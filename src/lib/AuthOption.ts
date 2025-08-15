@@ -32,8 +32,7 @@ export const authOptions: NextAuthOptions = {
   adapter: MongoDBAdapter(clientPromise),
 
   providers: [
-   
-     GoogleProvider({
+    GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       profile(profile) {
@@ -63,7 +62,8 @@ export const authOptions: NextAuthOptions = {
           id: "123",
           email: "test@example.com",
           name: "Test User",
-          hashedPassword: "$2b$10$123456789012345678901uQsfSlZ6B1b9PABhA9kV5P6p3z72IEb6", // exemple de hash bcrypt
+          hashedPassword:
+            "$2b$10$123456789012345678901uQsfSlZ6B1b9PABhA9kV5P6p3z72IEb6", // exemple de hash bcrypt
         };
 
         if (credentials.email !== userFromDB.email) {
@@ -92,20 +92,24 @@ export const authOptions: NextAuthOptions = {
     signIn: "/Auth",
     newUser: "/edit-account",
     error: "/auth/error",
-
   },
 
   secret: process.env.NEXTAUTH_SECRET,
 
   callbacks: {
-    async signIn({ user, account }: any) {
+    async signIn({ user, account }) {
       try {
         if (account?.provider === "credentials") return true;
-
+        if (!account) {
+          return false;
+        }
         const adapter = MongoDBAdapter(clientPromise);
+        if (!user?.email) {
+          return false;
+        }
         const isLinked = await checkAccountLink(
           adapter,
-          { email: user.email },
+          { email: user?.email },
           {
             provider: account.provider,
             providerAccountId: account.providerAccountId,
@@ -124,10 +128,12 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, user }) {
-      if (session.user ) {
-       
-        session.user=user;
+      if (!session) return session; // nothing to modify
+
+      if (session.user) {
+        session.user = user;
       }
+
       return session;
     },
   },

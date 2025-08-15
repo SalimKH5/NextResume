@@ -30,7 +30,17 @@ export async function GET(request: Request) {
   }
 }
 
-
+type UserFields = {
+  gender?: string;
+  firstName?: string;
+  lastName?: string;
+  address?: string;
+  postalCode?: string;
+  town?: string;
+  country?: string;
+  phoneNumber?: string;
+  dateOfbirth?: string;
+};
 
 
 
@@ -47,7 +57,7 @@ export async function POST(request: Request) {
     }
     
     // Nettoyer les champs non définis
-    const updateFields: Record<string, any> = {};
+    const updateFields: Record<string, UserFields> = {};
     if (gender !== undefined) updateFields.gender = gender;
     if (firstName !== undefined) updateFields.firstName = firstName;
     if (lastName !== undefined) updateFields.lastName = lastName;

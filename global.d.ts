@@ -123,7 +123,7 @@ type UserType={
   lastName?:string|null,
   email?:string,
   gender?:string,
-  dateOfbirth?:Date,
+  dateOfbirth?:Date|string,
   PhoneNumber?:string,
   address?:string,
   postalCode?:string,

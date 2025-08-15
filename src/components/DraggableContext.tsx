@@ -102,7 +102,7 @@ const { data: session, update ,status} = useSession();
   const componentRegistry = useRef<Map<string, React.ReactNode>>(new Map());
 
   const [information, setInformations] = useState<InformationsType>({
-    email: { label: session?.user?.email!, display: true },
+    email: { label: session?.user?.email??"", display: true },
     birthday: new Date("1995-01-01"),
     locations: { label: "Lyon, France", display: true },
     phonenumber: { label: "+33000000000", display: true },
@@ -232,7 +232,7 @@ const { data: session, update ,status} = useSession();
       if(status=="authenticated"){
         setInformations((prev)=>({
           ...prev,
-          email:{...prev.email,label:session?.user?.email!}
+          email:{...prev.email,label:session!.user.email!}
         }))
        
       }

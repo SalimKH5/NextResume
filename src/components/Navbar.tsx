@@ -27,7 +27,7 @@ import {
 import { useDragDrop } from "./DraggableContext";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 interface MenuItem {
@@ -206,7 +206,7 @@ const generatePdf = async () => {
 
   const { data: session, status } = useSession();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+
 
   return (
     <section

@@ -15,6 +15,7 @@ import {
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 // Menu items.
 const items = [
@@ -50,12 +51,12 @@ const SidebarAccount = () => {
       <SidebarContent>
         <SidebarGroup  className="py-2 h-full flex flex-col">
           <SidebarGroupLabel className="flex-[0.1]">
-            <a
+            <Link
               href="/"
               className="flex h-16 w-24 relative items-center gap-2"
             >
               <Image src="/logo.svg" alt="logo" fill />
-            </a>
+            </Link>
           </SidebarGroupLabel>
           <SidebarGroupContent className="flex-1">
             <SidebarMenu className="flex flex-col gap-3">

@@ -203,7 +203,7 @@ const TemplatesThird = ({
                 <div className="flex items-center justify-between gap-1  ">
                   <div className="flex-1 flex flex-col gap-1">
                     <h1 style={{fontSize:fontOptions.titleSize}}>{information.title}</h1>
-                    <h2 style={{fontSize:fontOptions?.titleSize!-3}}>
+                    <h2 style={{fontSize:(fontOptions?.titleSize&& fontOptions?.titleSize-3)}}>
                       {session?.user?.firstName} {session?.user?.lastName}
                     </h2>
                     <PersonalInfoDetail />

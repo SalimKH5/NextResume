@@ -7,16 +7,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
+
+
+
+
+
 export default function ProfilePage() {
   const { data: session, update ,status} = useSession();
   const user = session?.user;
 
-  const [form, setForm] = useState<any>({
+  const [form, setForm] = useState<UserType>({
     firstName: user?.firstName,
     lastName: user?.lastName ,
     gender: user?.gender ,
     dateOfbirth: user?.dateOfbirth?.toString() ,
-    phoneNumber: user?.PhoneNumber ,
+    PhoneNumber: user?.PhoneNumber ,
     email: user?.email,
     address: user?.address ,
     postalCode: user?.postalCode ,
@@ -34,7 +39,7 @@ export default function ProfilePage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((prev:any) => ({ ...prev, [name]: value }));
+    setForm((prev:UserType) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -127,7 +132,7 @@ console.log({session});
             id="dateOfbirth"
             name="dateOfbirth"
             type="date"
-            value={form.dateOfbirth}
+            value={form.dateOfbirth as string}
             onChange={handleChange}
             className="max-w-xs"
           />
@@ -137,8 +142,8 @@ console.log({session});
           <Label>Numéro de téléphone (optionnel)</Label>
           <PhoneInput
             name="phoneNumber"
-            value={form.phoneNumber}
-            onChange={(value) => setForm((prev:any) => ({ ...prev, phoneNumber: value }))}
+            value={form.PhoneNumber}
+            onChange={(value) => setForm((prev:UserType) => ({ ...prev, phoneNumber: value }))}
             className="max-w-xs"
           />
         </div>

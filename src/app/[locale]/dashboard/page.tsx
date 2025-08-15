@@ -8,13 +8,16 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 
+type cvsTemplates={
+  _id:string,
+  title_template:string,
+}
 
 
-
-const page = () => {
+const Dashboard = () => {
   const { data: session, update, status } = useSession();
   const { information } = useDragDrop();
-  const [cvs,setCsv]=useState<any>([]);
+  const [cvs,setCsv]=useState<cvsTemplates[]>([]);
 
 
   useEffect(()=>{
@@ -34,8 +37,8 @@ const page = () => {
                 return []
             }
     }
-    if(status==="authenticated"){
-              getCsv(session?.user.id!);
+    if(status==="authenticated" && session?.user?.id){
+              getCsv(session?.user?.id);
     }
   
   },[status])
@@ -51,7 +54,7 @@ console.log({cvs})
         <div className="w-full flex flex-col gap-3">
             
             {
-                cvs.map((cv:any)=>(
+                cvs.map((cv)=>(
                 <Link href={`/cv-editions?id_template=${cv._id}`} key={cv._id} className="w-full bg-white text-black rounded-xl py-2 flex items-center justify-between">
                       <p>{cv?.title_template}</p>
 
@@ -65,4 +68,4 @@ console.log({cvs})
   );
 };
 
-export default page;
+export default Dashboard;
