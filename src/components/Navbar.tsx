@@ -175,37 +175,36 @@ const generatePdf = async () => {
   if (templateEl) templateEl.style.gap = "0";
 
   // 🔥 3.5️⃣ Sanitize unsupported CSS color functions (oklch, lab)
-  const sanitizeColors = (element: HTMLElement) => {
-    element.querySelectorAll("*").forEach((el) => {
-      const style = window.getComputedStyle(el);
-      const target = el as HTMLElement;
+const sanitizeColors = (element: HTMLElement) => {
+  element.querySelectorAll("*").forEach((el) => {
+    const target = el as HTMLElement;
 
-      if (style.color.includes("oklch") || style.color.includes("lab")) {
-        target.style.color = "#000"; // fallback to black
-      }
-      if (style.backgroundColor.includes("oklch") || style.backgroundColor.includes("lab")) {
-        target.style.backgroundColor = "#fff"; // fallback to white
-      }
-      if (style.borderColor.includes("oklch") || style.borderColor.includes("lab")) {
-        target.style.borderColor = "#000"; // fallback to black
+    // Liste de propriétés à forcer
+    ["color", "backgroundColor", "borderColor"].forEach((prop) => {
+      const computed = window.getComputedStyle(el)[prop as any];
+      if (computed.includes("oklch") || computed.includes("lab")) {
+        // fallback hex
+        target.style[prop as any] = prop === "backgroundColor" ? "#fff" : "#000";
       }
     });
-  };
-
-  sanitizeColors(containerRef.current);
+  });
+};
 
   // 4️⃣ HTML2PDF options
   const opt = {
     margin: 0,
     filename: "salim-khadir-resume.pdf",
     image: { type: "png", quality: 0.98 },
-    html2canvas: {
-      scale: 2,
-      useCORS: true,
-      allowTaint: false, // safer than true for CORS images
-      logging: false,
-      backgroundColor: "#ffffff",
+     html2canvas: {
+    scale: 2,
+    useCORS: true,
+    allowTaint: true,
+    logging: false,
+    backgroundColor: "#ffffff",
+    onclone: (clonedDoc: Document) => {
+      sanitizeColors(clonedDoc.body as HTMLElement);
     },
+  },
     jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
   };
 
