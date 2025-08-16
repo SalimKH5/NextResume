@@ -188,7 +188,7 @@ const TemplateSelector = () => {
       <div className="grid grid-cols-2 gap-6">
         {templates.map((template, index) => (
           <div
-            key={template.id}
+            key={index}
             onClick={() => handleTemplateSelect(template)}
             className="w-full cursor-pointer flex flex-col gap-2 hover:scale-110 text-center transition-transform"
           >

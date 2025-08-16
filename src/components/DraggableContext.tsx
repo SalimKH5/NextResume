@@ -227,7 +227,7 @@ const { data: session, update ,status} = useSession();
   return Object.values(droppedItems).some(zone => zone.hasOwnProperty(pageKey));
   }
 
-  console.log({session})
+
   useEffect(()=>{
       if(status=="authenticated"){
         setInformations((prev)=>({

@@ -47,7 +47,7 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const user_id = url.searchParams.get("user_id");
 
-    console.log({ user_id });
+
 
     if (!user_id) {
       return NextResponse.json(

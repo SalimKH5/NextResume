@@ -63,7 +63,7 @@ export default function ProfilePage() {
       alert("Error updating profile");
     }
   };
-console.log({session});
+
   return (
     <form
       onSubmit={handleSubmit}

@@ -141,6 +141,7 @@ const Navbar1 = ({
 }: Navbar1Props) => {
   const { containerRef } = useDragDrop();
 
+
 const generatePdf = async () => {
   if (!containerRef.current) return;
 
@@ -188,7 +189,7 @@ const generatePdf = async () => {
     jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
   };
 
-  const html2pdf = await import("html2pdf.js");
+    const html2pdf = (await import("html2pdf.js")).default;
 
   try {
     await html2pdf().from(containerRef.current).set(opt).save();
@@ -200,6 +201,8 @@ const generatePdf = async () => {
     });
   }
 };
+
+
 
 
 
@@ -255,7 +258,7 @@ const generatePdf = async () => {
 
                 <Link
                   href="/locale/dashboard"
-                  className="text-white border-white hover:bg-white hover:text-black border-2 cursor-pointer p-2 rounded-xl"
+                  className="bg-white text-black border-2 cursor-pointer p-2 rounded-xl"
                 >
                   <MdAccountCircle size={25} />
                 </Link>

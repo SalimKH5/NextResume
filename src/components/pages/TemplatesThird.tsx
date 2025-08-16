@@ -166,12 +166,11 @@ const TemplatesThird = ({
 
 
   return (
-    <div   ref={containerRef} id="template3" className="w-[790px] h-auto  ">
+    <div   ref={containerRef} id="template" className="w-[790px] h-auto  ">
       <div  className="w-[790px] flex flex-col gap-[0.5px] justify-center items-center">
         {pagesToRender.map((page) => (
           <div
             key={page}
-          
           >
           {
             page>1 &&   <div id="page-header" className="w-full flex items-center justify-between py-3">
@@ -179,7 +178,6 @@ const TemplatesThird = ({
                     <button hidden={checkItemsInPage(page)}  className="bg-transparent text-blue-400 hover:none cursor-pointer">Masquer cette page</button>
             </div>
           }
-            
             <div
             
               ref={setContainerRef(page)}

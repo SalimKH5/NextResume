@@ -166,8 +166,8 @@ const TemplatesOne = ({
     });
     setMaxPages(pages.size > 0 ? Math.max(...pages) : 1);
   }, [droppedItems, width, setMaxPages]);
+  console.log({color:fontOptions.BackgroundColor})
 
-  console.log({ resizeRef });
   return (
     <div ref={containerRef} id="template" className="w-[790px] h-auto bg-white">
       <div className="w-[790px] flex flex-col gap-[0.5px] justify-center items-center">
