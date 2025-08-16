@@ -175,20 +175,24 @@ const generatePdf = async () => {
   if (templateEl) templateEl.style.gap = "0";
 
   // 🔥 3.5️⃣ Sanitize unsupported CSS color functions (oklch, lab)
-const sanitizeColors = (element: HTMLElement) => {
-  element.querySelectorAll("*").forEach((el) => {
-    const target = el as HTMLElement;
+  const sanitizeColors = (element: HTMLElement) => {
+    element.querySelectorAll("*").forEach((el) => {
+      const style = window.getComputedStyle(el);
+      const target = el as HTMLElement;
 
-    // Liste de propriétés à forcer
-    ["color", "backgroundColor", "borderColor"].forEach((prop) => {
-      const computed = window.getComputedStyle(el)[prop as any];
-      if (computed.includes("oklch") || computed.includes("lab")) {
-        // fallback hex
-        target.style[prop as any] = prop === "backgroundColor" ? "#fff" : "#000";
+      if (style.color.includes("oklch") || style.color.includes("lab")) {
+        target.style.color = "#000"; // fallback to black
+      }
+      if (style.backgroundColor.includes("oklch") || style.backgroundColor.includes("lab")) {
+        target.style.backgroundColor = "#fff"; // fallback to white
+      }
+      if (style.borderColor.includes("oklch") || style.borderColor.includes("lab")) {
+        target.style.borderColor = "#000"; // fallback to black
       }
     });
-  });
-};
+  };
+
+  
 
   // 4️⃣ HTML2PDF options
   const opt = {
