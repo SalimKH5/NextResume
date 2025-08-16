@@ -174,6 +174,26 @@ const generatePdf = async () => {
   const originalGap = templateEl?.style.gap || "";
   if (templateEl) templateEl.style.gap = "0";
 
+  // 🔥 3.5️⃣ Sanitize unsupported CSS color functions (oklch, lab)
+  const sanitizeColors = (element: HTMLElement) => {
+    element.querySelectorAll("*").forEach((el) => {
+      const style = window.getComputedStyle(el);
+      const target = el as HTMLElement;
+
+      if (style.color.includes("oklch") || style.color.includes("lab")) {
+        target.style.color = "#000"; // fallback to black
+      }
+      if (style.backgroundColor.includes("oklch") || style.backgroundColor.includes("lab")) {
+        target.style.backgroundColor = "#fff"; // fallback to white
+      }
+      if (style.borderColor.includes("oklch") || style.borderColor.includes("lab")) {
+        target.style.borderColor = "#000"; // fallback to black
+      }
+    });
+  };
+
+  sanitizeColors(containerRef.current);
+
   // 4️⃣ HTML2PDF options
   const opt = {
     margin: 0,
@@ -189,7 +209,7 @@ const generatePdf = async () => {
     jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
   };
 
-    const html2pdf = (await import("html2pdf.js")).default;
+  const html2pdf = (await import("html2pdf.js")).default;
 
   try {
     await html2pdf().from(containerRef.current).set(opt).save();
