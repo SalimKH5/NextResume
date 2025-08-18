@@ -52,7 +52,7 @@ const CreateCV =() => {
   
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger  className="cursor-pointer">Create</DialogTrigger>
+      <DialogTrigger  className="cursor-pointer bg-black text-white rounded-xl p-2">Create</DialogTrigger>
       <DialogContent className="sm:max-w-[625px] flex flex-col gap-3">
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>

@@ -42,7 +42,7 @@ const Dashboard = () => {
     }
   
   },[status])
-console.log({cvs})
+
 
   return (
     <div className="w-full h-full flex flex-col gap-3">
@@ -51,11 +51,11 @@ console.log({cvs})
         <CreateCV></CreateCV>
 
         </div>
-        <div className="w-full flex flex-col gap-3">
+        <div className="w-full flex flex-col gap-3 py-2">
             
             {
                 cvs.map((cv)=>(
-                <Link href={`/cv-editions?id_template=${cv._id}`} key={cv._id} className="w-full bg-white text-black rounded-xl py-2 flex items-center justify-between">
+                <Link href={`/cv-editions/${cv._id}`} key={cv._id} className="w-full bg-white text-black rounded-xl py-2 flex items-center justify-between">
                       <p>{cv?.title_template}</p>
 
                  </Link>

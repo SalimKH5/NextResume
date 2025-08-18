@@ -1,14 +1,24 @@
 "use client"
 import { useDragDrop } from "@/components/DraggableContext";
 import SidebarApp from "@/components/SidebarApp";
+import { useEffect } from "react";
 
   
-const MainTemplate = () => {
-  const { SelectedTemplate, containerRef } = useDragDrop();
+const MainTemplate = ({info}:{info?:GetTypeInformation}) => {
+  const { SelectedTemplate, containerRef,information,setInformations } = useDragDrop();
+
+  useEffect(()=>{
+        setInformations(info?.informations!)
+  },[info])
 
 
 
 
+  useEffect(()=>{
+
+  },[information])
+
+  
   return (
    <main className="flex w-full h-screen  ">
          <SidebarApp />

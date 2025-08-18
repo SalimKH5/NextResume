@@ -24,7 +24,7 @@ const TemplateSelector = () => {
   const templates: TemplateType[] = [
     {
       id:"template1",
-      img: "template1.png",
+      img: "/template1.png",
       label: "Template 1",
       template: TemplatesOne,
       style: {
@@ -74,7 +74,7 @@ const TemplateSelector = () => {
     },
     {
        id:"template2",
-      img: "template2.png",
+      img: "/template2.png",
       label: "Template 2",
       template: TemplatesTwo,
       style: {
@@ -125,7 +125,7 @@ const TemplateSelector = () => {
     },
     {
        id:"Template3",
-      img: "template2.png",
+      img: "/template2.png",
       label: "Template 3",
       template: TemplatesThird,
       style: {

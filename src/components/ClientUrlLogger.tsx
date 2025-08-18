@@ -9,7 +9,7 @@ export default function ClientUrlLogger() {
 
   useEffect(() => {
     const url = `${pathname}?${searchParams}`;
-    console.log({ url });
+   
   }, [pathname, searchParams]);
 
   return null;

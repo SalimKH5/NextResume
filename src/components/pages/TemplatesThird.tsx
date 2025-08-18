@@ -52,7 +52,6 @@ const TemplatesThird = ({
       if (positiveOverflow > 0) {
         hasOverflow = true;
         maxOverflowHeight = Math.max(maxOverflowHeight, positiveOverflow);
-        console.log({maxOverflowHeight})
       }
     });
 

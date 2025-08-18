@@ -51,7 +51,7 @@ declare global {
     email: DisplayComponent;
     phonenumber: DisplayComponent;
     locations: DisplayComponent;
-    birthday: Date;
+    birthday: Date|string;
     picture?:DisplayComponent;
     title: string;
     CatchPhrase: string;
@@ -109,6 +109,16 @@ type DroppedItemsMap = {
 };
 
 type TemplateComponentType = (props: { containerRef?: React.RefObject<HTMLDivElement> }) => JSX.Element;
+
+
+type GetTypeInformation={
+   _id: string,
+  user_id: string,
+  id_template:number,
+  title_template:string,
+  informations: InformationsType
+}
+
 
 
 declare namespace NodeJS {

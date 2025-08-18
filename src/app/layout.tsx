@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { DragDropProvider } from "@/components/DraggableContext";
-import { Navbar1 } from "@/components/Navbar";
 import { AuthProvider } from "./providers";
 
 export const metadata: Metadata = {

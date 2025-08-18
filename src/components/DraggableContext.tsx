@@ -343,6 +343,7 @@ const handleDragOverZone = useCallback((e: React.DragEvent) => {
 
 
 
+
   return (
     <DragDropContext.Provider
       value={{
@@ -377,7 +378,7 @@ const handleDragOverZone = useCallback((e: React.DragEvent) => {
 };
 
 export const useDragDrop = (): DragDropContextType => {
-  const context = useContext(DragDropContext);
+  const context = useContext(DragDropContext!);
   if (!context)
     throw new Error("useDragDrop must be used inside a DragDropProvider");
   return context;

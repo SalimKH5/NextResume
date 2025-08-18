@@ -49,7 +49,7 @@ export default function ResizableImage() {
       style={{ width: size.width, height: size.height }}
     >
       <img
-        src="profile.jpg"
+        src="/profile.jpg"
         alt="Profile"
         className="rounded-full"
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
