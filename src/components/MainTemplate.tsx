@@ -8,7 +8,10 @@ const MainTemplate = ({info}:{info?:GetTypeInformation}) => {
   const { SelectedTemplate, containerRef,information,setInformations } = useDragDrop();
 
   useEffect(()=>{
-        setInformations(info?.informations!)
+      if(!info ){
+        return 
+      }
+        setInformations(info.informations!)
   },[info])
 
 

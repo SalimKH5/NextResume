@@ -36,10 +36,10 @@ const Page = async ({
   params,
   searchParams,
 }: {
-  params: { id_template: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ id_template: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
-  const { id_template } = params;
+  const { id_template } = await params;
 
 
   const session = await getServerSession(authOptions);
