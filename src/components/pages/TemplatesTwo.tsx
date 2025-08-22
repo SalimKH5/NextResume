@@ -181,8 +181,10 @@ const TemplatesTwo = ({
               >
                 <h1>Page °{page}</h1>
                 <button
-                  hidden={checkItemsInPage(page)}
-                  className="bg-transparent text-blue-400 hover:none cursor-pointer"
+                  hidden={checkItemsInPage(page)} 
+                  style={{backgroundColor: "rgba(219, 54, 21, 1)"}}
+
+                  className="bg-transparent  hover:none cursor-pointer"
                 >
                   Masquer cette page
                 </button>
@@ -199,7 +201,7 @@ const TemplatesTwo = ({
             >
               {overflow && (
                 <div className="w-full absolute bottom-0 flex flex-col items-center gap-5">
-                  <div className="w-full no-print bg-red-600 text-white text-xs px-2 py-1 text-center">
+                  <div style={{backgroundColor: "rgba(220, 38, 38, 1)"}} className="w-full no-print  text-white text-xs px-2 py-1 text-center">
                     ⚠ Le contenu dépasse la hauteur d’une page A4
                   </div>
                 </div>

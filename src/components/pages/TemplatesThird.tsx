@@ -174,7 +174,7 @@ const TemplatesThird = ({
           {
             page>1 &&   <div id="page-header" className="w-full flex items-center justify-between py-3">
                     <h1>Page °{page}</h1>
-                    <button hidden={checkItemsInPage(page)}  className="bg-transparent text-blue-400 hover:none cursor-pointer">Masquer cette page</button>
+                    <button hidden={checkItemsInPage(page)} style={{color: "rgba(55, 132, 255, 1)"}} className="bg-transparent  hover:none cursor-pointer">Masquer cette page</button>
             </div>
           }
             <div
@@ -190,7 +190,7 @@ const TemplatesThird = ({
             >
               {overflow && (
                 <div className="w-full absolute bottom-0 flex flex-col items-center gap-5">
-                  <div className="w-full no-print bg-red-600 text-white text-xs px-2 py-1 text-center">
+                  <div style={{backgroundColor: "rgba(219, 54, 21, 1)",color:"#ffff"}} className="w-full no-print   text-xs px-2 py-1 text-center">
                     ⚠ Le contenu dépasse la hauteur d’une page A4
                   </div>
                 </div>
@@ -220,11 +220,11 @@ const TemplatesThird = ({
               <div className="w-[790px] no-print relative flex flex-col gap-3">
                 <div
                   style={{ height: height }}
-                  className="w-full items-start no-print bg-[#f309092b] text-white text-xs px-2 py-1 text-center"
+                  className="w-full items-start no-print bg-[#f309092b] text-[#FFFF] text-xs px-2 py-1 text-center"
                 >
                   ⚠ Le contenu dépasse la hauteur d’une page A4
                 </div>
-                <div className="z-50 text-white flex items-center justify-center gap-3 text-xs px-2 py-1 w-full text-center">
+                <div className="z-50 text-[#FFFF] flex items-center justify-center gap-3 text-xs px-2 py-1 w-full text-center">
                   <Button
                     onClick={() =>
                       setFontOptions((prev) => ({

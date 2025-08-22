@@ -253,7 +253,7 @@ const TemplatesOne = ({
                         fontSize: fontOptions.titleSize,
                         color: fontOptions.secondColor,
                       }}
-                      className="font-semibold text-lg text-blue-300"
+                      className="font-semibold text-lg "
                     >
                       {information.title}
                     </h3>
@@ -271,12 +271,12 @@ const TemplatesOne = ({
             {overflow && (
               <div className="w-[790px] no-print relative flex flex-col gap-3">
                 <div
-                  style={{ height: height,background:"#f309092b" }}
-                  className="w-full items-start no-print  text-white text-xs px-2 py-1 text-center"
+                  style={{ height: height,background:"#f309092b",color:"#ffffff" }}
+                  className="w-full items-start no-print   text-xs px-2 py-1 text-center"
                 >
                   ⚠ Le contenu dépasse la hauteur d’une page A4
                 </div>
-                <div className="z-50 text-white flex items-center justify-center gap-3 text-xs px-2 py-1 w-full text-center">
+                <div style={{color:"#ffffff"}} className="z-50  flex items-center justify-center gap-3 text-xs px-2 py-1 w-full text-center">
                   <Button
                     onClick={() =>
                       setFontOptions((prev) => ({
