@@ -169,14 +169,14 @@ const TemplatesOne = ({
 
 
   return (
-    <div ref={containerRef} id="template" className="w-[790px] h-auto bg-white">
+    <div ref={containerRef} style={{backgroundColor:"#00000"}} id="template" className="w-[790px] h-auto ">
       <div className="w-[790px] flex flex-col gap-[0.5px] justify-center items-center">
         {pagesToRender.map((page) => (
           <div  key={page}>
             <div
              
               ref={setContainerRef(page)}
-              className="w-[790px] shadow-2xl bg-white flex select-none transition-transform duration-300"
+              className="w-[790px] shadow-2xl  flex select-none transition-transform duration-300"
               style={{
                 height: "296.65mm",
                 fontSize: fontOptions.textSize,
@@ -271,8 +271,8 @@ const TemplatesOne = ({
             {overflow && (
               <div className="w-[790px] no-print relative flex flex-col gap-3">
                 <div
-                  style={{ height: height }}
-                  className="w-full items-start no-print bg-[#f309092b] text-white text-xs px-2 py-1 text-center"
+                  style={{ height: height,background:"#f309092b" }}
+                  className="w-full items-start no-print  text-white text-xs px-2 py-1 text-center"
                 >
                   ⚠ Le contenu dépasse la hauteur d’une page A4
                 </div>
