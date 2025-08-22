@@ -46,8 +46,9 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const user_id = request.nextUrl.searchParams.get("user_id");
-    const id_template = request.nextUrl.searchParams.get("id_template");
+    const url = new URL(request.url);
+    const user_id = url.searchParams.get("user_id");
+    const id_template = url.searchParams.get("id_template");
 
     if (!user_id) {
       return NextResponse.json(
