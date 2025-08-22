@@ -1,9 +1,9 @@
 import clientPromise from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { user_id, id_template, informations,title_template } = body;
@@ -43,11 +43,11 @@ export async function POST(request: Request) {
 
 
 
-export async function GET(request: Request) {
- try {
-    const url = new URL(request.url);
-    const user_id = url.searchParams.get("user_id");
-    const id_template = url.searchParams.get("id_template");
+
+export async function GET(request: NextRequest) {
+  try {
+    const user_id = request.nextUrl.searchParams.get("user_id");
+    const id_template = request.nextUrl.searchParams.get("id_template");
 
     if (!user_id) {
       return NextResponse.json(
@@ -62,13 +62,11 @@ export async function GET(request: Request) {
     let templates;
 
     if (id_template) {
-      // Get only one template
       templates = await db.collection("templates_info").findOne({
         user_id: user_id,
         _id: new ObjectId(id_template),
       });
     } else {
-      // Get all templates for this user
       templates = await db
         .collection("templates_info")
         .find({ user_id: user_id })
@@ -85,7 +83,7 @@ export async function GET(request: Request) {
   }
 }
 
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
     const { user_id, id_template, informations, title_template } = body;
