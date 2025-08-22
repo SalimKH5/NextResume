@@ -12,7 +12,7 @@ const options: MongoClientOptions = {}; // Add options if needed, e.g., tls=true
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-if (process.env.NODE_ENV === "development") {
+if (process?.env?.NODE_ENV === "development") {
   // Use a global variable to preserve value across module reloads (HMR)
   if (!global._mongoClientPromise) {
     client = new MongoClient(uri, options);
