@@ -178,6 +178,10 @@ const TemplateSelector = () => {
   const { setSelectedTemplate, setFontOptions, setDroppedItems } =
     useDragDrop();
 
+
+
+    
+
   const handleTemplateSelect = (Component: TemplateType) => {
     setSelectedTemplate(() => Component.template);
     setFontOptions(() => Component.style);

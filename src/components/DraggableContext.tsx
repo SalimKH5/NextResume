@@ -342,8 +342,6 @@ const handleDragOverZone = useCallback((e: React.DragEvent) => {
 
 
 
-
-
   return (
     <DragDropContext.Provider
       value={{

@@ -158,7 +158,7 @@ export default function AppSidebar() {
     <div>
       <div
        
-        className={`flex fixed min-h-screen z-[9999]  ${isScrolled ? "top-0" : ""}`}
+        className={`hidden md:flex fixed min-h-screen z-[9999]  ${isScrolled ? "top-0" : ""}`}
       >
         {/* Main icons column */}
         <div  ref={refNavbar} className="w-16 bg-white flex flex-col items-center py-4 space-y-4 border-r border-2">

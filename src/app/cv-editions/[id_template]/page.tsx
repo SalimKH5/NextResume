@@ -63,6 +63,7 @@ const Page = async ({
       <Navbar1 />
       <main className="w-full h-full">
         <MainTemplate info={template_data} />
+        
       </main>
     </>
   );
