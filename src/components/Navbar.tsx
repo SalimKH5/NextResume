@@ -1,9 +1,6 @@
 "use client";
 
-import { Book, Menu, Sunset, Trees, Zap } from "lucide-react";
-
 import {
-  Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
@@ -18,19 +15,12 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { MdAccountCircle } from "react-icons/md";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { useDragDrop } from "./DraggableContext";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-
+import { useReactToPrint } from "react-to-print";
 interface MenuItem {
   title: string;
   url: string;
@@ -66,10 +56,7 @@ const Navbar1 = ({
     alt: "logo",
     title: "CvGenerator",
   },
-  menu = [
-    { title: "Home", url: "/" },
-
-  ],
+  menu = [{ title: "Home", url: "/" }],
   auth = {
     login: { title: "Login", url: "/Auth" },
     signup: { title: "Sign up", url: "#" },
@@ -77,98 +64,13 @@ const Navbar1 = ({
 }: Navbar1Props) => {
   const { containerRef } = useDragDrop();
 
-
-const generatePdf = async () => {
-  if (!containerRef.current) return;
-
-  // 1️⃣ Ensure all images are CORS-safe
-  const images = containerRef.current.querySelectorAll("img");
-  images.forEach((img) => {
-    img.setAttribute("crossorigin", "anonymous");
-  });
-
-  // Wait until all images are loaded
-  await Promise.all(
-    Array.from(images).map(
-      (img) =>
-        new Promise<void>((resolve) => {
-          if (img.complete && img.naturalHeight !== 0) return resolve();
-          img.onload = () => resolve();
-          img.onerror = () => resolve();
-        })
-    )
-  );
-
-  // 2️⃣ Hide non-print elements
-  const elementsToHide = containerRef.current.querySelectorAll(".no-print, #page-header");
-  elementsToHide.forEach((el) => {
-    (el as HTMLElement).style.display = "none";
-  });
-
-  // 3️⃣ Remove gap in template
-  const templateEl = containerRef.current.querySelector("#template") as HTMLElement | null;
-  const originalGap = templateEl?.style.gap || "";
-  if (templateEl) templateEl.style.gap = "0";
-
-  // 🔥 3.5️⃣ Sanitize unsupported CSS color functions (oklch, lab)
-  const sanitizeColors = (element: HTMLElement) => {
-    element.querySelectorAll("*").forEach((el) => {
-      const style = window.getComputedStyle(el);
-      const target = el as HTMLElement;
-
-      if (style.color.includes("oklch") || style.color.includes("lab")) {
-        target.style.color = "#000"; // fallback to black
-      }
-      if (style.backgroundColor.includes("oklch") || style.backgroundColor.includes("lab")) {
-        target.style.backgroundColor = "#fff"; // fallback to white
-      }
-      if (style.borderColor.includes("oklch") || style.borderColor.includes("lab")) {
-        target.style.borderColor = "#000"; // fallback to black
-      }
+    const generatePdf = useReactToPrint({
+      contentRef: containerRef,
+      documentTitle: "salim-khadir-resume",
     });
-  };
-
-  
-
-  // 4️⃣ HTML2PDF options
-  const opt = {
-    margin: 0,
-    filename: "salim-khadir-resume.pdf",
-    image: { type: "png", quality: 0.98 },
-     html2canvas: {
-    scale: 2,
-    useCORS: true,
-    allowTaint: true,
-    logging: false,
-    backgroundColor: "#ffffff",
-    onclone: (clonedDoc: Document) => {
-      sanitizeColors(clonedDoc.body as HTMLElement);
-    },
-  },
-    jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-  };
-
-  const html2pdf = (await import("html2pdf.js")).default;
-
-  try {
-    await html2pdf().from(containerRef.current).set(opt).save();
-  } finally {
-    // Restore hidden elements & styles
-    if (templateEl) templateEl.style.gap = originalGap;
-    elementsToHide.forEach((el) => {
-      (el as HTMLElement).style.display = "";
-    });
-  }
-};
-
-
-
-
-
 
   const { data: session, status } = useSession();
   const pathname = usePathname();
-
 
   return (
     <section
@@ -203,10 +105,7 @@ const generatePdf = async () => {
           </div>
           <div className="flex items-center gap-2">
             {status === "loading" ? (
-             <div
-                  className=" w-16 h-9 bg-white animate-pulse  cursor-pointer p-2 rounded-xl" 
-                >
-                </div>
+              <div className=" w-16 h-9 bg-white animate-pulse  cursor-pointer p-2 rounded-xl"></div>
             ) : status === "authenticated" ? (
               <>
                 {pathname.includes("/cv-editions") && (
@@ -247,43 +146,40 @@ const generatePdf = async () => {
             <a href={logo.url} className="flex items-center gap-2">
               <img src={logo.src} className="max-h-8" alt={logo.alt} />
             </a>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Menu className="size-4" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="overflow-y-auto">
-                <SheetHeader>
-                  <SheetTitle>
-                    <a href={logo.url} className="flex items-center gap-2">
-                      <img src={logo.src} className="max-h-8" alt={logo.alt} />
-                    </a>
-                  </SheetTitle>
-                </SheetHeader>
-                <div className="flex flex-col gap-6 p-4">
-                  <Accordion
-                    type="single"
-                    collapsible
-                    className="flex w-full flex-col gap-4"
-                  >
-                    {menu.map((item) => renderMobileMenuItem(item))}
-                  </Accordion>
-
-                  <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              {status === "loading" ? (
+                <div className=" w-16 h-9 bg-white animate-pulse  cursor-pointer p-2 rounded-xl"></div>
+              ) : status === "authenticated" ? (
+                <>
+                  {pathname.includes("/cv-editions") && (
                     <Button className="cursor-pointer" onClick={generatePdf}>
                       download pdf
                     </Button>
-                    <Button asChild variant="outline">
-                      <a href={auth.login.url}>{auth.login.title}</a>
-                    </Button>
-                    <Button asChild>
-                      <a href={auth.signup.url}>{auth.signup.title}</a>
-                    </Button>
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
+                  )}
+
+                  <Link
+                    href="/locale/dashboard"
+                    className="bg-white text-black border-2 cursor-pointer p-2 rounded-xl"
+                  >
+                    <MdAccountCircle size={25} />
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={() => {
+                      signIn();
+                    }}
+                    asChild
+                    variant="outline"
+                    className="cursor-pointer"
+                    size="sm"
+                  >
+                    <span>{auth.login.title}</span>
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>

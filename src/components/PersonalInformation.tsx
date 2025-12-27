@@ -9,7 +9,7 @@ import { useDragDrop } from "./DraggableContext";
 const PersonalInformation = () => {
   const { information, setInformations } = useDragDrop();
   return (
-    <div className={`flex flex-col gap-6`}>
+    <div className={`w-full flex flex-col gap-6`}>
       <div key="input-title" className="flex flex-col gap-3">
         <span>Titre sur le CV</span>
         <Input

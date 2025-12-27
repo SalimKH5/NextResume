@@ -76,7 +76,7 @@ const Expriences = () => {
     >
       {hoverCreate && (
         <div className="flex z-50 absolute -top-2 shadow-2xs bg-white items-center gap-2">
-          <ExprienceForm open={dialogOpen} setOpen={setDialogOpen}>
+          <ExprienceForm  open={dialogOpen} setOpen={setDialogOpen}>
             <Plus className="cursor-pointer" size={16} />
           </ExprienceForm>
         

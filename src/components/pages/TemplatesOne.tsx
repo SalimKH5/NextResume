@@ -169,14 +169,14 @@ const TemplatesOne = ({
 
 
   return (
-    <div ref={containerRef} style={{backgroundColor:"#00000"}} id="template" className="w-[790px] h-auto ">
-      <div className="w-[790px] flex flex-col gap-[0.5px] justify-center items-center">
+    <div ref={containerRef} style={{backgroundColor:"#00000"}} id="template" className="w-full md:w-[790px] h-auto ">
+      <div className="w-full  flex flex-col gap-[0.5px] justify-center items-center">
         {pagesToRender.map((page) => (
-          <div  key={page}>
+          <div className="w-full" key={page}>
             <div
              
               ref={setContainerRef(page)}
-              className="w-[790px] shadow-2xl  flex select-none transition-transform duration-300"
+              className="w-full md:w-[790px] shadow-2xl  flex select-none transition-transform duration-300"
               style={{
                 height: "296.65mm",
                 fontSize: fontOptions.textSize,
@@ -218,9 +218,9 @@ const TemplatesOne = ({
                 onMouseDown={onMouseDown}
                 data-resize-div
                 style={{
-                  width: "2px",
+                  width: "1px",
                   cursor: "col-resize",
-                  backgroundColor: "#999",
+                  backgroundColor: "transparent",
                   position: "relative",
                 }}
               >

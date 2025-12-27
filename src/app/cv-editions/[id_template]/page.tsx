@@ -61,7 +61,7 @@ const Page = async ({
   return (
     <>
       <Navbar1 />
-      <main className="w-full h-full">
+      <main className="w-full h-auto md:h-full ">
         <MainTemplate info={template_data} />
         
       </main>

@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`antialiased h-full `}>
+      <body suppressHydrationWarning className={`antialiased h-full bg-gray-100 `}>
         <AuthProvider>
           <DragDropProvider>
           {children}

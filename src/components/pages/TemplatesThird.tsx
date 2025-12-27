@@ -165,18 +165,13 @@ const TemplatesThird = ({
 
 
   return (
-    <div   ref={containerRef} id="template" className="w-[790px] h-auto  ">
-      <div  className="w-[790px] flex flex-col gap-[0.5px] justify-center items-center">
+    <div   ref={containerRef} id="template" className="w-full md:w-[790px] h-auto ">
+      <div  className=" w-full  flex flex-col gap-[0.5px] justify-center items-center">
         {pagesToRender.map((page) => (
           <div
             key={page}
+            className="w-full"
           >
-          {
-            page>1 &&   <div id="page-header" className="w-full flex items-center justify-between py-3">
-                    <h1>Page °{page}</h1>
-                    <button hidden={checkItemsInPage(page)} style={{color: "rgba(55, 132, 255, 1)"}} className="bg-transparent  hover:none cursor-pointer">Masquer cette page</button>
-            </div>
-          }
             <div
             
               ref={setContainerRef(page)}

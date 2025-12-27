@@ -1,17 +1,24 @@
 import React, { useRef, useState, useEffect } from "react";
 
-export default function ResizableImage() {
+interface ResizableImageProps {
+  isPdfMode?: boolean;
+}
+
+export default function ResizableImage({
+  isPdfMode = false,
+}: ResizableImageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 100, height: 100 });
   const [isResizing, setIsResizing] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Define min/max sizes
+  // Size constraints
   const MIN_SIZE = 50;
   const MAX_WIDTH = 150;
   const MAX_HEIGHT = 150;
 
   const startResizing = (e: React.MouseEvent) => {
+    if (isPdfMode) return;
     e.preventDefault();
     setIsResizing(true);
   };
@@ -19,7 +26,7 @@ export default function ResizableImage() {
   const stopResizing = () => setIsResizing(false);
 
   const onMouseMove = (e: MouseEvent) => {
-    if (!isResizing || !containerRef.current) return;
+    if (!isResizing || !containerRef.current || isPdfMode) return;
 
     const rect = containerRef.current.getBoundingClientRect();
     const newWidth = e.clientX - rect.left;
@@ -32,31 +39,43 @@ export default function ResizableImage() {
   };
 
   useEffect(() => {
+    if (isPdfMode) return;
+
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", stopResizing);
+
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", stopResizing);
     };
-  }, [isResizing]);
+  }, [isResizing, isPdfMode]);
 
   return (
     <div
       ref={containerRef}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="relative  overflow-hidden"
-      style={{ width: size.width, height: size.height }}
+      onMouseEnter={() => !isPdfMode && setIsHovered(true)}
+      onMouseLeave={() => !isPdfMode && setIsHovered(false)}
+      className="relative"
+      style={{
+        width: size.width,
+        height: size.height,
+        overflow: isPdfMode ? "visible" : "hidden",
+      }}
     >
       <img
         src="/profile.jpg"
         alt="Profile"
-        className="rounded-full"
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
         draggable={false}
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "block",
+          borderRadius: "50%",
+          objectFit: isPdfMode ? "contain" : "cover",
+        }}
       />
 
-      {isHovered && (
+      {!isPdfMode && isHovered && (
         <div
           onMouseDown={startResizing}
           className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 cursor-nwse-resize rounded-full"
