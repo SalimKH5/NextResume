@@ -125,7 +125,7 @@ const TemplateSelector = () => {
     },
     {
        id:"Template3",
-      img: "/template2.png",
+      img: "/template3.png",
       label: "Template 3",
       template: TemplatesThird,
       style: {
