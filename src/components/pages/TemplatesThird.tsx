@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import ResizableImage from "../ResizableImage";
 import PersonalInfoDetail from "../PersonalInfoDetail";
 import Expriences from "../Expriences";
+import { useTextScale } from "@/Hook/useTextScale";
 
 const TemplatesThird = ({
   containerRef,
@@ -161,7 +162,10 @@ const TemplatesThird = ({
   }, [droppedItems, width, setMaxPages]);
 
 
+  const {scale} = useTextScale();
 
+  const computedTextSize = parseInt(fontOptions?.textSize!)* scale;
+  const computedTitleSize = parseInt(fontOptions?.titleSize!) * scale;
 
 
   return (
@@ -178,7 +182,7 @@ const TemplatesThird = ({
               className={`w-[790px] px-0 shadow-2xl bg-white relative flex select-none transition-transform duration-300 scale-100`}
               style={{
                 height: "296.85mm", // A4
-                fontSize: fontOptions.textSize,
+                fontSize: computedTextSize,
                 fontFamily: fontOptions.font,
                 padding: `${fontOptions.paddingVertical}px ${fontOptions.paddingHorizontal}px`,
               }}
@@ -194,8 +198,8 @@ const TemplatesThird = ({
                  {page === 1 && (
                 <div className="flex items-center justify-between gap-1  ">
                   <div className="flex-1 flex flex-col gap-1">
-                    <h1 style={{fontSize:fontOptions.titleSize}}>{information.title}</h1>
-                    <h2 style={{fontSize:(fontOptions?.titleSize&& fontOptions?.titleSize-3)}}>
+                    <h1 style={{fontSize:computedTitleSize}}>{information.title}</h1>
+                    <h2 style={{fontSize:(fontOptions?.titleSize&& computedTitleSize-3)}}>
                       {session?.user?.firstName} {session?.user?.lastName}
                     </h2>
                     <PersonalInfoDetail />
@@ -212,7 +216,7 @@ const TemplatesThird = ({
             </div>
 
             {overflow && (
-              <div className="w-[790px] no-print relative flex flex-col gap-3">
+              <div className="w-full md:w-[790px]   no-print relative flex flex-col gap-3">
                 <div
                   style={{ height: height }}
                   className="w-full items-start no-print bg-[#f309092b] text-[#FFFF] text-xs px-2 py-1 text-center"
@@ -224,8 +228,8 @@ const TemplatesThird = ({
                     onClick={() =>
                       setFontOptions((prev) => ({
                         ...prev,
-                        titleSize: Math.max((prev?.titleSize || 16) - 3, 13),
-                        textSize: Math.max((prev?.textSize || 14) - 3, 13),
+                        titleSize: Math.max((prev?.titleSize*scale || 16) - 3, 13),
+                        textSize: Math.max((prev?.textSize*scale || 14) - 3, 13),
                         SpaceContent: Math.max(
                           (prev?.SpaceContent || 12) - 3,
                           8

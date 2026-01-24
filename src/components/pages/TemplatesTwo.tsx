@@ -308,7 +308,7 @@ const TemplatesTwo = ({
             </div>
 
             {overflow && (
-              <div className="w-[790px] no-print relative flex flex-col gap-3">
+              <div className="w-full md:w-[790px]  no-print relative flex flex-col gap-3">
                 <div
                   style={{ height: height }}
                   className="w-full items-start no-print bg-[#f309092b] text-white text-xs px-2 py-1 text-center"

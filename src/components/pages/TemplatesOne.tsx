@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
 import ResizableImage from "../ResizableImage";
 import PersonalInfoDetail from "../PersonalInfoDetail";
+import { useTextScale } from "@/Hook/useTextScale";
 
 const TemplatesOne = ({
   containerRef,
@@ -21,6 +22,7 @@ const TemplatesOne = ({
     setMaxPages,
     setDroppedItems,
     setFontOptions,
+    scale
   } = useDragDrop();
 
   const containerRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
@@ -166,7 +168,16 @@ const TemplatesOne = ({
     });
     setMaxPages(pages.size > 0 ? Math.max(...pages) : 1);
   }, [droppedItems, width, setMaxPages]);
+ 
 
+const computedTextSize = parseInt(fontOptions?.textSize!)* scale;
+const computedTitleSize = parseInt(fontOptions?.titleSize!) * scale;
+
+
+useEffect(()=>{
+console.log({scale});
+
+},[scale])
 
   return (
     <div ref={containerRef} style={{backgroundColor:"#00000"}} id="template" className="w-full md:w-[790px] h-auto ">
@@ -179,7 +190,7 @@ const TemplatesOne = ({
               className="w-full md:w-[790px] shadow-2xl  flex select-none transition-transform duration-300"
               style={{
                 height: "296.65mm",
-                fontSize: fontOptions.textSize,
+                fontSize: computedTextSize,
                 fontFamily: fontOptions.font,
                 
               }}
@@ -250,7 +261,7 @@ const TemplatesOne = ({
                     </h1>
                     <h3
                       style={{
-                        fontSize: fontOptions.titleSize,
+                        fontSize:computedTextSize,
                         color: fontOptions.secondColor,
                       }}
                       className="font-semibold text-lg "
@@ -258,7 +269,7 @@ const TemplatesOne = ({
                       {information.title}
                     </h3>
                     <p
-                      style={{ fontSize: fontOptions.textSize }}
+                      style={{ fontSize: computedTextSize }}
                       className="text-sm"
                     >
                       {information.CatchPhrase}
@@ -269,7 +280,7 @@ const TemplatesOne = ({
               </div>
             </div>
             {overflow && (
-              <div className="w-[790px] no-print relative flex flex-col gap-3">
+              <div className="w-full md:w-[790px] no-print relative flex flex-col gap-3">
                 <div
                   style={{ height: height,background:"#f309092b",color:"#ffffff" }}
                   className="w-full items-start no-print   text-xs px-2 py-1 text-center"
@@ -281,8 +292,8 @@ const TemplatesOne = ({
                     onClick={() =>
                       setFontOptions((prev) => ({
                         ...prev,
-                        titleSize: Math.max((prev?.titleSize || 16) - 3, 13),
-                        textSize: Math.max((prev?.textSize || 14) - 3, 13),
+                        titleSize: Math.max((prev?.titleSize!*scale! || 16) - 3, 13),
+                        textSize: Math.max((prev?.textSize!*scale! || 14) - 3, 13),
                         SpaceContent: Math.max(
                           (prev?.SpaceContent || 12) - 3,
                           8

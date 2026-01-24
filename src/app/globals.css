@@ -44,6 +44,7 @@
 }
 
 :root {
+    --text-scale: 1;
   --radius: 0.625rem;
   --background: rgb(255, 255, 255);
   --foreground: rgb(32, 33, 36);
@@ -111,6 +112,13 @@
   --sidebar-border: rgba(255, 255, 255, 0.1);
   --sidebar-ring: rgb(119, 118, 140);
 }
+
+@media (max-width: 768px) {
+  :root {
+    --text-scale: 0.9; /* or 0.85, 0.8 depending on density */
+  }
+}
+
 
 
 @layer base {
@@ -180,3 +188,4 @@
   border-top: 3px solid #999999;
   margin: 2rem 0;
 }
+

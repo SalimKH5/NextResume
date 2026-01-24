@@ -53,14 +53,14 @@ const MainTemplate = ({ info }: { info?: GetTypeInformation }) => {
 
 
   return (
-    <main className="flex w-full h-auto  md:h-screen  relative py-5 ">
+    <main className="flex  w-full h-auto  md:h-screen  relative py-5 ">
       <SidebarApp />
-      <div className="w-full h-full flex-col flex py-6 px-2">
+      <div className="w-full h-full flex-col flex ">
         <div className="w-full flex items-center gap-3 justify-end"></div>
 
 
       {
-         previw && <div className="w-full  py-3 flex md:hidden justify-center  scale-x-[0.65] pointer-events-none scale-y-[0.95] ">
+         previw && <div className="w-full  py-3 flex md:hidden justify-center ">
           {/* <TemplatePage/> */}
           {containerRef && <SelectedTemplate containerRef={containerRef} />}
         </div>
@@ -77,12 +77,14 @@ const MainTemplate = ({ info }: { info?: GetTypeInformation }) => {
         }
        
       </div>
-      <div className="fixed bottom-0 bg-white w-full py-8 flex md:hidden items-center justify-end">
-                <Button onClick={()=>{
+      <div className="fixed w-full py-2 bottom-0 bg-white  flex md:hidden items-center justify-end">
+                <Button 
+                className="cursor-pointer"
+                onClick={()=>{
                   setPreview((prev)=>{
-                    return true
+                    return !prev
                   })
-                }}>Preview</Button>
+                }}>{previw?"info":"Preview"}</Button>
       </div>
     </main>
   );

@@ -21,6 +21,9 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useReactToPrint } from "react-to-print";
+import { useTextScale } from "@/Hook/useTextScale";
+import { useEffect } from "react";
+
 interface MenuItem {
   title: string;
   url: string;
@@ -64,10 +67,22 @@ const Navbar1 = ({
 }: Navbar1Props) => {
   const { containerRef } = useDragDrop();
 
-    const generatePdf = useReactToPrint({
-      contentRef: containerRef,
-      documentTitle: "salim-khadir-resume",
-    });
+
+ const {scale,setScale,unlockScale,lockScale}  = useDragDrop();
+const generatePdf = useReactToPrint({
+  contentRef: containerRef,
+  documentTitle: "salim-khadir-resume",
+
+  onBeforePrint: async () => {
+     lockScale();
+    setScale(1);
+    await new Promise((r) => setTimeout(r, 0));
+  },
+   onAfterPrint: () => {
+    unlockScale();
+  },
+});
+
 
   const { data: session, status } = useSession();
   const pathname = usePathname();

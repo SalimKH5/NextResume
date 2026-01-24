@@ -41,6 +41,11 @@ type DragDropContextType = {
   maxPages:number,
   setMaxPages:React.Dispatch<React.SetStateAction<number>>;
   checkItemsInPage:(page:number)=>boolean;
+  scale?:number,
+  setScale:React.Dispatch<React.SetStateAction<number>>;
+  lockScale:() => void,
+  unlockScale:() => void,
+
 };
 
 const DragDropContext = createContext<DragDropContextType | undefined>(
@@ -341,6 +346,21 @@ const handleDragOverZone = useCallback((e: React.DragEvent) => {
 
 
 
+const [scale, setScale] = useState(1);
+ const [locked, setLocked] = useState(false);
+useEffect(() => {
+    if (locked) return;
+
+    const updateScale = () => {
+      setScale(window.innerWidth <= 768 ? 0.6 : 1);
+    };
+
+    updateScale();
+    window.addEventListener("resize", updateScale);
+
+    return () => window.removeEventListener("resize", updateScale);
+  }, [locked]);
+
 
   return (
     <DragDropContext.Provider
@@ -367,7 +387,11 @@ const handleDragOverZone = useCallback((e: React.DragEvent) => {
         containerRef,
         maxPages,
         setMaxPages,
-        checkItemsInPage
+        checkItemsInPage,
+        scale,
+        setScale,
+        lockScale: () => setLocked(true),
+        unlockScale: () => setLocked(false),
       }}
     >
       {children}
