@@ -164,8 +164,10 @@ const TemplatesThird = ({
 
   const {scale} = useTextScale();
 
-  const computedTextSize = parseInt(fontOptions?.textSize!)* scale;
-  const computedTitleSize = parseInt(fontOptions?.titleSize!) * scale;
+  const computedTextSize = (fontOptions?.textSize ?? 14) * scale!;
+
+  const computedTitleSize = fontOptions?.titleSize! * scale!;
+
 
 
   return (
@@ -228,8 +230,8 @@ const TemplatesThird = ({
                     onClick={() =>
                       setFontOptions((prev) => ({
                         ...prev,
-                        titleSize: Math.max((prev?.titleSize*scale || 16) - 3, 13),
-                        textSize: Math.max((prev?.textSize*scale || 14) - 3, 13),
+                        titleSize: Math.max((prev?.titleSize!*scale || 16) - 3, 13),
+                        textSize: Math.max((prev?.textSize!*scale || 14) - 3, 13),
                         SpaceContent: Math.max(
                           (prev?.SpaceContent || 12) - 3,
                           8

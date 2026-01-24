@@ -169,9 +169,9 @@ const TemplatesOne = ({
     setMaxPages(pages.size > 0 ? Math.max(...pages) : 1);
   }, [droppedItems, width, setMaxPages]);
  
+const computedTextSize = (fontOptions?.textSize ?? 14) * scale!;
 
-const computedTextSize = parseInt(fontOptions?.textSize!)* scale;
-const computedTitleSize = parseInt(fontOptions?.titleSize!) * scale;
+const computedTitleSize = fontOptions?.titleSize! * scale!;
 
 
 useEffect(()=>{
