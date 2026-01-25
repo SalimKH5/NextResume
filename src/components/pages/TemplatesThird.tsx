@@ -176,7 +176,7 @@ const computedTitleSize = (fontOptions?.titleSize?? 14) * scale!;
         {pagesToRender.map((page) => (
           <div
             key={page}
-            className="w-full"
+            className="w-full "
           >
             <div
             

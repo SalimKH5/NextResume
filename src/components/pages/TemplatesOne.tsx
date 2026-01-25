@@ -82,7 +82,8 @@ const TemplatesOne = ({
 
     // Compute new sidebar width as a percentage
     let newWidth = (e.clientX - containerRect.left) / containerRect.width;
-    newWidth = Math.max(0.1, Math.min(newWidth, 0.6)); // Clamp between 10% and 60%
+    newWidth = Math.max(0.001, Math.min(newWidth, 0.6)); // Clamp between 10% and 60%
+    console.log({newWidth})
     setWidth(newWidth);
 
     // If resizeRef is defined, update the icon position
@@ -175,19 +176,28 @@ const computedTitleSize = (fontOptions?.titleSize?? 14) * scale!;
 
 
 useEffect(()=>{
-console.log({scale});
+console.log({width});
 
-},[scale])
+},[width])
 
   return (
     <div ref={containerRef} style={{backgroundColor:"#00000"}} id="template" className="w-full md:w-[790px] h-auto ">
-      <div className="w-full  flex flex-col gap-[0.5px] justify-center items-center">
+      <div className={`w-full  flex flex-col gap-[0.5px] ${scale===0.43? "px-14":""}`}>
         {pagesToRender.map((page) => (
-          <div className="w-full" key={page}>
+        <div
+                  className={`
+                    w-full
+                    justify-center
+                    ${scale===0.43? "transform origin-top-left scale-[0.395466] mb-[-678.892px] mr-[-480px]":""}
+                    
+                    sm:transform-none sm:scale-100 sm:mb-0 sm:mr-0
+                  `}
+                  key={page}
+                >
             <div
              
               ref={setContainerRef(page)}
-              className="w-full md:w-[790px] shadow-2xl  flex select-none transition-transform duration-300"
+              className="w-full md:w-[790px] shadow-2xl  flex select-none transition-transform duration-300 "
               style={{
                 height: "296.65mm",
                 fontSize: computedTextSize,
@@ -252,7 +262,7 @@ console.log({scale});
 
               <div
                 style={{ flex: 1,paddingTop: `${fontOptions.paddingVertical}px`, }}
-                className="px-6 py-2 flex flex-col gap-4"
+                className="px-6 py-2 flex flex-col gap-4 min-w-96 bg-white"
               >
                 {page === 1 && (
                   <>

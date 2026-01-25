@@ -7,7 +7,7 @@ import SkillsForm from "./SkillsForm";
 import Sortable from "sortablejs";
 
 const Skills = () => {
-  const { information, fontOptions, setInformations } = useDragDrop();
+  const { information, fontOptions, setInformations ,scale} = useDragDrop();
 
   const [EditTitle, setEditTitle] = useState<boolean>(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -62,6 +62,11 @@ const Skills = () => {
     }
   }, []);
 
+
+  const computedTitleSize = (fontOptions?.titleSize ?? 14) * scale!;
+
+
+
   return (
     <div
       onMouseEnter={handleMouseEnter}
@@ -102,7 +107,7 @@ const Skills = () => {
           }}
           style={{
             color: fontOptions.secondColor,
-            fontSize: fontOptions.titleSize,
+            fontSize:computedTitleSize,
           }}
           className="border-b-2 border-black cursor-pointer pl-0 font-bold   focus:border-black focus-visible:ring-0 w-full"
         >

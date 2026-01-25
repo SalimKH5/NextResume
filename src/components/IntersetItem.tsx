@@ -37,6 +37,7 @@ const IntersetItem = ({ Intersets }: { Intersets: IntersetType }) => {
     }
   };
 
+  
   return (
     <li
       onMouseEnter={handleMouseEnter}
@@ -61,7 +62,7 @@ const IntersetItem = ({ Intersets }: { Intersets: IntersetType }) => {
       <span className="font-bold">{Intersets.label}</span>
       <div className="w-full pl-3">
         {
-            Intersets.value && <div dangerouslySetInnerHTML={{ __html: Intersets.value }} />
+            Intersets.value && <div className="" dangerouslySetInnerHTML={{ __html: Intersets.value }} />
         }
         
       </div>

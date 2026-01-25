@@ -6,7 +6,7 @@ import LangugeItem from "./LangugeItem";
 import Sortable from 'sortablejs';
 import { Input } from "./ui/input";
 const Languages = () => {
-  const { information,setInformations,fontOptions } = useDragDrop();
+  const { information,setInformations,fontOptions ,scale} = useDragDrop();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
    const [hoverCreate, setHoverCreate] = useState(false);
@@ -39,6 +39,9 @@ const Languages = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
 
+  
+  
+  const computedTitleSize = (fontOptions?.titleSize?? 14) * scale!;
 
 
 
@@ -83,7 +86,7 @@ const Languages = () => {
           }}
           style={{
             color: fontOptions.secondColor,
-            fontSize: fontOptions.titleSize,
+            fontSize: computedTitleSize,
           }}
           className="outline-none pl-0 font-bold text-xl border-none focus:border-2 focus:border-black focus-visible:ring-0 w-60 cursor-pointer"
         >

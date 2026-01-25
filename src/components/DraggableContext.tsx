@@ -352,7 +352,7 @@ useEffect(() => {
     if (locked) return;
 
     const updateScale = () => {
-      setScale(window.innerWidth <= 768 ? 0.6 : 1);
+      setScale(window.innerWidth <= 768 ? 0.43 : 1);
     };
 
     updateScale();

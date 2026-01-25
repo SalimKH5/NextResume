@@ -9,7 +9,7 @@ import ExprienceForm from "./ExprienceForm";
 import Sortable from "sortablejs";
 
 const Expriences = () => {
-  const { information, setInformations,fontOptions } = useDragDrop();
+  const { information, setInformations,fontOptions,scale } = useDragDrop();
 
   const [EditTitle, setEditTitle] = useState<boolean>(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -67,6 +67,10 @@ const Expriences = () => {
     };
   }, [EditTitle]);
 
+const computedTitleSize = (fontOptions?.titleSize ?? 14) * scale!;
+
+
+
   return (
     <div
       onMouseEnter={handleMouseEnter}
@@ -108,7 +112,7 @@ const Expriences = () => {
           onClick={() => {
             setEditTitle(true);
           }}
-          style={{color:fontOptions.secondColor,fontSize:fontOptions.titleSize}} 
+          style={{color:fontOptions.secondColor,fontSize:computedTitleSize}} 
           className=" border-b-2 border-black cursor-pointer pl-0 font-bold   focus:border-black focus-visible:ring-0 w-full"
         >
           {information.titleExprience}

@@ -6,7 +6,7 @@ import IntersetItem from "./IntersetItem";
 import Sortable from "sortablejs";
 
 const IntersetComponent = () => {
-  const { information, fontOptions } = useDragDrop();
+  const { information, fontOptions,scale } = useDragDrop();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [hoverCreate, setHoverCreate] = useState(false);
@@ -26,6 +26,12 @@ const IntersetComponent = () => {
     }
   };
 
+  
+  const computedTextSize = (fontOptions?.textSize ?? 14) * scale!;
+  
+  const computedTitleSize = (fontOptions?.titleSize?? 14) * scale!;
+  
+  
 
 
   
@@ -56,12 +62,12 @@ const IntersetComponent = () => {
         </div>
       )}
       <h3
-            style={{color:fontOptions.secondColor,fontSize:fontOptions.titleSize}} 
+            style={{color:fontOptions.secondColor,fontSize:computedTitleSize}} 
         className="outline-none pl-0 font-bold text-xl border-none focus:border-2 focus:border-black focus-visible:ring-0 w-60"
       >
         Interset
       </h3>
-      <ul ref={listRef} id="hs-basic-usage-example-sortable"  className="w-full flex flex-col gap-1 px-3 text-xs">
+      <ul ref={listRef} id="hs-basic-usage-example-sortable" style={{fontSize:computedTextSize}}  className="w-full flex flex-col gap-1 px-3 text-xs">
         {information?.Intersets &&
           information.Intersets.map((Interset, index) => <IntersetItem key={Interset.id} Intersets={Interset} />)}
       </ul>
