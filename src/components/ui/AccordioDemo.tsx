@@ -12,8 +12,16 @@ import MenuAccordion from "./MenuExprience";
 import { Button } from "./button";
 import MenuExprience from "./MenuExprience";
 import MenuEducations from "../MenuEducations";
+import { useEffect } from "react";
 export function AccordionDemo() {
-    const {information}=useDragDrop();
+    const {information,droppedItems,setDroppedItems}=useDragDrop();
+
+
+  useEffect(()=>{
+        console.log({droppedItems})
+  },[droppedItems])
+
+    console.log({droppedItems});
 
   return (
     <Accordion

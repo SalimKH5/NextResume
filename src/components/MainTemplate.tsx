@@ -60,24 +60,24 @@ const MainTemplate = ({ info }: { info?: GetTypeInformation }) => {
 
 
       {
-         previw && <div className="w-full  py-3 flex md:hidden justify-center ">
+         previw && <div className="w-full  py-3 flex lg:hidden justify-center ">
           {/* <TemplatePage/> */}
           {containerRef && <SelectedTemplate containerRef={containerRef} />}
         </div>
       }
-        <div className="w-full hidden py-3 md:flex justify-center">
+        <div className="w-full hidden py-3 lg:flex md:justify-center">
           {/* <TemplatePage/> */}
           {containerRef && <SelectedTemplate containerRef={containerRef} />}
         </div>
 
         {
-          !previw &&  <div className={`w-full flex md:hidden items-center justify-between px-3`}>
+          !previw &&  <div className={`w-full flex lg:hidden items-center justify-between px-3`}>
           <AccordionDemo/>
         </div>
         }
        
       </div>
-      <div className="fixed w-full py-2 bottom-0 bg-white  flex md:hidden items-center justify-end">
+      <div className="fixed w-full py-2 bottom-0 bg-white  flex lg:hidden items-center justify-end">
                 <Button 
                 className="cursor-pointer"
                 onClick={()=>{

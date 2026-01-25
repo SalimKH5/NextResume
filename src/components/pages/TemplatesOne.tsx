@@ -175,16 +175,11 @@ const computedTextSize = (fontOptions?.textSize ?? 14)
 const computedTitleSize = (fontOptions?.titleSize?? 14)
 
 
-useEffect(()=>{
-console.log({width});
-
-},[width])
-
   return (
     <div ref={containerRef} style={{backgroundColor:"#00000"}} id="template" className={`w-[790px] h-auto 
     
        ${scale===0.43? "transform origin-top-left scale-[0.395466] mb-[-678.892px] mr-[-480px]":""}
-                    sm:transform-none sm:scale-100 sm:mb-0 sm:mr-0
+                           md:transform-none md:scale-100 md:mb-0 md:mr-0
                   
     `}>
       <div className={`w-full  flex flex-col gap-[0.5px] `}>

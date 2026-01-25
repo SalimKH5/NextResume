@@ -21,7 +21,8 @@ const TemplatesTwo = ({
     setMaxPages,
     setDroppedItems,
     setFontOptions,
-    checkItemsInPage
+    checkItemsInPage,
+    scale
   } = useDragDrop();
 
   const containerRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
@@ -170,7 +171,12 @@ const TemplatesTwo = ({
   }, [droppedItems, width, setMaxPages]);
 
   return (
-    <div ref={containerRef} id="template" className="w-[790px] h-auto bg-white">
+    <div ref={containerRef} id="template" className={`w-[790px] h-auto 
+    
+       ${scale===0.43? "transform origin-top-left scale-[0.395466] mb-[-678.892px] mr-[-480px]":""}
+                    md:transform-none md:scale-100 md:mb-0 md:mr-0
+                  
+    `}>
       <div className="w-[790px] flex flex-col gap-[0.5px] justify-center items-center">
         {pagesToRender.map((page) => (
           <div key={page}>

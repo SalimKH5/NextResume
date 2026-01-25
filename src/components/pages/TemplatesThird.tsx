@@ -23,7 +23,8 @@ const TemplatesThird = ({
     setMaxPages,
     setDroppedItems,
     setFontOptions,
-    checkItemsInPage
+    checkItemsInPage,
+    scale
   } = useDragDrop();
 
   const containerRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
@@ -162,16 +163,25 @@ const TemplatesThird = ({
   }, [droppedItems, width, setMaxPages]);
 
 
-  const {scale} = useTextScale();
+ 
 
 const computedTextSize = (fontOptions?.textSize ?? 14) 
 
 const computedTitleSize = (fontOptions?.titleSize?? 14) 
+useEffect(()=>{
+console.log({scale});
+
+},[scale])
 
 
 
   return (
-    <div   ref={containerRef} id="template" className="w-full md:w-[790px] h-auto ">
+    <div   ref={containerRef} id="template" className={`w-[790px] h-auto 
+    
+       ${scale===0.43? "transform origin-top-left scale-[0.395466] mb-[-678.892px] mr-[-480px]":""}
+                    md:transform-none md:scale-100 md:mb-0 md:mr-0
+                  
+    `}>
       <div  className=" w-full  flex flex-col gap-[0.5px] justify-center items-center">
         {pagesToRender.map((page) => (
           <div
@@ -181,7 +191,7 @@ const computedTitleSize = (fontOptions?.titleSize?? 14)
             <div
             
               ref={setContainerRef(page)}
-              className={`w-[790px] px-0 shadow-2xl bg-white relative flex select-none transition-transform duration-300 scale-100`}
+              className={`w-[790px] px-0 shadow-2xl bg-white relative flex select-none transition-transform duration-300`}
               style={{
                 height: "296.85mm", // A4
                 fontSize: computedTextSize,
