@@ -181,16 +181,19 @@ console.log({width});
 },[width])
 
   return (
-    <div ref={containerRef} style={{backgroundColor:"#00000"}} id="template" className="w-full md:w-[790px] h-auto ">
-      <div className={`w-full  flex flex-col gap-[0.5px] ${scale===0.43? "px-14":""}`}>
+    <div ref={containerRef} style={{backgroundColor:"#00000"}} id="template" className={`w-[790px] h-auto 
+    
+       ${scale===0.43? "transform origin-top-left scale-[0.395466] mb-[-678.892px] mr-[-480px]":""}
+                    sm:transform-none sm:scale-100 sm:mb-0 sm:mr-0
+                  
+    `}>
+      <div className={`w-full  flex flex-col gap-[0.5px] `}>
         {pagesToRender.map((page) => (
         <div
                   className={`
                     w-full
-                    justify-center
-                    ${scale===0.43? "transform origin-top-left scale-[0.395466] mb-[-678.892px] mr-[-480px]":""}
-                    sm:transform-none sm:scale-100 sm:mb-0 sm:mr-0
-                  `}
+                 
+                 `}
                   key={page}
                 >
             <div
