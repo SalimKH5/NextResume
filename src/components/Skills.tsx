@@ -63,7 +63,7 @@ const Skills = () => {
   }, []);
 
 
-  const computedTitleSize = (fontOptions?.titleSize ?? 14) * scale!;
+  const computedTitleSize = (fontOptions?.titleSize ?? 14);
 
 
 

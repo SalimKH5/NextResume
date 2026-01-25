@@ -27,9 +27,9 @@ const IntersetComponent = () => {
   };
 
   
-  const computedTextSize = (fontOptions?.textSize ?? 14) * scale!;
+  const computedTextSize = (fontOptions?.textSize ?? 14) 
   
-  const computedTitleSize = (fontOptions?.titleSize?? 14) * scale!;
+  const computedTitleSize = (fontOptions?.titleSize?? 14)
   
   
 

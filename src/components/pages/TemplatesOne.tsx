@@ -170,9 +170,9 @@ const TemplatesOne = ({
     setMaxPages(pages.size > 0 ? Math.max(...pages) : 1);
   }, [droppedItems, width, setMaxPages]);
  
-const computedTextSize = (fontOptions?.textSize ?? 14) * scale!;
+const computedTextSize = (fontOptions?.textSize ?? 14)
 
-const computedTitleSize = (fontOptions?.titleSize?? 14) * scale!;
+const computedTitleSize = (fontOptions?.titleSize?? 14)
 
 
 useEffect(()=>{
@@ -189,7 +189,6 @@ console.log({width});
                     w-full
                     justify-center
                     ${scale===0.43? "transform origin-top-left scale-[0.395466] mb-[-678.892px] mr-[-480px]":""}
-                    
                     sm:transform-none sm:scale-100 sm:mb-0 sm:mr-0
                   `}
                   key={page}
@@ -262,7 +261,7 @@ console.log({width});
 
               <div
                 style={{ flex: 1,paddingTop: `${fontOptions.paddingVertical}px`, }}
-                className="px-6 py-2 flex flex-col gap-4 min-w-96 bg-white"
+                className="px-6 py-2 flex flex-col gap-4  bg-white"
               >
                 {page === 1 && (
                   <>
@@ -302,8 +301,8 @@ console.log({width});
                     onClick={() =>
                       setFontOptions((prev) => ({
                         ...prev,
-                          titleSize: Math.max((prev?.titleSize || 16) - 3, 13)*scale!,
-                        textSize: Math.max((prev?.textSize || 14) - 3, 13)*scale!,
+                          titleSize: Math.max((prev?.titleSize || 16) - 3, 13),
+                        textSize: Math.max((prev?.textSize || 14) - 3, 13),
                         SpaceContent: Math.max(
                           (prev?.SpaceContent || 12) - 3,
                           8
