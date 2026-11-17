@@ -1,88 +1,69 @@
-"use client"
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+"use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+import { FileText, LogOut, UserRound } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import Image from "next/image";
-import { Button } from "./ui/button";
-import { signOut } from "next-auth/react";
-import Link from "next/link";
+import { Logo } from "./brand/Logo";
 
-// Menu items.
 const items = [
-  {
-    title: "Home",
-    url: "#",
-    icon: Home,
-  },
-  {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
+  { title: "My resumes", url: "/locale/dashboard", icon: FileText },
+  { title: "Profile", url: "/locale/edit-profile", icon: UserRound },
 ];
-const SidebarAccount = () => {
+
+export default function SidebarAccount() {
+  const pathname = usePathname();
+  const { data: session } = useSession();
+  const name = [session?.user?.firstName, session?.user?.lastName].filter(Boolean).join(" ");
+
   return (
-    <Sidebar className="py-2 h-full flex flex-col">
-      <SidebarContent>
-        <SidebarGroup  className="py-2 h-full flex flex-col">
-          <SidebarGroupLabel className="flex-[0.1]">
-            <Link
-              href="/"
-              className="flex h-16 w-24 relative items-center gap-2"
-            >
-              <Image src="/logo.svg" alt="logo" fill />
-            </Link>
-          </SidebarGroupLabel>
-          <SidebarGroupContent className="flex-1">
-            <SidebarMenu className="flex flex-col gap-3">
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-          <SidebarFooter>
-                  <Button className="cursor-pointer" onClick={()=>{
-                    signOut()
-                  }}>
-                      Signout
-                  </Button>
-          </SidebarFooter>
-        </SidebarGroup>
+    <Sidebar>
+      <SidebarHeader className="px-5 pt-6 pb-8">
+        <Logo />
+      </SidebarHeader>
+      <SidebarContent className="px-3">
+        <SidebarMenu className="gap-1">
+          {items.map((item) => {
+            const active = pathname === item.url;
+            return (
+              <SidebarMenuItem key={item.url}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={active}
+                  className="h-11 rounded-none border-l-2 border-transparent pl-3 text-[0.95rem] data-[active=true]:border-mint data-[active=true]:bg-mint-wash data-[active=true]:font-medium"
+                >
+                  <Link href={item.url} aria-current={active ? "page" : undefined}>
+                    <item.icon />
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
       </SidebarContent>
+      <SidebarFooter className="border-t border-line p-5">
+        {name && <p className="truncate text-sm font-medium">{name}</p>}
+        {session?.user?.email && (
+          <p className="truncate text-xs text-muted-foreground">{session.user.email}</p>
+        )}
+        <button
+          type="button"
+          onClick={() => signOut({ callbackUrl: "/" })}
+          className="mt-3 inline-flex items-center gap-2 self-start text-sm text-muted-foreground hover:text-ink"
+        >
+          <LogOut className="size-4" /> Sign out
+        </button>
+      </SidebarFooter>
     </Sidebar>
   );
-};
-
-export default SidebarAccount;
+}

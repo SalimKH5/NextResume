@@ -134,7 +134,7 @@ type UserType={
   email?:string,
   gender?:string,
   dateOfbirth?:Date|string,
-  PhoneNumber?:string,
+  phoneNumber?:string,
   address?:string,
   postalCode?:string,
   town?:string,

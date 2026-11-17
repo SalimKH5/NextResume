@@ -1,30 +1,33 @@
-import { CardSignUp } from "@/components/CardSignUp";
+import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import React, { Suspense } from "react";
-
 import { redirect } from "next/navigation";
+import { CardSignUp } from "@/components/CardSignUp";
 import { Navbar1 } from "@/components/Navbar";
+import { Backdrop, DotTitle } from "@/components/brand/Backdrop";
 import { authOptions } from "@/lib/AuthOption";
-import ClientUrlLogger from "@/components/ClientUrlLogger";
 
-const page = async () => {
+export const metadata: Metadata = { title: "Sign in" };
+
+export default async function AuthPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
   const session = await getServerSession(authOptions);
+  if (session) redirect("/locale/dashboard");
+  const { error } = await searchParams;
 
-  if (session) {
-    redirect("/"); // or redirect to "/login"
-  }
   return (
     <>
-      <Suspense fallback={null}>
-        <ClientUrlLogger />
-      </Suspense>
       <Navbar1 />
-
-      <div className="w-full h-full flex min-h-screen items-center justify-center">
-        <CardSignUp />
-      </div>
+      <main className="relative isolate flex min-h-[calc(100svh-5rem)] flex-col items-center justify-center overflow-hidden px-4 py-16 text-center">
+        <Backdrop />
+        <DotTitle className="text-[clamp(3.5rem,11vw,8rem)]">Sign in</DotTitle>
+        <p className="mt-6 mb-10 max-w-md text-lg text-ink/85">
+          Pick up where you left off, or start your first resume.
+        </p>
+        <CardSignUp error={error} />
+      </main>
     </>
   );
-};
-
-export default page;
+}

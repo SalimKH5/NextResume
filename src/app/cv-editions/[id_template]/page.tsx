@@ -1,74 +1,42 @@
-import MainTemplate from "@/components/MainTemplate";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { notFound, redirect } from "next/navigation";
+import { ObjectId } from "mongodb";
+import MainTemplate from "@/components/MainTemplate";
 import { Navbar1 } from "@/components/Navbar";
 import { authOptions } from "@/lib/AuthOption";
+import clientPromise from "@/lib/mongodb";
 
-const getCvDetail = async (user_id: string, id_template?: string):Promise<GetTypeInformation|undefined> => {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"; 
-    let url = `${baseUrl}/api/CvtTmplates?user_id=${user_id}`;
-    if (id_template) {
-      url += `&id_template=${id_template}`;
-    }
-    console.log("Fetching:", url);
+// Read straight from the database (scoped to the session user) instead of
+// fetching our own API over HTTP, which needed NEXT_PUBLIC_BASE_URL and cookie forwarding.
+async function getResume(userId: string, id: string): Promise<GetTypeInformation | null> {
+  if (!ObjectId.isValid(id)) return null;
+  const client = await clientPromise;
+  const doc = await client
+    .db()
+    .collection("templates_info")
+    .findOne({ _id: new ObjectId(id), user_id: userId });
+  if (!doc) return null;
+  return JSON.parse(JSON.stringify(doc)) as GetTypeInformation;
+}
 
-    // Server-side fetch: forward the session cookie so the API can authorize the request.
-    const cookieHeader = (await cookies()).toString();
-    const result = await fetch(url, {
-      method: "GET",
-      headers: { "Content-Type": "application/json", cookie: cookieHeader },
-      cache: "no-store", // ensures fresh data on SSR
-    });
-
-    if (result.ok) {
-      const data = await result.json();
-      return data.templates || [];
-    } else {
-      console.error("Failed to fetch CV details:", result.statusText);
-      return undefined;
-    }
-  } catch (error) {
-    console.error("getCvDetail error:", error);
-    return undefined;
-  }
-};
-
-const Page = async ({
+export default async function EditorPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id_template: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) => {
+}) {
   const { id_template } = await params;
-
-
   const session = await getServerSession(authOptions);
-  if (!session) {
-    redirect("/Auth"); // redirect to login if no session
-  }
+  if (!session?.user?.id) redirect("/Auth");
 
-  const user_id = session.user.id;
-  let template_data:GetTypeInformation|undefined;
-
-  if(user_id){
-      template_data = await getCvDetail(user_id!, id_template);
-        console.log("Template data:", template_data);
-  }
-   
-
-
+  const resume = await getResume(String(session.user.id), id_template);
+  if (!resume) notFound();
 
   return (
     <>
       <Navbar1 />
-      <main className="w-full h-auto md:h-full ">
-        <MainTemplate info={template_data} />
+      <main className="h-auto w-full bg-muted/60 md:min-h-[calc(100svh-4rem)]">
+        <MainTemplate info={resume} />
       </main>
     </>
   );
-};
-
-export default Page;
+}

@@ -1,75 +1,42 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { signIn, useSession } from "next-auth/react";
+
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithubSquare } from "react-icons/fa";
-export function CardSignUp() {
-  const { data: session } = useSession();
+import { Loader2 } from "lucide-react";
+
+const ERRORS: Record<string, string> = {
+  OAuthAccountNotLinked:
+    "This email is already linked to another sign-in method. Sign in the way you did the first time.",
+  SignInError: "Google sign-in didn't complete. Try again.",
+};
+
+export function CardSignUp({ error }: { error?: string }) {
+  const [pending, setPending] = useState(false);
+  const message = error ? ERRORS[error] ?? "Sign-in didn't complete. Try again." : null;
+
   return (
-    <Card className="w-full max-w-sm">
-      <CardHeader>
-        <CardTitle>Login to your account</CardTitle>
-        <CardDescription>
-          Enter your email below to login to your account
-        </CardDescription>
-        <CardAction>
-          <Button variant="link">Sign Up</Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <form>
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <a
-                  href="#"
-                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                >
-                  Forgot your password?
-                </a>
-              </div>
-              <Input id="password" type="password" required />
-            </div>
-          </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="">
-          Login
-        </Button>
-        <div className="flex items-center gap-3 justify-center">
-          <hr className="flex-1 h-1" />
-          <span>Or</span>
-          <hr className="flex-1" />
-        </div>
-        <div className="flex flex-col gap-3">
-          <Button    onClick={() => signIn("google")} variant="outline" className=" cursor-pointer">
-           <span>Login with Google</span>
-           <FcGoogle   size={22}/>
-          </Button>
-        </div>
-      </CardFooter>
-    </Card>
+    <div className="w-full max-w-sm">
+      {message && (
+        <p role="alert" className="mb-5 border-l-2 border-destructive pl-3 text-sm text-destructive">
+          {message}
+        </p>
+      )}
+      <button
+        type="button"
+        disabled={pending}
+        onClick={() => {
+          setPending(true);
+          signIn("google", { callbackUrl: "/locale/dashboard" });
+        }}
+        className="flex h-14 w-full items-center justify-center gap-3 rounded-md border-2 border-ink bg-background text-base font-medium transition-colors hover:bg-mint-wash disabled:opacity-60"
+      >
+        {pending ? <Loader2 className="size-5 animate-spin" /> : <FcGoogle size={22} />}
+        Continue with Google
+      </button>
+      <p className="mt-4 text-sm text-muted-foreground">
+        We only use your name and email to save your resumes.
+      </p>
+    </div>
   );
 }

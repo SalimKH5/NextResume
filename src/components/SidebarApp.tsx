@@ -130,20 +130,6 @@ export default function AppSidebar() {
 
   const activeItem = sidebarItems.find((i) => i.key === activeKey) || null;
 
-  useEffect(() => {
-    const element = refNavbar.current;
-    if (!element) return;
-
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        console.log("Navbar resized:", entry.contentRect);
-      }
-    });
-
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
-
   // Track scroll
   useEffect(() => {
     const handleScroll = () => {
@@ -158,16 +144,19 @@ export default function AppSidebar() {
     <div>
       <div
        
-        className={`hidden lg:flex fixed min-h-screen z-[9999]  ${isScrolled ? "top-0" : ""}`}
+        className={`hidden lg:flex fixed min-h-screen z-40  ${isScrolled ? "top-0" : ""}`}
       >
         {/* Main icons column */}
-        <div  ref={refNavbar} className="w-16 bg-white flex flex-col items-center py-4 space-y-4 border-r border-2">
+        <div  ref={refNavbar} className="w-16 bg-background flex flex-col items-center py-4 gap-2 border-r border-line">
           {sidebarItems.map((item) => (
             <button
               key={item.key}
               onClick={() => toggleSubSidebar(item.key)}
-              className={`p-2 rounded cursor-pointer ${
-                activeKey === item.key ? "text-pink-600" : ""
+              aria-label={item.label}
+              title={item.label}
+              aria-pressed={activeKey === item.key}
+              className={`grid size-10 place-items-center rounded-md cursor-pointer transition-colors hover:bg-mint-wash ${
+                activeKey === item.key ? "bg-mint-wash text-ink shadow-[inset_2px_0_0_var(--mint)]" : "text-muted-foreground"
               }`}
             >
               <item.icon size={20} />
@@ -177,14 +166,15 @@ export default function AppSidebar() {
 
         {/* Sub sidebar */}
         {activeItem && (
-          <div className="w-60 xl:w-72 bg-white border-r border-zinc-700 p-4">
+          <div className="w-60 xl:w-72 bg-background border-r border-line p-4 overflow-y-auto">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-semibold uppercase">
+              <span className="text-base font-medium tracking-tight">
                 {activeItem.label}
               </span>
               <button
                 onClick={() => setActiveKey(null)}
-                className="text-zinc-400 hover:text-white"
+                aria-label="Close panel"
+                className="text-muted-foreground hover:text-ink"
               >
                 <ChevronLeft size={16} />
               </button>
@@ -211,8 +201,8 @@ export default function AppSidebar() {
                             </span>
                           </DraggableItem>
                         ) : (
-                          <span className="text-zinc-400 opacity-50">
-                            {sub.label} (used)
+                          <span className="text-muted-foreground">
+                            {sub.label} (on page)
                           </span>
                         )
                       ) : (

@@ -1,224 +1,197 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { PhoneInput } from "@/components/phone-input";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { DotTitle } from "@/components/brand/Backdrop";
 
+type ProfileForm = {
+  firstName: string;
+  lastName: string;
+  gender: string;
+  dateOfbirth: string;
+  phoneNumber: string;
+  email: string;
+  address: string;
+  postalCode: string;
+  town: string;
+  country: string;
+};
 
+const toDateInput = (d?: Date | string) => {
+  if (!d) return "";
+  const date = new Date(d);
+  return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10);
+};
 
+const fromUser = (u?: UserType): ProfileForm => ({
+  firstName: u?.firstName ?? "",
+  lastName: u?.lastName ?? "",
+  gender: u?.gender ?? "",
+  dateOfbirth: toDateInput(u?.dateOfbirth),
+  phoneNumber: u?.phoneNumber ?? "",
+  email: u?.email ?? "",
+  address: u?.address ?? "",
+  postalCode: u?.postalCode ?? "",
+  town: u?.town ?? "",
+  country: u?.country ?? "",
+});
 
+type Status = { kind: "idle" } | { kind: "saving" } | { kind: "saved" } | { kind: "error"; message: string };
 
+function Field({
+  id,
+  label,
+  optional,
+  className,
+  children,
+}: {
+  id?: string;
+  label: string;
+  optional?: boolean;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={`flex flex-col gap-2 ${className ?? ""}`}>
+      <Label htmlFor={id} className="text-sm font-medium">
+        {label}
+        {optional && <span className="font-normal text-muted-foreground"> (optional)</span>}
+      </Label>
+      {children}
+    </div>
+  );
+}
+
+const inputClass = "h-12 text-base";
 
 export default function ProfilePage() {
-  const { data: session, update ,status} = useSession();
-  const user = session?.user;
+  const { data: session, update, status: sessionStatus } = useSession();
+  const [form, setForm] = useState<ProfileForm>(() => fromUser(session?.user));
+  const [status, setStatus] = useState<Status>({ kind: "idle" });
 
-  const [form, setForm] = useState<UserType>({
-    firstName: user?.firstName,
-    lastName: user?.lastName ,
-    gender: user?.gender ,
-    dateOfbirth: user?.dateOfbirth?.toString() ,
-    PhoneNumber: user?.PhoneNumber ,
-    email: user?.email,
-    address: user?.address ,
-    postalCode: user?.postalCode ,
-    town: user?.town ,
-    country: user?.country,
-  });
-
-
-  useEffect(()=>{
-    if(status==="authenticated"){
-           setForm(session?.user);
-    }
-   
-  },[session])
+  // Fill the form once the session is available.
+  useEffect(() => {
+    if (sessionStatus === "authenticated") setForm(fromUser(session?.user));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionStatus]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((prev:UserType) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (status.kind !== "idle") setStatus({ kind: "idle" });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const res = await fetch("/api/user", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-
-    if (res.ok) {
-      // Option 1: Refresh session to get updated user data
+    setStatus({ kind: "saving" });
+    // email is the account identity and is not editable here
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { email, ...payload } = form;
+    try {
+      const res = await fetch("/api/user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error ?? "Your changes weren't saved. Try again.");
+      }
       await update();
-
-      // Option 2: Or force signIn again with updated info to update token (if needed)
-      // await signIn("credentials", { email: form.email }, { redirect: false });
-
-      alert("Profile updated successfully!");
-    } else {
-      alert("Error updating profile");
+      setStatus({ kind: "saved" });
+    } catch (err) {
+      setStatus({ kind: "error", message: (err as Error).message });
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full max-w-7xl mx-auto flex flex-col gap-6 p-6"
-    >
-      <h1>Informations personnelles</h1>
-      <div className="grid grid-cols-2 gap-9">
-        <div className="flex flex-col gap-3">
-          <Label htmlFor="firstName">First Name</Label>
-          <Input
-            id="firstName"
-            name="firstName"
-            type="text"
-            placeholder="Enter your first name"
-            value={form.firstName!}
-            onChange={handleChange}
-            className="max-w-xs"
-            required
-          />
-        </div>
-        <div className="flex flex-col gap-3">
-          <Label htmlFor="lastName">Last Name</Label>
-          <Input
-            id="lastName"
-            name="lastName"
-            type="text"
-            placeholder="Enter your last name"
-            value={form.lastName!}
-            onChange={handleChange}
-            className="max-w-xs"
-            required
-          />
-        </div>
-
-        <div className="flex flex-col gap-3">
-          <Label>Gender</Label>
-          <div className="flex items-center gap-3">
-            <input
-              type="radio"
-              id="gender-female"
-              name="gender"
-              value="female"
-              checked={form.gender === "female"}
-              onChange={handleChange}
-              className="h-3 w-3"
-            />
-            <label htmlFor="gender-female">Women</label>
-          </div>
-          <div className="flex items-center gap-3">
-            <input
-              type="radio"
-              id="gender-male"
-              name="gender"
-              value="male"
-              checked={form.gender === "male"}
-              onChange={handleChange}
-              className="h-3 w-3"
-            />
-            <label htmlFor="gender-male">Men</label>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-3">
-          <Label htmlFor="dateOfBirth">Date of Birth</Label>
-          <Input
-            id="dateOfbirth"
-            name="dateOfbirth"
-            type="date"
-            value={form.dateOfbirth as string}
-            onChange={handleChange}
-            className="max-w-xs"
-          />
-        </div>
-
-        <div className="col-span-2 flex flex-col gap-3">
-          <Label>Numéro de téléphone (optionnel)</Label>
-          <PhoneInput
-            name="phoneNumber"
-            value={form.PhoneNumber}
-            onChange={(value) => setForm((prev:UserType) => ({ ...prev, phoneNumber: value }))}
-            className="max-w-xs"
-          />
-        </div>
-
-        <div className="col-span-2 flex flex-col gap-3">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            className="py-6 disabled:bg-gray-200"
-          />
-        </div>
-
-        <div className="col-span-2 flex flex-col gap-3">
-          <Label htmlFor="address">Adresse (optionnel)</Label>
-          <Input
-            id="address"
-            name="address"
-            type="text"
-            placeholder="Enter your address"
-            value={form.address}
-            onChange={handleChange}
-            className="py-6"
-          />
-        </div>
-
-        <div className="col-span-2 grid md:grid-cols-3 gap-3">
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="postalCode">Code postal (optionnel)</Label>
-            <Input
-              id="postalCode"
-              name="postalCode"
-              type="text"
-              placeholder="Enter your postalCode"
-              value={form.postalCode}
-              onChange={handleChange}
-              className="py-6"
-            />
-          </div>
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="town">Ville (optionnel)</Label>
-            <Input
-              id="town"
-              name="town"
-              type="text"
-              placeholder="Enter your town"
-              value={form.town}
-              onChange={handleChange}
-              className="py-6"
-            />
-          </div>
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="country">Pays (optionnel)</Label>
-            <Input
-              id="country"
-              name="country"
-              type="text"
-              placeholder="Enter your country"
-              value={form.country}
-              onChange={handleChange}
-              className="py-6"
-            />
-          </div>
-        </div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-12">
+      <div>
+        <DotTitle className="text-[clamp(2.75rem,7vw,5rem)]">Profile</DotTitle>
+        <p className="mt-4 max-w-lg text-muted-foreground">
+          These details fill in the header of every resume you create.
+        </p>
       </div>
 
-      <Button
-        type="submit"
-        className="mt-6 px-6 py-3 cursor-pointer bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-      >
-        Enregistrer les modifications
-      </Button>
+      <fieldset className="grid gap-x-8 gap-y-7 border-t-2 border-ink pt-8 md:grid-cols-2">
+        <legend className="sr-only">Personal details</legend>
+        <Field id="firstName" label="First name">
+          <Input id="firstName" name="firstName" autoComplete="given-name" value={form.firstName} onChange={handleChange} className={inputClass} required />
+        </Field>
+        <Field id="lastName" label="Last name">
+          <Input id="lastName" name="lastName" autoComplete="family-name" value={form.lastName} onChange={handleChange} className={inputClass} required />
+        </Field>
+
+        <div className="flex flex-col gap-2" role="radiogroup" aria-labelledby="gender-label">
+          <span id="gender-label" className="text-sm font-medium">
+            Gender <span className="font-normal text-muted-foreground">(optional)</span>
+          </span>
+          <div className="flex h-12 items-center gap-6">
+            {[
+              { value: "female", label: "Woman" },
+              { value: "male", label: "Man" },
+            ].map((g) => (
+              <label key={g.value} className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="radio"
+                  name="gender"
+                  value={g.value}
+                  checked={form.gender === g.value}
+                  onChange={handleChange}
+                  className="size-4 accent-[var(--ink)]"
+                />
+                {g.label}
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <Field id="dateOfbirth" label="Date of birth" optional>
+          <Input id="dateOfbirth" name="dateOfbirth" type="date" autoComplete="bday" value={form.dateOfbirth} onChange={handleChange} className={inputClass} />
+        </Field>
+
+        <Field label="Phone number" optional>
+          <PhoneInput
+            name="phoneNumber"
+            value={form.phoneNumber}
+            onChange={(value) => setForm((prev) => ({ ...prev, phoneNumber: value ?? "" }))}
+          />
+        </Field>
+
+        <Field id="email" label="Email">
+          <Input id="email" name="email" type="email" value={form.email} readOnly disabled className={inputClass} />
+        </Field>
+      </fieldset>
+
+      <fieldset className="grid gap-x-8 gap-y-7 border-t-2 border-ink pt-8 md:grid-cols-3">
+        <legend className="sr-only">Address</legend>
+        <Field id="address" label="Address" optional className="md:col-span-3">
+          <Input id="address" name="address" autoComplete="street-address" value={form.address} onChange={handleChange} className={inputClass} />
+        </Field>
+        <Field id="postalCode" label="Postal code" optional>
+          <Input id="postalCode" name="postalCode" autoComplete="postal-code" value={form.postalCode} onChange={handleChange} className={inputClass} />
+        </Field>
+        <Field id="town" label="City" optional>
+          <Input id="town" name="town" autoComplete="address-level2" value={form.town} onChange={handleChange} className={inputClass} />
+        </Field>
+        <Field id="country" label="Country" optional>
+          <Input id="country" name="country" autoComplete="country-name" value={form.country} onChange={handleChange} className={inputClass} />
+        </Field>
+      </fieldset>
+
+      <div className="flex flex-wrap items-center gap-5 border-t border-line pt-8">
+        <Button type="submit" size="lg" className="h-12 px-6" disabled={status.kind === "saving"}>
+          {status.kind === "saving" ? "Saving…" : "Save changes"}
+        </Button>
+        <p aria-live="polite" className="text-sm">
+          {status.kind === "saved" && <span className="text-mint-deep">Changes saved.</span>}
+          {status.kind === "error" && <span className="text-destructive">{status.message}</span>}
+        </p>
+      </div>
     </form>
   );
 }

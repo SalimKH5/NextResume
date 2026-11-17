@@ -47,8 +47,8 @@ export const authOptions: NextAuthOptions = {
 
   pages: {
     signIn: "/Auth",
-    newUser: "/edit-account",
-    error: "/auth/error",
+    newUser: "/locale/edit-profile",
+    error: "/Auth",
   },
 
   secret: process?.env?.NEXTAUTH_SECRET,
@@ -73,13 +73,13 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (!isLinked) {
-          return "/auth/error?error=OAuthAccountNotLinked";
+          return "/Auth?error=OAuthAccountNotLinked";
         }
 
         return true;
       } catch (error) {
         console.error("Error in signIn callback:", error);
-        return "/auth/error?error=SignInError";
+        return "/Auth?error=SignInError";
       }
     },
 

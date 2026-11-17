@@ -17,11 +17,7 @@ export function AccordionDemo() {
     const {information,droppedItems,setDroppedItems}=useDragDrop();
 
 
-  useEffect(()=>{
-        console.log({droppedItems})
-  },[droppedItems])
 
-    console.log({droppedItems});
 
   return (
     <Accordion
