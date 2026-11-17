@@ -212,7 +212,7 @@ console.log({scale});
                  {page === 1 && (
                 <div className="flex items-center justify-between gap-1  ">
                   <div className="flex-1 flex flex-col gap-1">
-                    <h1 style={{fontSize:computedTitleSize}}>{information.title}</h1>
+                    <h2 style={{fontSize:computedTitleSize}}>{information.title}</h2>
                     <h2 style={{fontSize:(fontOptions?.titleSize&& computedTitleSize-3)}}>
                       {session?.user?.firstName} {session?.user?.lastName}
                     </h2>

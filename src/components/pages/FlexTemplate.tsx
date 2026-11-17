@@ -81,7 +81,7 @@ function usePages() {
 export function OverflowNotice({ onShrink, onAddPage }: { onShrink: () => void; onAddPage: () => void }) {
   const { t } = useI18n();
   return (
-    <div className="no-print flex w-full flex-wrap items-center justify-between gap-3 border-l-4 border-amber-400 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+    <div role="status" className="no-print flex w-full flex-wrap items-center justify-between gap-3 border-l-4 border-amber-400 bg-amber-50 px-4 py-3 text-sm text-amber-950">
       <span>{t.editor.overflow}</span>
       <span className="flex gap-2">
         <button type="button" onClick={onShrink} className="rounded-md border border-amber-300 bg-white px-3 py-1.5 font-medium hover:bg-amber-100">
@@ -100,9 +100,9 @@ function FullName({ className, style }: { className?: string; style?: React.CSSP
   const { t } = useI18n();
   const name = [session?.user?.firstName, session?.user?.lastName].filter(Boolean).join(" ");
   return (
-    <h1 className={className} style={style}>
+    <h2 className={className} style={style}>
       {name || t.resume.yourName}
-    </h1>
+    </h2>
   );
 }
 

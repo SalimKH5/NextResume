@@ -20,7 +20,7 @@ export default async function AccountLayout({ children }: { children: React.Reac
         <div className="flex h-14 items-center px-4 md:hidden">
           <SidebarTrigger />
         </div>
-        <main className="mx-auto w-full max-w-5xl px-4 pb-20 pt-6 sm:px-8 md:pt-16">{children}</main>
+        <main id="main" tabIndex={-1} className="mx-auto w-full max-w-5xl px-4 pb-20 pt-6 sm:px-8 md:pt-16">{children}</main>
       </div>
     </SidebarProvider>
   );

@@ -1,178 +1,90 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react'
-import { useEditor, EditorContent, useEditorState, Editor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import { TextStyleKit } from '@tiptap/extension-text-style'
+import { useEditor, EditorContent, useEditorState, type Editor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { TextStyleKit } from "@tiptap/extension-text-style";
+import { Bold, Italic, List, ListOrdered, Redo2, Undo2, type LucideIcon } from "lucide-react";
+import { IconButton } from "./editor/Tip";
+import { useI18n } from "@/i18n/I18nProvider";
 
-// Lucide Icons
-import {
-  Bold,
-  Italic,
-  Strikethrough,
-  Code,
-  Undo,
-  Redo,
-  List,
-  ListOrdered,
-  Heading1,
-  Heading2,
-  Heading3,
-  Heading4,
-  Heading5,
-  Heading6,
-  Quote,
-  Minus,
-  Pilcrow,
-  Eraser,
-} from 'lucide-react'
+const extensions = [TextStyleKit, StarterKit];
 
-// Helper to join classes
-const cn = (...classes: (string | boolean | undefined)[]) => classes.filter(Boolean).join(' ')
-
-const extensions = [TextStyleKit, StarterKit]
-
+/** Resume-sized toolbar: the formatting a resume actually uses, every button named. */
 function MenuBar({ editor }: { editor: Editor }) {
-  const state = useEditorState({
+  const { t } = useI18n();
+  const r = t.editor.richText;
+  const s = useEditorState({
     editor,
-    selector: ctx => ({
-      isBold: ctx.editor.isActive('bold'),
-      canBold: ctx.editor.can().chain().focus().toggleBold().run(),
-      isItalic: ctx.editor.isActive('italic'),
-      canItalic: ctx.editor.can().chain().focus().toggleItalic().run(),
-      isStrike: ctx.editor.isActive('strike'),
-      canStrike: ctx.editor.can().chain().focus().toggleStrike().run(),
-      isCode: ctx.editor.isActive('code'),
-      isParagraph: ctx.editor.isActive('paragraph'),
-      isHeading1: ctx.editor.isActive('heading', { level: 1 }),
-      isHeading2: ctx.editor.isActive('heading', { level: 2 }),
-      isHeading3: ctx.editor.isActive('heading', { level: 3 }),
-      isHeading4: ctx.editor.isActive('heading', { level: 4 }),
-      isHeading5: ctx.editor.isActive('heading', { level: 5 }),
-      isHeading6: ctx.editor.isActive('heading', { level: 6 }),
-      isBulletList: ctx.editor.isActive('bulletList'),
-      isOrderedList: ctx.editor.isActive('orderedList'),
-      isCodeBlock: ctx.editor.isActive('codeBlock'),
-      isBlockquote: ctx.editor.isActive('blockquote'),
-      canUndo: ctx.editor.can().chain().focus().undo().run(),
-      canRedo: ctx.editor.can().chain().focus().redo().run(),
+    selector: ({ editor: e }) => ({
+      bold: e.isActive("bold"),
+      italic: e.isActive("italic"),
+      bullet: e.isActive("bulletList"),
+      ordered: e.isActive("orderedList"),
+      canUndo: e.can().chain().undo().run(),
+      canRedo: e.can().chain().redo().run(),
     }),
-  })
+  });
 
-  const btnStyle = (active: boolean) =>
-    cn(
-      'p-2 border rounded text-sm hover:bg-gray-200',
-      active && 'bg-black text-white border-black'
-    )
+  const tools: { label: string; icon: LucideIcon; active?: boolean; disabled?: boolean; run: () => void; shortcut?: string }[] = [
+    { label: r.bold, icon: Bold, active: s.bold, shortcut: "Ctrl+B", run: () => editor.chain().focus().toggleBold().run() },
+    { label: r.italic, icon: Italic, active: s.italic, shortcut: "Ctrl+I", run: () => editor.chain().focus().toggleItalic().run() },
+    { label: r.bullets, icon: List, active: s.bullet, run: () => editor.chain().focus().toggleBulletList().run() },
+    { label: r.numbered, icon: ListOrdered, active: s.ordered, run: () => editor.chain().focus().toggleOrderedList().run() },
+    { label: t.editor.undo, icon: Undo2, disabled: !s.canUndo, run: () => editor.chain().focus().undo().run() },
+    { label: t.editor.redo, icon: Redo2, disabled: !s.canRedo, run: () => editor.chain().focus().redo().run() },
+  ];
 
   return (
-    <div className="flex flex-wrap gap-2 p-2 border-b">
-      <button onClick={() => editor.chain().focus().toggleBold().run()} disabled={!state.canBold} className={btnStyle(state.isBold)}>
-        <Bold size={16} />
-      </button>
-      <button onClick={() => editor.chain().focus().toggleItalic().run()} disabled={!state.canItalic} className={btnStyle(state.isItalic)}>
-        <Italic size={16} />
-      </button>
-      <button onClick={() => editor.chain().focus().toggleStrike().run()} disabled={!state.canStrike} className={btnStyle(state.isStrike)}>
-        <Strikethrough size={16} />
-      </button>
-      <button onClick={() => editor.chain().focus().toggleCode().run()} className={btnStyle(state.isCode)}>
-        <Code size={16} />
-      </button>
-
-      <button onClick={() => editor.chain().focus().setParagraph().run()} className={btnStyle(state.isParagraph)}>
-        <Pilcrow size={16} />
-      </button>
-
-      <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={btnStyle(state.isHeading1)}>
-        <Heading1 size={16} />
-      </button>
-      <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={btnStyle(state.isHeading2)}>
-        <Heading2 size={16} />
-      </button>
-      <button onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={btnStyle(state.isHeading3)}>
-        <Heading3 size={16} />
-      </button>
-      <button onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()} className={btnStyle(state.isHeading4)}>
-        <Heading4 size={16} />
-      </button>
-      <button onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()} className={btnStyle(state.isHeading5)}>
-        <Heading5 size={16} />
-      </button>
-      <button onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()} className={btnStyle(state.isHeading6)}>
-        <Heading6 size={16} />
-      </button>
-
-      <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={`${btnStyle(state.isBulletList)} list-item`}>
-        <List  size={16} />
-      </button>
-      <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className={btnStyle(state.isOrderedList)}>
-        <ListOrdered size={16} />
-      </button>
-
-      <button onClick={() => editor.chain().focus().toggleBlockquote().run()} className={btnStyle(state.isBlockquote)}>
-        <Quote size={16} />
-      </button>
-      <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={btnStyle(state.isCodeBlock)}>
-        {'</>'}
-      </button>
-
-      <button onClick={() => editor.chain().focus().setHorizontalRule().run()} className={btnStyle(false)}>
-        <Minus size={16} />
-      </button>
-      <button onClick={() => editor.chain().focus().setHardBreak().run()} className={btnStyle(false)}>
-        ↵
-      </button>
-
-      <button onClick={() => editor.chain().focus().unsetAllMarks().run()} className={btnStyle(false)}>
-        <Eraser size={16} />
-      </button>
-
-      <button onClick={() => editor.chain().focus().undo().run()} disabled={!state.canUndo} className={btnStyle(false)}>
-        <Undo size={16} />
-      </button>
-      <button onClick={() => editor.chain().focus().redo().run()} disabled={!state.canRedo} className={btnStyle(false)}>
-        <Redo size={16} />
-      </button>
+    <div role="toolbar" aria-label={r.toolbar} className="flex flex-wrap items-center gap-0.5 border-b border-input bg-muted/50 p-1">
+      {tools.map(({ label, icon: Icon, active, disabled, run, shortcut }, i) => (
+        <span key={label} className="contents">
+          {i === 4 && <span aria-hidden="true" className="mx-1 h-5 w-px bg-input" />}
+          <IconButton
+            label={label}
+            shortcut={shortcut}
+            side="top"
+            onClick={run}
+            disabled={disabled}
+            aria-pressed={active === undefined ? undefined : active}
+            className={active ? "bg-ink text-white hover:bg-ink/90" : undefined}
+          >
+            <Icon className="size-4" />
+          </IconButton>
+        </span>
+      ))}
     </div>
-  )
+  );
 }
 
-type propos={
-    value: string
-  onChange: (e: { target: { value: string } }) => void
-}
+type Props = {
+  value: string;
+  onChange: (e: { target: { value: string } }) => void;
+  /** id of the visible label, so the text area has an accessible name */
+  labelledBy?: string;
+};
 
-
-export default function TipTapEditor({value,onChange}:propos) {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+export default function TipTapEditor({ value, onChange, labelledBy }: Props) {
   const editor = useEditor({
     extensions,
-    content:value,
+    content: value,
     editorProps: {
       attributes: {
-        class: "flex flex-col gap-3 px-4 py-3  justify-start border-b border-r border-l border-gray-700 text-gray-400 items-start w-full gap-3 font-medium text-[16px] pt-4 rounded-bl-md rounded-br-md outline-none",
+        class: "min-h-28 w-full px-4 py-3 text-[15px] leading-relaxed text-ink outline-none",
+        role: "textbox",
+        "aria-multiline": "true",
+        ...(labelledBy ? { "aria-labelledby": labelledBy } : {}),
       },
     },
-    autofocus: false,
-    injectCSS: true,
-    editable: true,
     immediatelyRender: false,
-    onUpdate: ({ editor }) => {
-      onChange({ target: { value: editor.getHTML() } })
-    },
-  })
+    onUpdate: ({ editor: e }) => onChange({ target: { value: e.getHTML() } }),
+  });
 
-  if (!mounted || !editor) return null
+  if (!editor) return <div className="min-h-36 rounded-md border border-input bg-muted/40" aria-hidden="true" />;
 
   return (
-    <div className="bg-white border rounded shadow-sm">
+    <div className="overflow-hidden rounded-md border border-input bg-white focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ink">
       <MenuBar editor={editor} />
-      <EditorContent   editor={editor} />
+      <EditorContent editor={editor} />
     </div>
-  )
+  );
 }

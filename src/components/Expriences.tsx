@@ -8,42 +8,17 @@ import { Delete, Edit, Plus } from "lucide-react";
 import ExpriencesItem from "./ExpriencesItem";
 import ExprienceForm from "./ExprienceForm";
 import { useSortableList } from "./editor/useSortableList";
+import SectionTitle from "./SectionTitle";
 
 const Expriences = () => {
   const { information, setInformations,fontOptions,scale } = useDragDrop();
   const { t } = useI18n();
-
-  const [EditTitle, setEditTitle] = useState<boolean>(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-
-  const inputRef = useRef<HTMLInputElement>(null);
 
 
   const listRef = useRef<HTMLUListElement>(null);
   
     useSortableList(listRef, "Expriences");
-  
-
-
-  // 🔁 Detect outside click to disable edit mode
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        inputRef.current &&
-        !inputRef.current.contains(event.target as Node)
-      ) {
-        setEditTitle(false);
-      }
-    };
-
-    if (EditTitle) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [EditTitle]);
 
 const computedTitleSize = (fontOptions?.titleSize ?? 14);
 
@@ -60,39 +35,9 @@ const computedTitleSize = (fontOptions?.titleSize ?? 14);
         </ExprienceForm>
       </div>
 
-      {EditTitle ? (
-        <Input
-          ref={inputRef}
-          type="text"
-          className="text-blue-600 outline-none cursor-pointer pl-0 font-bold text-xl border-none focus:border-2 focus:border-black focus-visible:ring-0 w-60"
-          
-           value={information.titleExprience}
-          onChange={(e) => {
-            const value = e.target.value;
-            setInformations((prev) => ({
-              ...prev,
-              titleExprience: value,
-            }));
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              setEditTitle(false);
-            }
-          }}
-        />
-      ) : (
-        <h1
-          onClick={() => {
-            setEditTitle(true);
-          }}
-          style={{color:fontOptions.secondColor,fontSize:computedTitleSize}} 
-          className=" border-b-2 border-current cursor-pointer pl-0 font-bold   focus:border-black focus-visible:ring-0 w-full"
-        >
-          {information.titleExprience}
-        </h1>
-      )}
+      <SectionTitle field="titleExprience" />
 
-      <ul ref={listRef} id="hs-basic-usage-example-sortable"  className="flex flex-col gap-4">
+      <ul ref={listRef}  className="flex flex-col gap-4">
         {information?.Expriences &&
           information?.Expriences.map((info) => (
             <ExpriencesItem key={info.id} info={info} />

@@ -6,7 +6,16 @@ import { RESUME_FONTS } from "@/fonts/resumeFonts";
 import { useI18n } from "@/i18n/I18nProvider";
 
 
-const SWATCHES = ["#06191b", "#333333", "#1e3a5f", "#0f766e", "#0a9e73", "#479099", "#8a6a2f", "#9f1239"];
+const SWATCHES = [
+  { hex: "#06191b", name: "Ink" },
+  { hex: "#333333", name: "Graphite" },
+  { hex: "#1e3a5f", name: "Navy" },
+  { hex: "#0f766e", name: "Teal" },
+  { hex: "#077a59", name: "Green" },
+  { hex: "#2f7480", name: "Sea" },
+  { hex: "#8a6a2f", name: "Bronze" },
+  { hex: "#9f1239", name: "Wine" },
+];
 
 type NumKey = "textSize" | "titleSize" | "paddingHorizontal" | "paddingVertical" | "SpaceContent" | "SpaceInside";
 type ColorKey = "BackgroundColor" | "primaryColor" | "secondColor";
@@ -46,14 +55,16 @@ export default function Options() {
           />
         </div>
         <div className="flex gap-1.5" role="group" aria-label={`${label} presets`}>
-          {SWATCHES.map((c) => (
+          {SWATCHES.map(({ hex, name }) => (
             <button
-              key={c}
+              key={hex}
               type="button"
-              aria-label={c}
-              onClick={() => set(key, c)}
-              className={`size-5 rounded-full border ${value.toLowerCase() === c ? "ring-2 ring-mint ring-offset-1" : "border-line"}`}
-              style={{ background: c }}
+              aria-label={`${label}: ${name}`}
+              title={name}
+              aria-pressed={value.toLowerCase() === hex}
+              onClick={() => set(key, hex)}
+              className={`size-6 rounded-full border ${value.toLowerCase() === hex ? "ring-2 ring-ink ring-offset-2" : "border-line"}`}
+              style={{ background: hex }}
             />
           ))}
         </div>

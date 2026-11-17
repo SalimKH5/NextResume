@@ -187,7 +187,7 @@ const TemplatesTwo = ({
                 id="page-header"
                 className="w-full flex items-center justify-between py-3"
               >
-                <h1>Page °{page}</h1>
+                <h2>Page °{page}</h2>
                 <button
                   hidden={checkItemsInPage(page)} 
                   style={{backgroundColor: "rgba(219, 54, 21, 1)"}}
@@ -232,17 +232,17 @@ const TemplatesTwo = ({
                       }}
                       className="flex items-center justify-center"
                     >
-                      <h1
+                      <h2
                         style={{ fontSize: fontOptions.titleSize }}
                         className="text-center font-bold capitalize"
                       >
                         {session?.user?.firstName} {session?.user?.lastName}
-                      </h1>
+                      </h2>
                     </div>
 
                     <div className="absolute -bottom-2 text-white w-full flex items-center justify-center px-6">
                       <div className="bg-[#3A3538] text-center max-w-64 px-4 py-2">
-                        <h1>{information.title}</h1>
+                        <h2>{information.title}</h2>
                       </div>
                     </div>
                   </div>

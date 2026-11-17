@@ -4,7 +4,7 @@ import { useEffect, type RefObject } from "react";
 import Sortable from "sortablejs";
 import { useDragDrop } from "../DraggableContext";
 
-type ListField = "skills" | "Languages" | "Expriences" | "Educations" | "Intersets";
+export type ListField = "skills" | "Languages" | "Expriences" | "Educations" | "Intersets";
 
 /**
  * Drag to reorder the items of a list inside a section.

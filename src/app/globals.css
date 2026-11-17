@@ -55,7 +55,7 @@
   --ink: #06191b;
   --paper: #ffffff;
   --mint: #17e2a5;
-  --mint-deep: #0a9e73; /* mint dark enough for text/icons on white */
+  --mint-deep: #077a59; /* 5.3:1 on white: mint dark enough for text */
   --mint-wash: #e8fbf5;
   --line: #e2ebe9;
   --muted-ink: #5a6b6a;
@@ -76,7 +76,7 @@
   --accent-foreground: var(--ink);
   --destructive: #c23b22;
   --border: var(--line);
-  --input: #d5e0de;
+  --input: #7d8f8d; /* 3.4:1: form field edges must be visible (WCAG 1.4.11) */
   --ring: var(--mint);
   --chart-1: #17e2a5;
   --chart-2: #0a9e73;
@@ -146,9 +146,11 @@
     background: var(--mint);
     color: var(--ink);
   }
+  /* Ink outline (18:1) + mint halo: visible on white, mint and dark fills. */
   :focus-visible {
-    outline: 2px solid var(--mint);
+    outline: 2px solid var(--ink);
     outline-offset: 2px;
+    box-shadow: 0 0 0 5px rgba(23, 226, 165, 0.55);
   }
 }
 
@@ -355,6 +357,10 @@
 .nr-action:hover {
   background: var(--mint-wash);
 }
+.nr-action:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
 .nr-action[data-danger]:hover {
   background: #fef2f2;
   color: #b91c1c;
@@ -405,4 +411,29 @@
     background: none;
     box-shadow: none;
   }
+}
+
+/* Skip link: first focusable element, visible only when focused. */
+.nr-skip {
+  position: fixed;
+  left: 16px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 600;
+  transition: top 0.15s ease;
+}
+main:focus,
+[role="dialog"]:focus,
+[role="dialog"]:focus-visible {
+  outline: none;
+}
+main:focus {
+  box-shadow: none;
+}
+.nr-skip:focus {
+  top: 12px;
 }

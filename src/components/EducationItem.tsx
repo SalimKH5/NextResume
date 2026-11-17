@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDragDrop } from "./DraggableContext";
 import { useI18n } from "@/i18n/I18nProvider";
+import { ItemMoveButtons } from "./editor/ItemMoveButtons";
 import { Pencil, Trash2 } from "lucide-react";
 import EducationForm from "./EducationForm";
 import { DateRange } from "./DateRange";
@@ -22,6 +23,7 @@ const EducationItem = ({ info }: { info: Educations }) => {
       className="nr-hover nr-item flex flex-col gap-2 relative"
     >
       <div className="nr-actions no-print -top-3 right-0">
+        <ItemMoveButtons field="Educations" id={info.id} />
         <EducationForm id={info.id} open={dialogOpen} setOpen={setDialogOpen} label={t.editor.item.edit}>
           <Pencil />
         </EducationForm>
@@ -36,9 +38,9 @@ const EducationItem = ({ info }: { info: Educations }) => {
             : "flex-col"
         } `}
       >
-        <h1 className="font-bold" style={{ fontSize: fontOptions.textSize }}>
+        <h4 className="font-bold" style={{ fontSize: fontOptions.textSize }}>
           {info.title}
-        </h1>
+        </h4>
         <DateRange start={info.date_started} end={info.date_ending} />
       </div>
 

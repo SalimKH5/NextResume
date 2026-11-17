@@ -40,7 +40,7 @@ export default function Dashboard() {
           {t.dashboard.loadError}
         </p>
       ) : resumes === null ? (
-        <ul className="flex flex-col" aria-busy="true">
+        <ul className="flex flex-col" aria-busy="true" aria-label={t.dashboard.loading}>
           {[0, 1, 2].map((i) => (
             <li key={i} className="h-20 border-t border-line">
               <span className="mt-7 block h-5 w-1/3 animate-pulse rounded bg-muted" />

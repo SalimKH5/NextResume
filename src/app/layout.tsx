@@ -7,6 +7,7 @@ import { DragDropProvider } from "@/components/DraggableContext";
 import { AuthProvider } from "./providers";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { getLocale } from "@/i18n/server";
+import { DICTIONARIES } from "@/i18n/dictionaries";
 
 export const metadata: Metadata = {
   title: { default: "NextResume — build your resume", template: "%s · NextResume" },
@@ -23,6 +24,9 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body suppressHydrationWarning className="antialiased min-h-screen">
+        <a href="#main" className="nr-skip">
+          {DICTIONARIES[locale].nav.skip}
+        </a>
         <I18nProvider initialLocale={locale}>
           <AuthProvider>
             <DragDropProvider>{children}</DragDropProvider>

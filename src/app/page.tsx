@@ -22,7 +22,7 @@ export default async function Home() {
   return (
     <>
       <Navbar1 />
-      <main>
+      <main id="main" tabIndex={-1}>
         {/* Hero */}
         <section className="relative isolate flex min-h-[calc(100svh-5rem)] flex-col items-center justify-center overflow-hidden px-4 pb-16 pt-10 text-center">
           <Backdrop />
@@ -65,7 +65,7 @@ export default async function Home() {
                   <div className="relative aspect-[1/1.414] overflow-hidden rounded-sm border border-line bg-muted transition-colors group-hover:border-mint">
                     <Image
                       src={tpl.src}
-                      alt={t.templates[tpl.key].label}
+                      alt=""
                       fill
                       sizes="(min-width: 1024px) 25vw, 33vw"
                       className="object-cover object-top grayscale transition duration-300 group-hover:grayscale-0"

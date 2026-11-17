@@ -9,7 +9,7 @@ export default async function NotFound() {
   return (
     <>
       <Navbar1 />
-      <main className="relative isolate flex min-h-[calc(100svh-5rem)] flex-col items-center justify-center overflow-hidden px-4 text-center">
+      <main id="main" tabIndex={-1} className="relative isolate flex min-h-[calc(100svh-5rem)] flex-col items-center justify-center overflow-hidden px-4 text-center">
         <Backdrop />
         <p className="text-sm text-muted-foreground">
           <span className="text-mint-deep">/</span>404

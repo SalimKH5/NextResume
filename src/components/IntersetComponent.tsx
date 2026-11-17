@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import IntersetDialog from "./IntersetDialog";
 import IntersetItem from "./IntersetItem";
 import { useSortableList } from "./editor/useSortableList";
+import SectionTitle from "./SectionTitle";
 
 const IntersetComponent = () => {
   const { information, fontOptions,scale } = useDragDrop();
@@ -35,13 +36,8 @@ const IntersetComponent = () => {
           <button type="button" className="nr-action" aria-label={t.editor.item.add}><Plus /><span>{t.editor.item.add}</span></button>
         </IntersetDialog>
       </div>
-      <h3
-            style={{color:fontOptions.secondColor,fontSize:computedTitleSize}} 
-        className="outline-none pl-0 font-bold text-xl border-none focus:border-2 focus:border-black focus-visible:ring-0 w-60"
-      >
-        {information.titleInterests || t.resume.titles.titleInterests}
-      </h3>
-      <ul ref={listRef} id="hs-basic-usage-example-sortable" style={{fontSize:computedTextSize}}  className="w-full flex flex-col gap-1 px-3 text-xs">
+      <SectionTitle field="titleInterests" />
+      <ul ref={listRef} style={{fontSize:computedTextSize}}  className="w-full flex flex-col gap-1 px-3 text-xs">
         {information?.Intersets &&
           information.Intersets.map((Interset, index) => <IntersetItem key={Interset.id} Intersets={Interset} />)}
       </ul>

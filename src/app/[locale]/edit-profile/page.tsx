@@ -158,8 +158,9 @@ export default function ProfilePage() {
           <Input id="dateOfbirth" name="dateOfbirth" type="date" autoComplete="bday" value={form.dateOfbirth} onChange={handleChange} className={inputClass} />
         </Field>
 
-        <Field label={p.phone} optional={opt}>
+        <Field id="phoneNumber" label={p.phone} optional={opt}>
           <PhoneInput
+            id="phoneNumber"
             name="phoneNumber"
             value={form.phoneNumber}
             onChange={(value) => setForm((prev) => ({ ...prev, phoneNumber: value ?? "" }))}

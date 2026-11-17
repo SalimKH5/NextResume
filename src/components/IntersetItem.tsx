@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useDragDrop } from "./DraggableContext";
 import { useI18n } from "@/i18n/I18nProvider";
+import { ItemMoveButtons } from "./editor/ItemMoveButtons";
 import LangugeDialog from "./LangugeDialog";
 import { Pencil, Trash2 } from "lucide-react";
 import IntersetDialog from "./IntersetDialog";
@@ -28,6 +29,7 @@ const IntersetItem = ({ Intersets }: { Intersets: IntersetType }) => {
       className="nr-hover nr-item w-full hover:bg-[#0303034c] flex flex-col relative gap-2"
     >
       <div className="nr-actions no-print -top-3 right-0">
+        <ItemMoveButtons field="Intersets" id={Intersets.id} />
         <IntersetDialog id={Intersets.id} open={dialogOpen} setOpen={setDialogOpen}>
           <button type="button" className="nr-action" aria-label={t.editor.item.edit}><Pencil /></button>
         </IntersetDialog>

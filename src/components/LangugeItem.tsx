@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useDragDrop } from "./DraggableContext";
 import { useI18n } from "@/i18n/I18nProvider";
+import { ItemMoveButtons } from "./editor/ItemMoveButtons";
 import LangugeDialog from "./LangugeDialog";
 import { Pencil, Trash2 } from "lucide-react";
 
@@ -27,6 +28,7 @@ const LangugeItem = ({ language }: { language: Languge }) => {
        className={`nr-hover nr-item flex ${fontOptions.diplayLanguageLine?"justify-between items-center gap-1":"flex-col"}  relative `}
     >
       <div className="nr-actions no-print -top-3 right-0">
+        <ItemMoveButtons field="Languages" id={language.id} />
         <LangugeDialog id={language.id} open={dialogOpen} setOpen={setDialogOpen}>
           <button type="button" className="nr-action" aria-label={t.editor.item.edit}><Pencil /></button>
         </LangugeDialog>

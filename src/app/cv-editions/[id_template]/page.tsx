@@ -34,7 +34,7 @@ export default async function EditorPage({
   return (
     <>
       <Navbar1 />
-      <main className="h-auto w-full bg-muted/60 md:min-h-[calc(100svh-4rem)]">
+      <main id="main" tabIndex={-1} className="h-auto w-full bg-muted/60 md:min-h-[calc(100svh-4rem)]">
         <MainTemplate info={resume} />
       </main>
     </>

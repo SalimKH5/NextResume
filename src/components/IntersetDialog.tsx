@@ -1,117 +1,47 @@
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+"use client";
+
+import type { Dispatch, ReactNode, SetStateAction } from "react";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useState,
-} from "react";
-import { useDragDrop } from "./DraggableContext";
 import TipTapEditor from "./TipTapEditor";
+import { EntryDialog, Field, triggerFor, useEntryForm } from "./editor/EntryDialog";
+import { useI18n } from "@/i18n/I18nProvider";
+import { Gamepad2 } from "lucide-react";
+
 type Props = {
   children: ReactNode;
+  label?: string;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   id?: number;
 };
-const IntersetDialog = ({ children, open, setOpen, id }: Props) => {
-  const { information, setInformations } = useDragDrop();
-  const [item, setItem] = useState<IntersetType>(() => {
-    if (id) {
-      const existing = information.Intersets?.find((prev) => prev.id === id);
-      if (existing) return existing;
-    }
-    return {
-      id: information.Intersets?.length ?? 0,
-      label: "",
-    };
-  });
 
-  const handleItems = (item: IntersetType | undefined) => {
-    if (!item) return; // Prevent inserting undefined
-
-    if (id && information?.Intersets) {
-      const updatedItems = information.Intersets.map((exp) =>
-        exp.id === id ? item : exp
-      );
-
-      setInformations((prev) => ({
-        ...prev,
-        Intersets: updatedItems,
-      }));
-    } else {
-      setInformations((prev) => ({
-        ...prev,
-        Intersets: [item, ...(prev.Intersets || [])],
-      }));
-    }
-
-    setOpen(false);
-  };
+/** Add / edit an interest. */
+export default function IntersetDialog({ children, label, open, setOpen, id }: Props) {
+  const { t } = useI18n();
+  const copy = t.editor.forms.interest;
+  const { item, setItem, save, isEdit } = useEntryForm<IntersetType>("Intersets", id, open, () => ({ label: "", value: "" }));
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[625px] flex flex-col gap-3">
-        <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex flex-1 flex-col gap-4">
-          <div className="flex flex-1 flex-col gap-1">
-            <Label htmlFor="username-1">Centre d&apos;intérêt</Label>
-            <Input
-              value={item?.label}
-              onChange={(e) =>
-                setItem((prev) => ({
-                  ...prev,
-                  label: e.target.value,
-                }))
-              }
-            />
-          </div>
-          <div className="flex flex-1 flex-col gap-1">
-            <Label htmlFor="username-1">Details</Label>
-            <TipTapEditor
-              value={item?.value?item?.value:""}
-              onChange={(e) => {
-                setItem((prev) => ({
-                  ...prev,
-                  value: e.target.value,
-                }));
-              }}
-            />
-          </div>
-        </div>
-        <DialogFooter className="py-2">
-          <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DialogClose>
-          <Button
-            onClick={() => {
-              handleItems(item);
-            }}
-          >
-            {" "}
-            Save changes
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <EntryDialog
+      open={open}
+      setOpen={setOpen}
+      trigger={triggerFor(children, label)}
+      title={isEdit ? copy.edit : copy.add}
+      description={copy.desc}
+      canSave={item.label.trim().length > 0}
+      onSave={save}
+      icon={Gamepad2}
+    >
+      <Field label={copy.name}>
+        {(fid) => (
+          <Input id={fid} required autoFocus value={item.label} onChange={(e) => setItem((p) => ({ ...p, label: e.target.value }))} className="h-11" />
+        )}
+      </Field>
+      <Field label={copy.details} optional>
+        {(fid) => (
+          <TipTapEditor labelledBy={`${fid}-label`} value={item.value ?? ""} onChange={(e) => setItem((p) => ({ ...p, value: e.target.value }))} />
+        )}
+      </Field>
+    </EntryDialog>
   );
-};
-
-export default IntersetDialog;
+}

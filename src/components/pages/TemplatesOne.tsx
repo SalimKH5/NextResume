@@ -264,9 +264,9 @@ const computedTitleSize = (fontOptions?.titleSize?? 14)
               >
                 {page === 1 && (
                   <>
-                    <h1 className="text-xl font-bold px-1 capitalize">
+                    <h2 className="text-xl font-bold px-1 capitalize">
                       {session?.user?.firstName} {session?.user?.lastName}
-                    </h1>
+                    </h2>
                     <h3
                       style={{
                         fontSize:computedTextSize,

@@ -22,7 +22,7 @@ export default async function AuthPage({
   return (
     <>
       <Navbar1 />
-      <main className="relative isolate flex min-h-[calc(100svh-5rem)] flex-col items-center justify-center overflow-hidden px-4 py-16 text-center">
+      <main id="main" tabIndex={-1} className="relative isolate flex min-h-[calc(100svh-5rem)] flex-col items-center justify-center overflow-hidden px-4 py-16 text-center">
         <Backdrop />
         <DotTitle className="text-[clamp(3.5rem,11vw,8rem)]">{t.auth.title}</DotTitle>
         <p className="mt-6 mb-10 max-w-md text-lg text-ink/85">
