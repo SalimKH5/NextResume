@@ -9,6 +9,7 @@ import ExpriencesItem from "./ExpriencesItem";
 import ExprienceForm from "./ExprienceForm";
 import { useSortableList } from "./editor/useSortableList";
 import SectionTitle from "./SectionTitle";
+import { SectionExample } from "./editor/SectionExample";
 
 const Expriences = () => {
   const { information, setInformations,fontOptions,scale } = useDragDrop();
@@ -43,6 +44,7 @@ const computedTitleSize = (fontOptions?.titleSize ?? 14);
             <ExpriencesItem key={info.id} info={info} />
           ))}
       </ul>
+      {!information?.Expriences?.length && <SectionExample kind="experience" />}
     </div>
   );
 };

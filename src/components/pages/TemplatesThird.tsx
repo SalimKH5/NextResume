@@ -6,7 +6,7 @@ import DropZone from "../DropZone";
 import { GripHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
-import ResizableImage from "../ResizableImage";
+import ProfilePhoto from "../ProfilePhoto";
 import PersonalInfoDetail from "../PersonalInfoDetail";
 import Expriences from "../Expriences";
 import { useTextScale } from "@/Hook/useTextScale";
@@ -219,7 +219,7 @@ console.log({scale});
                     <PersonalInfoDetail />
                   </div>
                   <div className="flex  justify-center items-center">
-                    {information?.picture?.display && <ResizableImage />}
+                    {information?.picture?.display && <ProfilePhoto />}
                   </div>
                 </div>)}
                 <div className="w-full">

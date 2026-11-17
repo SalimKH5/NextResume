@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useDragDrop } from "../DraggableContext";
 import DropZone from "../DropZone";
 import PersonalInfoDetail from "../PersonalInfoDetail";
-import ResizableImage from "../ResizableImage";
+import ProfilePhoto from "../ProfilePhoto";
 import { useI18n } from "@/i18n/I18nProvider";
 
 /**
@@ -150,12 +150,15 @@ export function makeFlexTemplate(variant: FlexVariant) {
           return (
             <>
               {first && (
-                <header style={{ background: fill, color: onFill, padding: `${padY + 8}px ${padX}px` }}>
-                  <FullName className="text-[2.6em] font-semibold leading-none tracking-tight" />
-                  <div className="mt-3">{headline}</div>
-                  <div className="mt-4 opacity-90">
-                    <PersonalInfoDetail />
+                <header className="flex items-center gap-8" style={{ background: fill, color: onFill, padding: `${padY + 8}px ${padX}px` }}>
+                  <div className="min-w-0 flex-1">
+                    <FullName className="text-[2.6em] font-semibold leading-none tracking-tight" />
+                    <div className="mt-3">{headline}</div>
+                    <div className="mt-4 opacity-90">
+                      <PersonalInfoDetail />
+                    </div>
                   </div>
+                  {information?.picture?.display && <ProfilePhoto onDark />}
                 </header>
               )}
               <div className="flex flex-1">
@@ -181,14 +184,14 @@ export function makeFlexTemplate(variant: FlexVariant) {
                 {zoneB}
               </div>
               <aside
-                className="flex-1 flex flex-col [&_h1]:!text-[var(--on-fill)]"
+                className="flex-1 flex flex-col [&_h3]:!text-[var(--on-fill)]"
                 style={{ background: fill, color: onFill, padding: `${padY + 8}px ${padX * 0.7}px`, gap, ["--on-fill" as string]: onFill }}
               >
                 {first && (
                   <>
                     {information?.picture?.display && (
                       <div className="flex justify-center">
-                        <ResizableImage />
+                        <ProfilePhoto onDark />
                       </div>
                     )}
                     <PersonalInfoDetail />
@@ -203,6 +206,11 @@ export function makeFlexTemplate(variant: FlexVariant) {
             <div className="flex flex-1 flex-col" style={{ padding: `${padY + 16}px ${padX + 16}px`, gap }}>
               {first && (
                 <header className="text-center pb-4" style={{ borderBottom: `1px solid ${accent}` }}>
+                  {information?.picture?.display && (
+                    <div className="mb-4 flex justify-center">
+                      <ProfilePhoto />
+                    </div>
+                  )}
                   <FullName className="text-[2.5em] font-normal leading-tight tracking-wide" style={{ color: fill }} />
                   <p className="mt-1 uppercase tracking-[0.18em]" style={{ color: accent, fontSize: text - 1 }}>
                     {information.title}
@@ -228,7 +236,7 @@ export function makeFlexTemplate(variant: FlexVariant) {
                 <header className="flex items-center gap-6" style={{ background: fill, color: onFill, padding: `${padY + 4}px ${padX}px` }}>
                   {information?.picture?.display && (
                     <div className="shrink-0">
-                      <ResizableImage />
+                      <ProfilePhoto onDark />
                     </div>
                   )}
                   <div className="min-w-0">

@@ -6,7 +6,7 @@ import DropZone from "../DropZone";
 import { GripHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
-import ResizableImage from "../ResizableImage";
+import ProfilePhoto from "../ProfilePhoto";
 import PersonalInfoDetail from "../PersonalInfoDetail";
 import { useTextScale } from "@/Hook/useTextScale";
 
@@ -221,7 +221,7 @@ const computedTitleSize = (fontOptions?.titleSize?? 14)
                   {page === 1 && (
                     <>
                       <div className="w-full flex items-center justify-center">
-                        {information?.picture?.display && <ResizableImage />}
+                        {information?.picture?.display && <ProfilePhoto onDark />}
                       </div>
                       <ul className="w-full flex flex-col gap-2">
                         <PersonalInfoDetail />

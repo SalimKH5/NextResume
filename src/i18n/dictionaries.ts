@@ -114,6 +114,18 @@ const en = {
     closePanel: "Close panel",
     item: { add: "Add an entry", edit: "Edit", remove: "Delete", up: "Move up", down: "Move down" },
     renameSection: "Rename section",
+    photo: {
+      title: "Photo", alt: "Profile photo", upload: "Upload a photo", change: "Change photo", remove: "Remove photo",
+      hint: "JPG or PNG. It’s cropped to a square and stays with this resume.", error: "That file isn’t an image we can use. Try a JPG or PNG under 15 MB.",
+      show: "Show the photo", shape: "Shape", circle: "Circle", rounded: "Rounded", square: "Square", size: "Size", ring: "Accent ring",
+    },
+    example: {
+      badge: "Example", use: "Use this example", hint: "This section is empty. Start from the example or add your own entry.",
+      experience: { title: "Product Designer", company: "Studio North", location: "Lyon, France", start: "2022-03", end: "currently",
+        body: "<ul><li><p>Led the redesign of the booking flow, raising completed bookings by 18%</p></li><li><p>Built a shared component library now used by four product teams</p></li><li><p>Ran weekly usability sessions with customers and turned findings into the roadmap</p></li></ul>" },
+      education: { title: "Master’s in Computer Science", school: "University of Lyon", location: "Lyon, France", start: "2018-09", end: "2020-06",
+        body: "<ul><li><p>Thesis on accessible web interfaces</p></li><li><p>Graduated with honours</p></li></ul>" },
+    },
     details: { jobTitle: "Job title on the resume", summary: "Summary", summaryHint: "Two or three sentences about who you are and what you’re looking for.", switchHint: "Switch a detail off to hide it from the resume.", email: "Email", phone: "Phone", location: "City", show: "Show on the resume", showPicture: "Show my photo" },
     sectionTitle: "Section title",
     richText: {
@@ -314,6 +326,18 @@ const fr: Dictionary = {
     closePanel: "Fermer le panneau",
     item: { add: "Ajouter une entrée", edit: "Modifier", remove: "Supprimer", up: "Monter", down: "Descendre" },
     renameSection: "Renommer la section",
+    photo: {
+      title: "Photo", alt: "Photo de profil", upload: "Ajouter une photo", change: "Changer la photo", remove: "Retirer la photo",
+      hint: "JPG ou PNG. Elle est recadrée en carré et enregistrée avec ce CV.", error: "Ce fichier n’est pas une image utilisable. Essayez un JPG ou PNG de moins de 15 Mo.",
+      show: "Afficher la photo", shape: "Forme", circle: "Rond", rounded: "Arrondi", square: "Carré", size: "Taille", ring: "Contour accent",
+    },
+    example: {
+      badge: "Exemple", use: "Utiliser cet exemple", hint: "Cette section est vide. Partez de l’exemple ou ajoutez votre propre entrée.",
+      experience: { title: "Designer produit", company: "Studio Nord", location: "Lyon, France", start: "2022-03", end: "currently",
+        body: "<ul><li><p>Refonte du parcours de réservation : +18 % de réservations finalisées</p></li><li><p>Création d’une bibliothèque de composants utilisée par quatre équipes produit</p></li><li><p>Tests utilisateurs hebdomadaires, transformés en priorités de la feuille de route</p></li></ul>" },
+      education: { title: "Master Informatique", school: "Université de Lyon", location: "Lyon, France", start: "2018-09", end: "2020-06",
+        body: "<ul><li><p>Mémoire sur l’accessibilité des interfaces web</p></li><li><p>Diplômé avec mention</p></li></ul>" },
+    },
     details: { jobTitle: "Intitulé sur le CV", summary: "Accroche", summaryHint: "Deux ou trois phrases sur qui vous êtes et ce que vous cherchez.", switchHint: "Désactivez une information pour la masquer sur le CV.", email: "E-mail", phone: "Téléphone", location: "Ville", show: "Afficher sur le CV", showPicture: "Afficher ma photo" },
     sectionTitle: "Titre de la section",
     richText: {

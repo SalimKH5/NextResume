@@ -6,7 +6,7 @@ import DropZone from "../DropZone";
 import { GripHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
-import ResizableImage from "../ResizableImage";
+import ProfilePhoto from "../ProfilePhoto";
 import PersonalInfoDetail from "../PersonalInfoDetail";
 
 const TemplatesTwo = ({
@@ -256,7 +256,7 @@ const TemplatesTwo = ({
                 >
                   {page === 1 && (
                     <div className="flex items-center justify-center">
-                      {information?.picture?.display && <ResizableImage />}
+                      {information?.picture?.display && <ProfilePhoto />}
                     </div>
                   )}
 

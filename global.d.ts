@@ -85,6 +85,9 @@ declare global {
     displayOneLine?:boolean=false;
     diplayDateLine?:boolean=false;
     diplayLanguageLine?:boolean=false;
+    photoSize?:number;
+    photoShape?:"circle"|"rounded"|"square";
+    photoRing?:boolean;
   }
 
 

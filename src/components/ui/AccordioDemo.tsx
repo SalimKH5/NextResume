@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import PersonalInformation from "../PersonalInformation";
+import ProfilePhoto from "../ProfilePhoto";
 import { useDragDrop } from "../DraggableContext";
 import ExprienceMobile from "../ExprienceMobile";
 import { EllipsisIcon, EllipsisVerticalIcon, Menu } from "lucide-react";
@@ -28,7 +29,7 @@ export function AccordionDemo() {
       <AccordionItem value="item-1" className="bg-white cursor-pointer px-2">
         <AccordionTrigger>Information</AccordionTrigger>
         <AccordionContent className="w-full flex items-center gap-3 flex-col  p-2  rounded-xl">
-          <img src="/profile.jpg" alt="" width={150} height={150} />
+          <ProfilePhoto />
           <PersonalInformation />
         </AccordionContent>
       </AccordionItem>

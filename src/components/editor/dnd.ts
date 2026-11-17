@@ -14,14 +14,56 @@ let current: DragPayload | null = null;
 const listeners = new Set<() => void>();
 const emit = () => listeners.forEach((l) => l());
 
+/* ---------- autoscroll while dragging ----------
+   Native drag and drop does not scroll the page, so reaching a zone lower on
+   the CV meant dropping, scrolling and dragging again. Holding the pointer near
+   the top or bottom edge now scrolls, faster the closer it gets. */
+const TOP_EDGE = 150; // sticky header + editor bar take ~120px
+const BOTTOM_EDGE = 110;
+const MAX_SPEED = 28; // px per frame
+let pointerY = -1;
+let frame = 0;
+
+const trackPointer = (e: DragEvent) => {
+  pointerY = e.clientY;
+};
+
+function autoscroll() {
+  if (!current) return;
+  if (pointerY >= 0) {
+    const h = window.innerHeight;
+    let speed = 0;
+    if (pointerY < TOP_EDGE) speed = -MAX_SPEED * ((TOP_EDGE - pointerY) / TOP_EDGE);
+    else if (pointerY > h - BOTTOM_EDGE) speed = MAX_SPEED * ((pointerY - (h - BOTTOM_EDGE)) / BOTTOM_EDGE);
+    if (speed) window.scrollBy(0, Math.round(speed));
+  }
+  frame = requestAnimationFrame(autoscroll);
+}
+
+// Safety net: if the dragged element re-renders mid-drag, its own dragend can
+// be lost; ending on any page-level dragend/drop keeps autoscroll and the drop
+// highlighting from running forever. Deferred so a zone's onDrop reads the
+// payload first.
+const endSoon = () => setTimeout(() => dragStore.end(), 0);
+
 export const dragStore = {
   start(p: DragPayload) {
     current = p;
+    pointerY = -1;
+    document.addEventListener("dragover", trackPointer, true);
+    document.addEventListener("dragend", endSoon, true);
+    document.addEventListener("drop", endSoon, true);
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(autoscroll);
     emit();
   },
   end() {
     if (!current) return;
     current = null;
+    document.removeEventListener("dragover", trackPointer, true);
+    document.removeEventListener("dragend", endSoon, true);
+    document.removeEventListener("drop", endSoon, true);
+    cancelAnimationFrame(frame);
     emit();
   },
   get: () => current,

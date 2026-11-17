@@ -8,6 +8,7 @@ import { Delete, Plus } from "lucide-react";
 import EducationForm from "./EducationForm";
 import { useSortableList } from "./editor/useSortableList";
 import SectionTitle from "./SectionTitle";
+import { SectionExample } from "./editor/SectionExample";
 
 const Educations = () => {
   const { information,fontOptions,setInformations } = useDragDrop();
@@ -39,6 +40,7 @@ const Educations = () => {
             <EducationItem key={info.id} info={info} />
           ))}
       </ul>
+      {!information?.Educations?.length && <SectionExample kind="education" />}
     </div>
   );
 };

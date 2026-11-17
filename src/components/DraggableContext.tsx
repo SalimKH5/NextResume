@@ -114,7 +114,7 @@ const { data: session, update ,status} = useSession();
     birthday: new Date("1995-01-01"),
     locations: { label: "Lyon, France", display: true },
     phonenumber: { label: "+33000000000", display: true },
-    picture: { label: "default-profile.jpg", display: true },
+    picture: { label: "", display: true },
     titleSkills:"Skills",
     titleExprience:"Work Experience",
     titleEducations:"Education",

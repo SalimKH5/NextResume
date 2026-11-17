@@ -14,9 +14,10 @@ templates, built with **Next.js 15, TypeScript, NextAuth and MongoDB**.
 - **Sign in with Google** (NextAuth, users and accounts stored through the MongoDB adapter).
 - **Dashboard** listing the resumes of the signed-in user; create a new resume from a template.
 - **Resume editor** with sections for personal information, experience, education, skills, languages and interests.
-- **Drag and drop** to reorder items within sections (SortableJS).
-- **Rich-text descriptions** (TipTap), font selection, resizable profile picture.
-- **Three templates** with live preview.
+- **Drag and drop** sections between columns and pages (with autoscroll), and reorder items inside sections; keyboard alternatives for both.
+- **Rich-text descriptions** (TipTap), 10 bundled resume fonts, profile photo upload (cropped in the browser) with initials fallback.
+- **Seven templates** with live preview; template, style and section layout are saved per resume.
+- **English / French** interface and resume text.
 - **Export to PDF** through the browser print dialog (`react-to-print`).
 - **Profile page** to store personal details reused in resumes.
 - **Per-user data isolation**: every API route resolves the user from the server session.

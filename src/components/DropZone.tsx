@@ -74,7 +74,8 @@ export default function DropZone({ zoneId, page = 1 }: DropZoneProps) {
       onDragLeave={onDragLeave}
       style={{ gap: fontOptions.SpaceContent }}
       className={cn(
-        "relative flex flex-col rounded-sm transition-[background-color,outline-color]",
+        // grow to fill the column (bigger drop target) but never shrink below the content
+        "relative flex grow shrink-0 flex-col rounded-sm transition-[background-color,outline-color]",
         dragging ? "min-h-16 outline-2 outline-dashed outline-offset-4 outline-mint/50" : "min-h-6",
         insertAt !== null && "bg-mint/5 outline-mint"
       )}
