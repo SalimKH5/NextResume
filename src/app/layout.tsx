@@ -1,15 +1,10 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+// DM Sans is bundled with the app (no Google Fonts download at build/dev time,
+// which failed intermittently with Turbopack).
+import "@fontsource-variable/dm-sans";
 import "./globals.css";
 import { DragDropProvider } from "@/components/DraggableContext";
 import { AuthProvider } from "./providers";
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  display: "swap",
-  variable: "--font-dm-sans",
-});
 
 export const metadata: Metadata = {
   title: { default: "NextResume — build your resume", template: "%s · NextResume" },
@@ -23,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={dmSans.variable} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning className="antialiased min-h-screen">
         <AuthProvider>
           <DragDropProvider>{children}</DragDropProvider>
