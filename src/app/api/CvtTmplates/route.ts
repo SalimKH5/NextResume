@@ -3,6 +3,18 @@ import { requireSession } from "@/lib/apiAuth";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 
+const MAX_LAYOUT_BYTES = 20_000;
+
+/** layout = { template, style, zones }: a small JSON object, stored as-is. */
+function validLayout(layout: unknown): boolean {
+  if (layout === undefined) return true;
+  if (!layout || typeof layout !== "object" || Array.isArray(layout)) return false;
+  const l = layout as Record<string, unknown>;
+  if (typeof l.template !== "string" || l.template.length > 64) return false;
+  if (typeof l.style !== "object" || typeof l.zones !== "object") return false;
+  return JSON.stringify(layout).length <= MAX_LAYOUT_BYTES;
+}
+
 // All handlers scope data to the signed-in user (session), not to a user_id
 // sent by the client: a user can only create, read and update their own CVs.
 
@@ -12,7 +24,10 @@ export async function POST(request: NextRequest) {
     if (identity instanceof NextResponse) return identity;
 
     const body = await request.json();
-    const { id_template, informations, title_template } = body;
+    const { id_template, informations, title_template, layout } = body;
+    if (!validLayout(layout)) {
+      return NextResponse.json({ error: "Invalid layout" }, { status: 400 });
+    }
 
     const client = await clientPromise;
     const db = client.db();
@@ -25,6 +40,7 @@ export async function POST(request: NextRequest) {
       id_template,
       title_template,
       informations,
+      ...(layout ? { layout } : {}),
     });
 
     if (!result.acknowledged) {
@@ -95,7 +111,11 @@ export async function PUT(request: NextRequest) {
     if (identity instanceof NextResponse) return identity;
 
     const body = await request.json();
-    const { id_template, informations, title_template } = body;
+    const { id_template, informations, title_template, layout } = body;
+
+    if (!validLayout(layout)) {
+      return NextResponse.json({ error: "Invalid layout" }, { status: 400 });
+    }
 
     if (!id_template || !ObjectId.isValid(id_template)) {
       return NextResponse.json(
@@ -117,6 +137,7 @@ export async function PUT(request: NextRequest) {
         $set: {
           informations: informations,
           title_template: title_template,
+          ...(layout ? { layout } : {}),
         },
       },
       { returnDocument: "after" } // return the updated document

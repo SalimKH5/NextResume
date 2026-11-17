@@ -113,7 +113,7 @@ const computedTitleSize = (fontOptions?.titleSize ?? 14);
             setEditTitle(true);
           }}
           style={{color:fontOptions.secondColor,fontSize:computedTitleSize}} 
-          className=" border-b-2 border-black cursor-pointer pl-0 font-bold   focus:border-black focus-visible:ring-0 w-full"
+          className=" border-b-2 border-current cursor-pointer pl-0 font-bold   focus:border-black focus-visible:ring-0 w-full"
         >
           {information.titleExprience}
         </h1>

@@ -105,7 +105,7 @@ const Educations = () => {
             setEditTitle(true);
           }}
            style={{color:fontOptions.secondColor,fontSize:fontOptions.titleSize}} 
-           className="w-full border-b-2 border-black pl-0 font-bold cursor-pointer  focus:border-black focus-visible:ring-0 "
+           className="w-full border-b-2 border-current pl-0 font-bold cursor-pointer  focus:border-black focus-visible:ring-0 "
         >
           {information.titleEducations}
         </h1>

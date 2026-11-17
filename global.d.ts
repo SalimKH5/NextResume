@@ -117,6 +117,8 @@ type GetTypeInformation={
   id_template:number,
   title_template:string,
   informations: InformationsType
+  /** template key, style options and section layout (see components/pages/templates) */
+  layout?: unknown
 }
 
 

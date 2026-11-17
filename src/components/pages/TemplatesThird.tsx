@@ -202,7 +202,7 @@ console.log({scale});
               {overflow && (
                 <div className="w-full absolute bottom-0 flex flex-col items-center gap-5">
                   <div style={{backgroundColor: "rgba(219, 54, 21, 1)",color:"#ffff"}} className="w-full no-print   text-xs px-2 py-1 text-center">
-                    ⚠ Le contenu dépasse la hauteur d’une page A4
+                    This page is longer than A4
                   </div>
                 </div>
               )}
@@ -233,7 +233,7 @@ console.log({scale});
                   style={{ height: height }}
                   className="w-full items-start no-print bg-[#f309092b] text-[#FFFF] text-xs px-2 py-1 text-center"
                 >
-                  ⚠ Le contenu dépasse la hauteur d’une page A4
+                  This page is longer than A4
                 </div>
                 <div className="z-50 text-[#FFFF] flex items-center justify-center gap-3 text-xs px-2 py-1 w-full text-center">
                   <Button
@@ -249,7 +249,7 @@ console.log({scale});
                       }))
                     }
                   >
-                    Auto Réduction
+                    Shrink text
                   </Button>
 
                   <Button
@@ -281,7 +281,7 @@ console.log({scale});
                       setOverflow(false);
                     }}
                   >
-                    Ajouter une page
+                    Add a page
                   </Button>
                 </div>
               </div>

@@ -36,6 +36,8 @@ type DragDropContextType = {
   fontOptions: OptionsStyle;
   setFontOptions: React.Dispatch<React.SetStateAction<OptionsStyle>>;
   SelectedTemplate: TemplateComponentType;
+  templateKey: string;
+  setTemplateKey: React.Dispatch<React.SetStateAction<string>>;
   setSelectedTemplate: React.Dispatch<React.SetStateAction<TemplateComponentType>>;
   containerRef: React.RefObject<HTMLDivElement>;
   maxPages:number,
@@ -87,6 +89,7 @@ export const DragDropProvider = ({ children }: { children: ReactNode }) => {
 const { data: session, update ,status} = useSession();
   const [maxPages, setMaxPages] = useState<number>(1);
 
+  const [templateKey, setTemplateKey] = useState<string>("classic");
   const [SelectedTemplate, setSelectedTemplate] =
     useState<TemplateComponentType>(() => TemplatesOne);
 
@@ -384,6 +387,8 @@ useEffect(() => {
         setFontOptions,
         SelectedTemplate,
         setSelectedTemplate,
+        templateKey,
+        setTemplateKey,
         containerRef,
         maxPages,
         setMaxPages,

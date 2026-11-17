@@ -1,18 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import {
-  Inbox,
-  Plus,
-  ChevronLeft,
-  LanguagesIcon,
-  Briefcase,
-  GraduationCap,
-  Lightbulb,
-  Option,
-  Gamepad,
-  BookAIcon
-} from "lucide-react";
+import { useState } from "react";
+import { UserRound, LayoutTemplate, Palette, Plus, X, LanguagesIcon, Briefcase, GraduationCap, Lightbulb, Gamepad2 } from "lucide-react";
 import PersonalInformation from "./PersonalInformation";
 import { useDragDrop } from "./DraggableContext";
 import DraggableItem from "./DraggableItem";
@@ -23,11 +12,12 @@ import Skills from "./Skills";
 import Options from "./Options";
 import IntersetComponent from "./IntersetComponent";
 import TemplateSelector from "./pages/TemplateSelector";
+import { SECTION_ID, type SectionKind } from "./pages/templates";
 
 type SubItemType = {
   label: string;
   items: React.ReactNode;
-  canBedrop?: boolean;
+  kind?: SectionKind; // set for sections that can be dragged onto the page
   icon?: React.ElementType;
 };
 
@@ -35,187 +25,127 @@ type SidebarItem = {
   key: string;
   icon: React.ElementType;
   label: string;
+  title: string;
+  hint?: string;
   subItems: SubItemType[];
-  take_allwith?: boolean;
+  grid?: boolean;
 };
 
 const sidebarItems: SidebarItem[] = [
   {
-    key: "inbox",
-    icon: Inbox,
-    label: "Inbox",
-    take_allwith: false,
-    subItems: [
-      {
-        label: "Personal Information",
-        items: <PersonalInformation />,
-        canBedrop: false
-      }
-    ]
+    key: "details",
+    icon: UserRound,
+    label: "Details",
+    title: "Your details",
+    hint: "Shown in the header of the resume.",
+    subItems: [{ label: "Personal information", items: <PersonalInformation /> }],
   },
   {
     key: "templates",
-    icon: BookAIcon,
+    icon: LayoutTemplate,
     label: "Templates",
-    take_allwith: false,
-    subItems: [
-      {
-        label: "Template Selector",
-        items: <TemplateSelector />,
-        canBedrop: false
-      }
-    ]
+    title: "Templates",
+    subItems: [{ label: "Templates", items: <TemplateSelector /> }],
   },
   {
-    key: "option",
-    icon: Option,
-    label: "Option",
-    take_allwith: false,
-    subItems: [
-      {
-        label: "Option",
-        items: <Options />,
-        canBedrop: false
-      }
-    ]
+    key: "style",
+    icon: Palette,
+    label: "Style",
+    title: "Style",
+    hint: "Colors, font and spacing for this resume.",
+    subItems: [{ label: "Style", items: <Options /> }],
   },
   {
-    key: "add-block",
+    key: "sections",
     icon: Plus,
-    label: "Add a block",
-    take_allwith: true,
+    label: "Sections",
+    title: "Add a section",
+    hint: "Drag a section onto the page. Hover a section on the page to remove it.",
+    grid: true,
     subItems: [
-      {
-        label: "Languages",
-        canBedrop: true,
-        icon: LanguagesIcon,
-        items: <Languges />
-      },
-      {
-        label: "Experiences",
-        canBedrop: true,
-        icon: Briefcase,
-        items: <Expriences />
-      },
-      {
-        label: "Educations",
-        canBedrop: true,
-        icon: GraduationCap,
-        items: <Educations />
-      },
-      {
-        label: "Skills",
-        canBedrop: true,
-        icon: Lightbulb,
-        items: <Skills />
-      },
-      {
-        label: "Interests",
-        canBedrop: true,
-        icon: Gamepad,
-        items: <IntersetComponent />
-      }
-    ]
-  }
+      { label: "Languages", kind: "languages", icon: LanguagesIcon, items: <Languges /> },
+      { label: "Experience", kind: "experience", icon: Briefcase, items: <Expriences /> },
+      { label: "Education", kind: "education", icon: GraduationCap, items: <Educations /> },
+      { label: "Skills", kind: "skills", icon: Lightbulb, items: <Skills /> },
+      { label: "Interests", kind: "interests", icon: Gamepad2, items: <IntersetComponent /> },
+    ],
+  },
 ];
+
 export default function AppSidebar() {
-  const [activeKey, setActiveKey] = useState<string | null>(null);
+  const [activeKey, setActiveKey] = useState<string | null>("templates");
   const { isItemDropped } = useDragDrop();
-  const refNavbar = useRef<HTMLDivElement>(null);
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  const toggleSubSidebar = (key: string) => {
-    setActiveKey((prev) => (prev === key ? null : key));
-  };
-
-  const activeItem = sidebarItems.find((i) => i.key === activeKey) || null;
-
-  // Track scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const activeItem = sidebarItems.find((i) => i.key === activeKey) ?? null;
 
   return (
-    <div>
-      <div
-       
-        className={`hidden lg:flex fixed min-h-screen z-40  ${isScrolled ? "top-0" : ""}`}
-      >
-        {/* Main icons column */}
-        <div  ref={refNavbar} className="w-16 bg-background flex flex-col items-center py-4 gap-2 border-r border-line">
-          {sidebarItems.map((item) => (
+    <div className="sticky top-16 z-30 hidden h-[calc(100svh-4rem)] shrink-0 lg:flex">
+      {/* tool rail */}
+      <nav aria-label="Editor tools" className="flex w-20 flex-col items-center gap-1 border-r border-line bg-background py-4">
+        {sidebarItems.map((item) => {
+          const active = activeKey === item.key;
+          return (
             <button
               key={item.key}
-              onClick={() => toggleSubSidebar(item.key)}
-              aria-label={item.label}
-              title={item.label}
-              aria-pressed={activeKey === item.key}
-              className={`grid size-10 place-items-center rounded-md cursor-pointer transition-colors hover:bg-mint-wash ${
-                activeKey === item.key ? "bg-mint-wash text-ink shadow-[inset_2px_0_0_var(--mint)]" : "text-muted-foreground"
+              type="button"
+              onClick={() => setActiveKey(active ? null : item.key)}
+              aria-pressed={active}
+              className={`flex w-16 flex-col items-center gap-1 rounded-md py-2.5 text-[0.7rem] font-medium transition-colors ${
+                active ? "bg-mint-wash text-ink" : "text-muted-foreground hover:bg-muted hover:text-ink"
               }`}
             >
-              <item.icon size={20} />
+              <item.icon className="size-5" strokeWidth={active ? 2.25 : 1.75} />
+              {item.label}
             </button>
-          ))}
-        </div>
+          );
+        })}
+      </nav>
 
-        {/* Sub sidebar */}
-        {activeItem && (
-          <div className="w-60 xl:w-72 bg-background border-r border-line p-4 overflow-y-auto">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-base font-medium tracking-tight">
-                {activeItem.label}
-              </span>
-              <button
-                onClick={() => setActiveKey(null)}
-                aria-label="Close panel"
-                className="text-muted-foreground hover:text-ink"
-              >
-                <ChevronLeft size={16} />
-              </button>
-            </div>
-
-            <ul
-              className={`space-y-6 ${
-                activeItem.take_allwith ? "grid grid-cols-1 xl:grid-cols-2" : ""
-              }`}
+      {/* panel */}
+      {activeItem && (
+        <section
+          aria-label={activeItem.title}
+          className="w-80 overflow-y-auto border-r border-line bg-background px-5 py-5 shadow-[8px_0_24px_-16px_rgba(6,25,27,0.2)]"
+        >
+          <div className="mb-1 flex items-center justify-between">
+            <h2 className="text-lg font-medium tracking-tight">{activeItem.title}</h2>
+            <button
+              type="button"
+              onClick={() => setActiveKey(null)}
+              aria-label="Close panel"
+              className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-ink"
             >
-              {activeItem.subItems.map((sub, index) => {
-                const id = `${activeItem.key}-${index}`;
-                const alreadyDropped = isItemDropped(id);
-
-                return (
-                  <li key={id}>
-                    <div className="p-2 rounded">
-                      {sub.canBedrop ? (
-                        !alreadyDropped ? (
-                          <DraggableItem id={id} component={sub.items}>
-                            <span className="flex justify-center items-center flex-col gap-2">
-                              {sub.icon ? <sub.icon size={20} /> : null}
-                              {sub.label}
-                            </span>
-                          </DraggableItem>
-                        ) : (
-                          <span className="text-muted-foreground">
-                            {sub.label} (on page)
-                          </span>
-                        )
-                      ) : (
-                        sub.items
-                      )}
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
+              <X className="size-4" />
+            </button>
           </div>
-        )}
-      </div>
+          {activeItem.hint && <p className="mb-5 text-sm text-muted-foreground">{activeItem.hint}</p>}
+
+          <ul className={activeItem.grid ? "grid grid-cols-2 gap-3" : "flex flex-col gap-6"}>
+            {activeItem.subItems.map((sub) => {
+              if (!sub.kind) return <li key={sub.label}>{sub.items}</li>;
+              const id = SECTION_ID[sub.kind];
+              const used = isItemDropped(id);
+              const body = (
+                <span
+                  className={`flex h-24 flex-col items-center justify-center gap-2 rounded-md border text-sm transition-colors ${
+                    used
+                      ? "border-dashed border-line text-muted-foreground"
+                      : "cursor-grab border-line bg-background hover:border-mint hover:bg-mint-wash active:cursor-grabbing"
+                  }`}
+                >
+                  {sub.icon && <sub.icon className="size-5" />}
+                  {sub.label}
+                  {used && <span className="text-[0.7rem]">On the page</span>}
+                </span>
+              );
+              return (
+                <li key={sub.label}>
+                  {used ? body : <DraggableItem id={id} component={sub.items}>{body}</DraggableItem>}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

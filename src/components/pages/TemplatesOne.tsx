@@ -83,7 +83,6 @@ const TemplatesOne = ({
     // Compute new sidebar width as a percentage
     let newWidth = (e.clientX - containerRect.left) / containerRect.width;
     newWidth = Math.max(0.001, Math.min(newWidth, 0.6)); // Clamp between 10% and 60%
-    console.log({newWidth})
     setWidth(newWidth);
 
     // If resizeRef is defined, update the icon position
@@ -292,7 +291,7 @@ const computedTitleSize = (fontOptions?.titleSize?? 14)
                   style={{ height: height,background:"#f309092b",color:"#ffffff" }}
                   className="w-full items-start no-print   text-xs px-2 py-1 text-center"
                 >
-                  ⚠ Le contenu dépasse la hauteur d’une page A4
+                  This page is longer than A4
                 </div>
                 <div style={{color:"#ffffff"}} className="z-50  flex items-center justify-center gap-3 text-xs px-2 py-1 w-full text-center">
                   <Button
@@ -308,7 +307,7 @@ const computedTitleSize = (fontOptions?.titleSize?? 14)
                       }))
                     }
                   >
-                    Auto Réduction
+                    Shrink text
                   </Button>
 
                   <Button
@@ -340,7 +339,7 @@ const computedTitleSize = (fontOptions?.titleSize?? 14)
                       setOverflow(false);
                     }}
                   >
-                    Ajouter une page
+                    Add a page
                   </Button>
                 </div>
               </div>

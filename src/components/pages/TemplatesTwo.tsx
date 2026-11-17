@@ -208,7 +208,7 @@ const TemplatesTwo = ({
               {overflow && (
                 <div className="w-full absolute bottom-0 flex flex-col items-center gap-5">
                   <div style={{backgroundColor: "rgba(220, 38, 38, 1)"}} className="w-full no-print  text-white text-xs px-2 py-1 text-center">
-                    ⚠ Le contenu dépasse la hauteur d’une page A4
+                    This page is longer than A4
                   </div>
                 </div>
               )}
@@ -319,7 +319,7 @@ const TemplatesTwo = ({
                   style={{ height: height }}
                   className="w-full items-start no-print bg-[#f309092b] text-white text-xs px-2 py-1 text-center"
                 >
-                  ⚠ Le contenu dépasse la hauteur d’une page A4
+                  This page is longer than A4
                 </div>
                 <div className="z-50 text-white flex items-center justify-center gap-3 text-xs px-2 py-1 w-full text-center">
                   <Button
@@ -335,7 +335,7 @@ const TemplatesTwo = ({
                       }))
                     }
                   >
-                    Auto Réduction
+                    Shrink text
                   </Button>
 
                   <Button
@@ -367,7 +367,7 @@ const TemplatesTwo = ({
                       setOverflow(false);
                     }}
                   >
-                    Ajouter une page
+                    Add a page
                   </Button>
                 </div>
               </div>
