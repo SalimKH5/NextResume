@@ -6,6 +6,7 @@ import { useDragDrop } from "../DraggableContext";
 import DropZone from "../DropZone";
 import PersonalInfoDetail from "../PersonalInfoDetail";
 import ResizableImage from "../ResizableImage";
+import { useI18n } from "@/i18n/I18nProvider";
 
 /**
  * One configurable A4 layout used by the newer templates.
@@ -78,15 +79,16 @@ function usePages() {
 }
 
 export function OverflowNotice({ onShrink, onAddPage }: { onShrink: () => void; onAddPage: () => void }) {
+  const { t } = useI18n();
   return (
     <div className="no-print flex w-full flex-wrap items-center justify-between gap-3 border-l-4 border-amber-400 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-      <span>This page is longer than A4. Shrink the text or move the last section to a new page.</span>
+      <span>{t.editor.overflow}</span>
       <span className="flex gap-2">
         <button type="button" onClick={onShrink} className="rounded-md border border-amber-300 bg-white px-3 py-1.5 font-medium hover:bg-amber-100">
-          Shrink text
+          {t.editor.shrink}
         </button>
         <button type="button" onClick={onAddPage} className="rounded-md bg-ink px-3 py-1.5 font-medium text-white hover:bg-ink/85">
-          Add a page
+          {t.editor.addPage}
         </button>
       </span>
     </div>
@@ -95,10 +97,11 @@ export function OverflowNotice({ onShrink, onAddPage }: { onShrink: () => void; 
 
 function FullName({ className, style }: { className?: string; style?: React.CSSProperties }) {
   const { data: session } = useSession();
+  const { t } = useI18n();
   const name = [session?.user?.firstName, session?.user?.lastName].filter(Boolean).join(" ");
   return (
     <h1 className={className} style={style}>
-      {name || "Your name"}
+      {name || t.resume.yourName}
     </h1>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 import React, { RefObject, useEffect, useRef, useState, useMemo } from "react";
 import { useDragDrop } from "../DraggableContext";
+import { useI18n } from "@/i18n/I18nProvider";
 import DropZone from "../DropZone";
 import { GripHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
@@ -26,6 +27,7 @@ const TemplatesThird = ({
     checkItemsInPage,
     scale
   } = useDragDrop();
+  const { t } = useI18n();
 
   const containerRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
@@ -202,7 +204,7 @@ console.log({scale});
               {overflow && (
                 <div className="w-full absolute bottom-0 flex flex-col items-center gap-5">
                   <div style={{backgroundColor: "rgba(219, 54, 21, 1)",color:"#ffff"}} className="w-full no-print   text-xs px-2 py-1 text-center">
-                    This page is longer than A4
+                    {t.editor.overflow}
                   </div>
                 </div>
               )}
@@ -233,7 +235,7 @@ console.log({scale});
                   style={{ height: height }}
                   className="w-full items-start no-print bg-[#f309092b] text-[#FFFF] text-xs px-2 py-1 text-center"
                 >
-                  This page is longer than A4
+                  {t.editor.overflow}
                 </div>
                 <div className="z-50 text-[#FFFF] flex items-center justify-center gap-3 text-xs px-2 py-1 w-full text-center">
                   <Button
@@ -249,7 +251,7 @@ console.log({scale});
                       }))
                     }
                   >
-                    Shrink text
+                    {t.editor.shrink}
                   </Button>
 
                   <Button
@@ -281,7 +283,7 @@ console.log({scale});
                       setOverflow(false);
                     }}
                   >
-                    Add a page
+                    {t.editor.addPage}
                   </Button>
                 </div>
               </div>

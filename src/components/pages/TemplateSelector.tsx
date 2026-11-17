@@ -3,6 +3,7 @@
 import { Check } from "lucide-react";
 import { useDragDrop } from "../DraggableContext";
 import { TEMPLATES, deserializeZones, type TemplateDef, type Thumb } from "./templates";
+import { useI18n } from "@/i18n/I18nProvider";
 
 /** Small schematic of a layout, drawn from the template's colours. */
 function TemplateThumb({ thumb }: { thumb: Thumb }) {
@@ -95,6 +96,7 @@ function TemplateThumb({ thumb }: { thumb: Thumb }) {
 
 export default function TemplateSelector() {
   const { templateKey, setTemplateKey, setSelectedTemplate, setFontOptions, setDroppedItems } = useDragDrop();
+  const { t } = useI18n();
 
   const choose = (t: TemplateDef) => {
     setTemplateKey(t.key);
@@ -105,17 +107,15 @@ export default function TemplateSelector() {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-muted-foreground">
-        Switching keeps everything you wrote. Colors, fonts and section order reset to the template’s defaults.
-      </p>
       <ul className="grid grid-cols-2 gap-x-3 gap-y-5">
-        {TEMPLATES.map((t) => {
-          const active = t.key === templateKey;
+        {TEMPLATES.map((tpl) => {
+          const active = tpl.key === templateKey;
+          const copy = t.templates[tpl.key] ?? { label: tpl.label, desc: tpl.description };
           return (
-            <li key={t.key}>
+            <li key={tpl.key}>
               <button
                 type="button"
-                onClick={() => choose(t)}
+                onClick={() => choose(tpl)}
                 aria-pressed={active}
                 className="group w-full text-left"
               >
@@ -124,15 +124,15 @@ export default function TemplateSelector() {
                     active ? "border-mint" : "border-line group-hover:border-ink/40"
                   }`}
                 >
-                  <TemplateThumb thumb={t.thumb} />
+                  <TemplateThumb thumb={tpl.thumb} />
                   {active && (
                     <span className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded-full bg-mint text-ink">
                       <Check className="size-3" strokeWidth={3} />
                     </span>
                   )}
                 </span>
-                <span className="mt-2 block text-sm font-medium">{t.label}</span>
-                <span className="block text-xs leading-snug text-muted-foreground">{t.description}</span>
+                <span className="mt-2 block text-sm font-medium">{copy.label}</span>
+                <span className="block text-xs leading-snug text-muted-foreground">{copy.desc}</span>
               </button>
             </li>
           );

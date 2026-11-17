@@ -1,6 +1,7 @@
 "use client";
 import React, { RefObject, useEffect, useRef, useState, useMemo } from "react";
 import { useDragDrop } from "../DraggableContext";
+import { useI18n } from "@/i18n/I18nProvider";
 import DropZone from "../DropZone";
 import { GripHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
@@ -24,6 +25,7 @@ const TemplatesTwo = ({
     checkItemsInPage,
     scale
   } = useDragDrop();
+  const { t } = useI18n();
 
   const containerRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
@@ -208,7 +210,7 @@ const TemplatesTwo = ({
               {overflow && (
                 <div className="w-full absolute bottom-0 flex flex-col items-center gap-5">
                   <div style={{backgroundColor: "rgba(220, 38, 38, 1)"}} className="w-full no-print  text-white text-xs px-2 py-1 text-center">
-                    This page is longer than A4
+                    {t.editor.overflow}
                   </div>
                 </div>
               )}
@@ -319,7 +321,7 @@ const TemplatesTwo = ({
                   style={{ height: height }}
                   className="w-full items-start no-print bg-[#f309092b] text-white text-xs px-2 py-1 text-center"
                 >
-                  This page is longer than A4
+                  {t.editor.overflow}
                 </div>
                 <div className="z-50 text-white flex items-center justify-center gap-3 text-xs px-2 py-1 w-full text-center">
                   <Button
@@ -335,7 +337,7 @@ const TemplatesTwo = ({
                       }))
                     }
                   >
-                    Shrink text
+                    {t.editor.shrink}
                   </Button>
 
                   <Button
@@ -367,7 +369,7 @@ const TemplatesTwo = ({
                       setOverflow(false);
                     }}
                   >
-                    Add a page
+                    {t.editor.addPage}
                   </Button>
                 </div>
               </div>

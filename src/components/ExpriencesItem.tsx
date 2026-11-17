@@ -3,8 +3,7 @@ import { Button } from "./ui/button";
 import { Delete, Edit, Plus } from "lucide-react";
 import { useDragDrop } from "./DraggableContext";
 import ExprienceForm from "./ExprienceForm";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale"; // Optional: for French month names
+import { DateRange } from "./DateRange";
 
 const ExpriencesItem = ({ info }: { info: Experience }) => {
   const [hoverCreate, setHoverCreate] = useState(false);
@@ -57,16 +56,7 @@ const ExpriencesItem = ({ info }: { info: Experience }) => {
         >
           {info.title}
         </h1>
-        <div className="flex items-center gap-2 px-2 text-xs font-bold ">
-          <span>From </span>
-          <span>{format(info.date_started, "MMMM yyyy", { locale: fr })}</span>
-          <span> to </span>
-          <span>
-            {info.date_ending === "currently"
-              ? info.date_ending
-              : format(info.date_ending, "MMMM yyyy", { locale: fr })}
-          </span>
-        </div>
+        <DateRange start={info.date_started} end={info.date_ending} />
       </div>
 
       <div className="flex items-center gap-2 px-2 text-xs text-gray-600">

@@ -302,3 +302,10 @@
   margin: 2rem 0;
 }
 
+
+/* Editor chrome (toolbars, drop hints, overflow notices) never prints. */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

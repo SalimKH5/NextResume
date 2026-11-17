@@ -14,15 +14,18 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Logo } from "./brand/Logo";
+import { LanguageSwitch } from "./LanguageSwitch";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const items = [
-  { title: "My resumes", url: "/locale/dashboard", icon: FileText },
-  { title: "Profile", url: "/locale/edit-profile", icon: UserRound },
-];
+  { key: "myResumes", url: "/locale/dashboard", icon: FileText },
+  { key: "profile", url: "/locale/edit-profile", icon: UserRound },
+] as const;
 
 export default function SidebarAccount() {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const { t } = useI18n();
   const name = [session?.user?.firstName, session?.user?.lastName].filter(Boolean).join(" ");
 
   return (
@@ -43,7 +46,7 @@ export default function SidebarAccount() {
                 >
                   <Link href={item.url} aria-current={active ? "page" : undefined}>
                     <item.icon />
-                    <span>{item.title}</span>
+                    <span>{t.account[item.key]}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -52,6 +55,7 @@ export default function SidebarAccount() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="border-t border-line p-5">
+        <LanguageSwitch className="mb-3" />
         {name && <p className="truncate text-sm font-medium">{name}</p>}
         {session?.user?.email && (
           <p className="truncate text-xs text-muted-foreground">{session.user.email}</p>
@@ -61,7 +65,7 @@ export default function SidebarAccount() {
           onClick={() => signOut({ callbackUrl: "/" })}
           className="mt-3 inline-flex items-center gap-2 self-start text-sm text-muted-foreground hover:text-ink"
         >
-          <LogOut className="size-4" /> Sign out
+          <LogOut className="size-4" /> {t.account.signOut}
         </button>
       </SidebarFooter>
     </Sidebar>

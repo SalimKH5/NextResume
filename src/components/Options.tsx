@@ -2,6 +2,7 @@
 
 import { useDragDrop } from "./DraggableContext";
 import { Switch } from "./ui/switch";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const FONTS = [
   { label: "Arial", value: "Arial, sans-serif" },
@@ -31,6 +32,8 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
 
 export default function Options() {
   const { fontOptions, setFontOptions } = useDragDrop();
+  const { t } = useI18n();
+  const o = t.editor.style;
   const set = <K extends keyof OptionsStyle>(key: K, value: OptionsStyle[K]) =>
     setFontOptions((prev) => ({ ...prev, [key]: value }));
 
@@ -100,16 +103,16 @@ export default function Options() {
 
   return (
     <div className="flex flex-col gap-6">
-      <Group title="Colors">
-        {color("BackgroundColor", "Fill", "Sidebar, header band or name")}
-        {color("primaryColor", "Text on fill", "Text and icons on the fill")}
-        {color("secondColor", "Accent", "Section titles and job title")}
+      <Group title={o.colors}>
+        {color("BackgroundColor", o.fill, o.fillHint)}
+        {color("primaryColor", o.onFill, o.onFillHint)}
+        {color("secondColor", o.accent, o.accentHint)}
       </Group>
 
-      <Group title="Typography">
+      <Group title={o.typography}>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="opt-font" className="text-sm">
-            Font
+            {o.font}
           </label>
           <select
             id="opt-font"
@@ -125,21 +128,21 @@ export default function Options() {
             ))}
           </select>
         </div>
-        {range("textSize", "Text size", 11, 20, "px")}
-        {range("titleSize", "Section title size", 13, 28, "px")}
+        {range("textSize", o.textSize, 11, 20, "px")}
+        {range("titleSize", o.titleSize, 13, 28, "px")}
       </Group>
 
-      <Group title="Spacing">
-        {range("paddingHorizontal", "Side margins", 0, 12)}
-        {range("paddingVertical", "Top margin", 0, 20)}
-        {range("SpaceContent", "Space between sections", 5, 40, "px")}
-        {range("SpaceInside", "Space inside sections", 0, 30, "px")}
+      <Group title={o.spacing}>
+        {range("paddingHorizontal", o.sideMargins, 0, 12)}
+        {range("paddingVertical", o.topMargin, 0, 20)}
+        {range("SpaceContent", o.between, 5, 40, "px")}
+        {range("SpaceInside", o.inside, 0, 30, "px")}
       </Group>
 
-      <Group title="Layout">
-        {toggle("displayOneLine", "Contact details on one line")}
-        {toggle("diplayDateLine", "Dates on the same line as titles")}
-        {toggle("diplayLanguageLine", "Language level on one line")}
+      <Group title={o.layout}>
+        {toggle("displayOneLine", o.oneLine)}
+        {toggle("diplayDateLine", o.dateLine)}
+        {toggle("diplayLanguageLine", o.langLine)}
       </Group>
     </div>
   );

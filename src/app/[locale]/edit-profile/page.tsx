@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { DotTitle } from "@/components/brand/Backdrop";
+import { useI18n } from "@/i18n/I18nProvider";
 
 type ProfileForm = {
   firstName: string;
@@ -51,7 +52,7 @@ function Field({
 }: {
   id?: string;
   label: string;
-  optional?: boolean;
+  optional?: string;
   className?: string;
   children: React.ReactNode;
 }) {
@@ -59,7 +60,7 @@ function Field({
     <div className={`flex flex-col gap-2 ${className ?? ""}`}>
       <Label htmlFor={id} className="text-sm font-medium">
         {label}
-        {optional && <span className="font-normal text-muted-foreground"> (optional)</span>}
+        {optional && <span className="font-normal text-muted-foreground"> {optional}</span>}
       </Label>
       {children}
     </div>
@@ -72,6 +73,9 @@ export default function ProfilePage() {
   const { data: session, update, status: sessionStatus } = useSession();
   const [form, setForm] = useState<ProfileForm>(() => fromUser(session?.user));
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+  const { t } = useI18n();
+  const p = t.profile;
+  const opt = p.optional;
 
   // Fill the form once the session is available.
   useEffect(() => {
@@ -99,7 +103,7 @@ export default function ProfilePage() {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => null);
-        throw new Error(data?.error ?? "Your changes weren't saved. Try again.");
+        throw new Error(data?.error ?? p.saveError);
       }
       await update();
       setStatus({ kind: "saved" });
@@ -111,29 +115,29 @@ export default function ProfilePage() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-12">
       <div>
-        <DotTitle className="text-[clamp(2.75rem,7vw,5rem)]">Profile</DotTitle>
+        <DotTitle className="text-[clamp(2.75rem,7vw,5rem)]">{p.title}</DotTitle>
         <p className="mt-4 max-w-lg text-muted-foreground">
-          These details fill in the header of every resume you create.
+          {p.lead}
         </p>
       </div>
 
       <fieldset className="grid gap-x-8 gap-y-7 border-t-2 border-ink pt-8 md:grid-cols-2">
         <legend className="sr-only">Personal details</legend>
-        <Field id="firstName" label="First name">
+        <Field id="firstName" label={p.firstName}>
           <Input id="firstName" name="firstName" autoComplete="given-name" value={form.firstName} onChange={handleChange} className={inputClass} required />
         </Field>
-        <Field id="lastName" label="Last name">
+        <Field id="lastName" label={p.lastName}>
           <Input id="lastName" name="lastName" autoComplete="family-name" value={form.lastName} onChange={handleChange} className={inputClass} required />
         </Field>
 
         <div className="flex flex-col gap-2" role="radiogroup" aria-labelledby="gender-label">
           <span id="gender-label" className="text-sm font-medium">
-            Gender <span className="font-normal text-muted-foreground">(optional)</span>
+            {p.gender} <span className="font-normal text-muted-foreground">{opt}</span>
           </span>
           <div className="flex h-12 items-center gap-6">
             {[
-              { value: "female", label: "Woman" },
-              { value: "male", label: "Man" },
+              { value: "female", label: p.woman },
+              { value: "male", label: p.man },
             ].map((g) => (
               <label key={g.value} className="flex cursor-pointer items-center gap-2">
                 <input
@@ -150,11 +154,11 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <Field id="dateOfbirth" label="Date of birth" optional>
+        <Field id="dateOfbirth" label={p.birth} optional={opt}>
           <Input id="dateOfbirth" name="dateOfbirth" type="date" autoComplete="bday" value={form.dateOfbirth} onChange={handleChange} className={inputClass} />
         </Field>
 
-        <Field label="Phone number" optional>
+        <Field label={p.phone} optional={opt}>
           <PhoneInput
             name="phoneNumber"
             value={form.phoneNumber}
@@ -162,33 +166,33 @@ export default function ProfilePage() {
           />
         </Field>
 
-        <Field id="email" label="Email">
+        <Field id="email" label={p.email}>
           <Input id="email" name="email" type="email" value={form.email} readOnly disabled className={inputClass} />
         </Field>
       </fieldset>
 
       <fieldset className="grid gap-x-8 gap-y-7 border-t-2 border-ink pt-8 md:grid-cols-3">
         <legend className="sr-only">Address</legend>
-        <Field id="address" label="Address" optional className="md:col-span-3">
+        <Field id="address" label={p.address} optional={opt} className="md:col-span-3">
           <Input id="address" name="address" autoComplete="street-address" value={form.address} onChange={handleChange} className={inputClass} />
         </Field>
-        <Field id="postalCode" label="Postal code" optional>
+        <Field id="postalCode" label={p.postalCode} optional={opt}>
           <Input id="postalCode" name="postalCode" autoComplete="postal-code" value={form.postalCode} onChange={handleChange} className={inputClass} />
         </Field>
-        <Field id="town" label="City" optional>
+        <Field id="town" label={p.city} optional={opt}>
           <Input id="town" name="town" autoComplete="address-level2" value={form.town} onChange={handleChange} className={inputClass} />
         </Field>
-        <Field id="country" label="Country" optional>
+        <Field id="country" label={p.country} optional={opt}>
           <Input id="country" name="country" autoComplete="country-name" value={form.country} onChange={handleChange} className={inputClass} />
         </Field>
       </fieldset>
 
       <div className="flex flex-wrap items-center gap-5 border-t border-line pt-8">
         <Button type="submit" size="lg" className="h-12 px-6" disabled={status.kind === "saving"}>
-          {status.kind === "saving" ? "Saving…" : "Save changes"}
+          {status.kind === "saving" ? p.saving : p.save}
         </Button>
         <p aria-live="polite" className="text-sm">
-          {status.kind === "saved" && <span className="text-mint-deep">Changes saved.</span>}
+          {status.kind === "saved" && <span className="text-mint-deep">{p.saved}</span>}
           {status.kind === "error" && <span className="text-destructive">{status.message}</span>}
         </p>
       </div>

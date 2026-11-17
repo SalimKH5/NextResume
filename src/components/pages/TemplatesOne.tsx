@@ -1,6 +1,7 @@
 "use client";
 import React, { RefObject, useEffect, useRef, useState, useMemo } from "react";
 import { useDragDrop } from "../DraggableContext";
+import { useI18n } from "@/i18n/I18nProvider";
 import DropZone from "../DropZone";
 import { GripHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
@@ -24,6 +25,7 @@ const TemplatesOne = ({
     setFontOptions,
     scale
   } = useDragDrop();
+  const { t } = useI18n();
 
   const containerRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
@@ -291,7 +293,7 @@ const computedTitleSize = (fontOptions?.titleSize?? 14)
                   style={{ height: height,background:"#f309092b",color:"#ffffff" }}
                   className="w-full items-start no-print   text-xs px-2 py-1 text-center"
                 >
-                  This page is longer than A4
+                  {t.editor.overflow}
                 </div>
                 <div style={{color:"#ffffff"}} className="z-50  flex items-center justify-center gap-3 text-xs px-2 py-1 w-full text-center">
                   <Button
@@ -307,7 +309,7 @@ const computedTitleSize = (fontOptions?.titleSize?? 14)
                       }))
                     }
                   >
-                    Shrink text
+                    {t.editor.shrink}
                   </Button>
 
                   <Button
@@ -339,7 +341,7 @@ const computedTitleSize = (fontOptions?.titleSize?? 14)
                       setOverflow(false);
                     }}
                   >
-                    Add a page
+                    {t.editor.addPage}
                   </Button>
                 </div>
               </div>

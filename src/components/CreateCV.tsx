@@ -17,10 +17,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useDragDrop } from "./DraggableContext";
+import { useI18n } from "@/i18n/I18nProvider";
+import { DICTIONARIES } from "@/i18n/dictionaries";
 
 export default function CreateCV() {
   const router = useRouter();
   const { information } = useDragDrop();
+  const { t, locale } = useI18n();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [pending, setPending] = useState(false);
@@ -39,14 +42,14 @@ export default function CreateCV() {
         body: JSON.stringify({
           id_template: 1,
           title_template: name,
-          informations: { ...information, title: name },
+          informations: { ...information, ...DICTIONARIES[locale].resume.titles },
         }),
       });
       if (!res.ok) throw new Error();
       const data: { insertedId: string } = await res.json();
       router.push(`/cv-editions/${data.insertedId}`);
     } catch {
-      setError("The resume wasn't created. Check your connection and try again.");
+      setError(t.create.error);
       setPending(false);
     }
   };
@@ -55,25 +58,25 @@ export default function CreateCV() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size="lg" className="h-12 gap-2 px-5">
-          <Plus className="size-4" /> New resume
+          <Plus className="size-4" /> {t.dashboard.newResume}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <form onSubmit={createResume} className="flex flex-col gap-6">
           <DialogHeader>
-            <DialogTitle className="text-2xl tracking-tight">New resume</DialogTitle>
+            <DialogTitle className="text-2xl tracking-tight">{t.create.title}</DialogTitle>
             <DialogDescription>
-              Give it a name you’ll recognise, like the role you’re applying for.
+              {t.create.description}
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="resume-title">Name</Label>
+            <Label htmlFor="resume-title">{t.create.name}</Label>
             <Input
               id="resume-title"
               autoFocus
               required
               maxLength={120}
-              placeholder="Product designer — 2026"
+              placeholder={t.create.placeholder}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="h-11"
@@ -87,11 +90,11 @@ export default function CreateCV() {
           <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="outline">
-                Cancel
+                {t.create.cancel}
               </Button>
             </DialogClose>
             <Button type="submit" disabled={pending || !title.trim()}>
-              {pending ? "Creating…" : "Create resume"}
+              {pending ? t.create.creating : t.create.create}
             </Button>
           </DialogFooter>
         </form>
