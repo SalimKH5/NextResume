@@ -1,6 +1,7 @@
 import MainTemplate from "@/components/MainTemplate";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { Navbar1 } from "@/components/Navbar";
 import { authOptions } from "@/lib/AuthOption";
 
@@ -13,9 +14,11 @@ const getCvDetail = async (user_id: string, id_template?: string):Promise<GetTyp
     }
     console.log("Fetching:", url);
 
+    // Server-side fetch: forward the session cookie so the API can authorize the request.
+    const cookieHeader = (await cookies()).toString();
     const result = await fetch(url, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", cookie: cookieHeader },
       cache: "no-store", // ensures fresh data on SSR
     });
 

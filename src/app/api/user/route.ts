@@ -1,78 +1,68 @@
-import { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 import clientPromise from "@/lib/mongodb"
+import { requireSession } from "@/lib/apiAuth"
 
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const url = new URL(request.url);
-    const email = url.searchParams.get("email");
-
-    if (!email) {
-      return NextResponse.json({ error: "Email query parameter is required" }, { status: 400 });
-    }
+    const identity = await requireSession();
+    if (identity instanceof NextResponse) return identity;
 
     const client = await clientPromise;
     const db = client.db();
 
-    // La méthode findOne prend juste le filtre, pas d'objet set:
-    const user = await db.collection("users").findOne({ email });
+    // Only the signed-in user's own profile can be read.
+    const user = await db.collection("users").findOne({ email: identity.email });
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Retourne l'utilisateur trouvé et l'email
-    return NextResponse.json({ user, email });
+    return NextResponse.json({ user, email: identity.email });
   } catch (error) {
     console.error("GET /api/user error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 
-type UserFields = {
-  gender?: string;
-  firstName?: string;
-  lastName?: string;
-  address?: string;
-  postalCode?: string;
-  town?: string;
-  country?: string;
-  phoneNumber?: string;
-  dateOfbirth?: string;
-};
+const EDITABLE_FIELDS = [
+  "gender",
+  "firstName",
+  "lastName",
+  "address",
+  "postalCode",
+  "town",
+  "country",
+  "phoneNumber",
+  "dateOfbirth",
+] as const;
 
-
-
+const MAX_FIELD_LENGTH = 200;
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-   
-    const { email, gender, firstName, lastName, address, postalCode, town,country,phoneNumber,dateOfbirth} = body;
-   
+    const identity = await requireSession();
+    if (identity instanceof NextResponse) return identity;
 
-    if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    const body = await request.json();
+
+    // Whitelist + type check: only known string fields are written.
+    const updateFields: Record<string, string> = {};
+    for (const field of EDITABLE_FIELDS) {
+      const value = body?.[field];
+      if (value === undefined) continue;
+      if (typeof value !== "string" || value.length > MAX_FIELD_LENGTH) {
+        return NextResponse.json({ error: `Invalid value for ${field}` }, { status: 422 });
+      }
+      updateFields[field] = value;
     }
-    
-    // Nettoyer les champs non définis
-    const updateFields: Record<string, UserFields> = {};
-    if (gender !== undefined) updateFields.gender = gender;
-    if (firstName !== undefined) updateFields.firstName = firstName;
-    if (lastName !== undefined) updateFields.lastName = lastName;
-    if (address !== undefined) updateFields.address = address;
-    if (postalCode !== undefined) updateFields.postalCode = postalCode;
-    if (town !== undefined) updateFields.town = town;
-    if (country !== undefined) updateFields.country = country;
-    if (phoneNumber !== undefined) updateFields.phoneNumber = phoneNumber;
-    if (dateOfbirth !== undefined) updateFields.dateOfbirth = dateOfbirth;
 
     const client = await clientPromise;
     const db = client.db();
 
+    // The profile updated is always the session user's, whatever email the body contains.
     const result = await db.collection("users").findOneAndUpdate(
-       { email: { $regex: `^${email}$`, $options: "i" } },
+      { email: identity.email },
       { $set: updateFields },
       { returnDocument: "after" }
     );
