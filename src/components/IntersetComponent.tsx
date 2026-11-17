@@ -1,30 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDragDrop } from "./DraggableContext";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Plus } from "lucide-react";
 import IntersetDialog from "./IntersetDialog";
 import IntersetItem from "./IntersetItem";
-import Sortable from "sortablejs";
+import { useSortableList } from "./editor/useSortableList";
 
 const IntersetComponent = () => {
   const { information, fontOptions,scale } = useDragDrop();
+  const { t } = useI18n();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [hoverCreate, setHoverCreate] = useState(false);
-
-  const handleMouseEnter = () => {
-    if (!dialogOpen) {
-      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-      setHoverCreate(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (!dialogOpen) {
-      hoverTimeoutRef.current = setTimeout(() => {
-        setHoverCreate(false);
-      }, 300);
-    }
-  };
 
   
   const computedTextSize = (fontOptions?.textSize ?? 14) 
@@ -38,34 +23,23 @@ const IntersetComponent = () => {
 
   const listRef = useRef<HTMLUListElement>(null);
   
-    useEffect(() => {
-      if (listRef.current) {
-        Sortable.create(listRef.current, {
-          animation: 150,
-          dragClass: 'rounded-none!',
-        });
-      }
-    }, []);
+    useSortableList(listRef, "Intersets");
 
 
   return (
     <div
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className="w-full relative flex flex-col gap-1 pr-3"
+      className="nr-hover w-full relative flex flex-col gap-1 pr-3"
     >
-      {hoverCreate && (
-        <div className="absolute -top-5 flex items-center gap-3 bg-white text-black cursor-pointer rounded-xl">
-          <IntersetDialog open={dialogOpen} setOpen={setDialogOpen}>
-            <Plus size={20} />
-          </IntersetDialog>
-        </div>
-      )}
+      <div className="nr-actions nr-actions--add no-print -bottom-4 left-0">
+        <IntersetDialog open={dialogOpen} setOpen={setDialogOpen}>
+          <button type="button" className="nr-action" aria-label={t.editor.item.add}><Plus /><span>{t.editor.item.add}</span></button>
+        </IntersetDialog>
+      </div>
       <h3
             style={{color:fontOptions.secondColor,fontSize:computedTitleSize}} 
         className="outline-none pl-0 font-bold text-xl border-none focus:border-2 focus:border-black focus-visible:ring-0 w-60"
       >
-        Interset
+        {information.titleInterests || t.resume.titles.titleInterests}
       </h3>
       <ul ref={listRef} id="hs-basic-usage-example-sortable" style={{fontSize:computedTextSize}}  className="w-full flex flex-col gap-1 px-3 text-xs">
         {information?.Intersets &&

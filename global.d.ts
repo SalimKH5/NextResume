@@ -59,6 +59,7 @@ declare global {
     titleExprience?:string="Work Experience";
     titleEducations?:string="Work Educations";
     titleLanguages?:string="Languages";
+    titleInterests?:string;
     skills?: Skills[];
     Languages?: Languge[];
     Expriences?: Experience[];

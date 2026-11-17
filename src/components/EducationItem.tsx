@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useDragDrop } from "./DraggableContext";
-import { Button } from "./ui/button";
-import { Delete, Edit, Plus } from "lucide-react";
+import { useI18n } from "@/i18n/I18nProvider";
+import { Pencil, Trash2 } from "lucide-react";
 import EducationForm from "./EducationForm";
 import { DateRange } from "./DateRange";
 
 const EducationItem = ({ info }: { info: Educations }) => {
-  const [hover, setHover] = useState<boolean>(false);
   const { information, setInformations, fontOptions } = useDragDrop();
+  const { t } = useI18n();
   const [dialogOpen, setDialogOpen] = useState(false);
   const deleteItem = () => {
     const infoexpre = information.Educations?.filter((ex) => ex.id !== info.id);
@@ -18,25 +18,17 @@ const EducationItem = ({ info }: { info: Educations }) => {
   };
   return (
     <li
-      onMouseEnter={() => {
-        setHover(true);
-      }}
-      onMouseLeave={() => {
-        setHover(false);
-      }}
       key={info.id}
-      className="flex flex-col gap-2 relative hover:bg-[#1717171b]"
+      className="nr-hover nr-item flex flex-col gap-2 relative"
     >
-      {hover && (
-        <div className="absolute -right-1 flex items-center gap-3">
-          <Button onClick={deleteItem}>
-            <Delete />
-          </Button>
-          <EducationForm id={info.id} open={dialogOpen} setOpen={setDialogOpen}>
-            <Edit size={16} />
-          </EducationForm>
-        </div>
-      )}
+      <div className="nr-actions no-print -top-3 right-0">
+        <EducationForm id={info.id} open={dialogOpen} setOpen={setDialogOpen} label={t.editor.item.edit}>
+          <Pencil />
+        </EducationForm>
+        <button type="button" className="nr-action" data-danger aria-label={t.editor.item.remove} onClick={deleteItem}>
+          <Trash2 />
+        </button>
+      </div>
       <div
         className={`w-full flex ${
           fontOptions?.diplayDateLine

@@ -8,11 +8,13 @@ import TipTapEditor from "./TipTapEditor";
 
 type Props = {
   children: ReactNode;
+  /** Accessible name of the button that opens the form. */
+  label?: string;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   id?: number;
 };
-const EducationForm = ({ children, open, setOpen, id }: Props) => {
+const EducationForm = ({ children, open, setOpen, id, label }: Props) => {
   const { information, setInformations } = useDragDrop();
 
   const [item, setItem] = useState<Educations>(() => {
@@ -60,16 +62,15 @@ const EducationForm = ({ children, open, setOpen, id }: Props) => {
   );
   return (
     <div>
-      <Button
-        className="cursor-pointer bg-white text-black hover:text-white"
-        onClick={() => {
-          setOpen((prev) => {
-            return !prev;
-          });
-        }}
+      <button
+        type="button"
+        className="nr-action"
+        aria-label={label}
+        title={label}
+        onClick={() => setOpen((prev) => !prev)}
       >
         {children}
-      </Button>
+      </button>
       {open && (
         <div className="fixed inset-0 z-[99999999] flex items-center justify-center bg-black/50 p-4">
           <div className="relative w-full max-w-lg sm:max-w-2xl md:max-w-3xl lg:max-w-[625px] bg-white rounded-xl shadow-lg p-4 sm:p-6 overflow-y-auto max-h-[90vh]">

@@ -2,18 +2,9 @@
 
 import { useDragDrop } from "./DraggableContext";
 import { Switch } from "./ui/switch";
+import { RESUME_FONTS } from "@/fonts/resumeFonts";
 import { useI18n } from "@/i18n/I18nProvider";
 
-const FONTS = [
-  { label: "Arial", value: "Arial, sans-serif" },
-  { label: "Helvetica", value: "Helvetica, Arial, sans-serif" },
-  { label: "Verdana", value: "Verdana, sans-serif" },
-  { label: "Trebuchet", value: "Trebuchet MS, sans-serif" },
-  { label: "Georgia", value: "Georgia, serif" },
-  { label: "Times New Roman", value: "Times New Roman, serif" },
-  { label: "Garamond", value: "Garamond, Georgia, serif" },
-  { label: "Courier New", value: "Courier New, monospace" },
-];
 
 const SWATCHES = ["#06191b", "#333333", "#1e3a5f", "#0f766e", "#0a9e73", "#479099", "#8a6a2f", "#9f1239"];
 
@@ -110,23 +101,34 @@ export default function Options() {
       </Group>
 
       <Group title={o.typography}>
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="opt-font" className="text-sm">
-            {o.font}
-          </label>
-          <select
-            id="opt-font"
-            value={fontOptions.font}
-            onChange={(e) => set("font", e.target.value)}
-            className="h-10 rounded-md border border-input bg-background px-3 text-sm"
-            style={{ fontFamily: fontOptions.font }}
-          >
-            {FONTS.map((f) => (
-              <option key={f.value} value={f.value} style={{ fontFamily: f.value }}>
-                {f.label}
-              </option>
-            ))}
-          </select>
+        <div className="flex flex-col gap-2" role="radiogroup" aria-label={o.font}>
+          <span className="text-sm">{o.font}</span>
+          {(["sans", "serif"] as const).map((kind) => (
+            <div key={kind} className="grid grid-cols-2 gap-1.5">
+              {RESUME_FONTS.filter((f) => f.kind === kind).map((f) => {
+                const active = fontOptions.font === f.value;
+                return (
+                  <button
+                    key={f.value}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onClick={() => set("font", f.value)}
+                    className={`flex flex-col items-start rounded-md border px-2.5 py-2 text-left transition-colors ${
+                      active ? "border-mint bg-mint-wash" : "border-line hover:border-ink/30"
+                    }`}
+                  >
+                    <span className="text-lg leading-none" style={{ fontFamily: f.value }} aria-hidden="true">
+                      Aa
+                    </span>
+                    <span className="mt-1 text-xs" style={{ fontFamily: f.value }}>
+                      {f.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          ))}
         </div>
         {range("textSize", o.textSize, 11, 20, "px")}
         {range("titleSize", o.titleSize, 13, 28, "px")}

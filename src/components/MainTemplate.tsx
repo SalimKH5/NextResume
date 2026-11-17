@@ -15,6 +15,7 @@ import {
   type SavedLayout,
 } from "./pages/templates";
 import { useI18n } from "@/i18n/I18nProvider";
+import "@/fonts/resumeFonts";
 
 type SaveState = "idle" | "saving" | "saved" | "error";
 

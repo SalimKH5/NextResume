@@ -309,3 +309,100 @@
     display: none !important;
   }
 }
+
+/* ---------- CV editor: hover actions ---------- */
+
+/* Small floating pill of actions, revealed when its .nr-hover parent is hovered or focused. */
+.nr-actions {
+  position: absolute;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 18px -8px rgba(6, 25, 27, 0.35);
+  color: var(--ink);
+  font-family: "DM Sans Variable", system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(3px) scale(0.97);
+  pointer-events: none;
+  transition: opacity 0.16s ease, transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.nr-hover:hover > .nr-actions,
+.nr-hover:focus-within > .nr-actions,
+.nr-actions:has([data-state="open"]) {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.nr-action {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.nr-action:hover {
+  background: var(--mint-wash);
+}
+.nr-action[data-danger]:hover {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+.nr-actions--add .nr-action {
+  display: inline-flex;
+  width: auto;
+  gap: 4px;
+  padding: 0 9px 0 6px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.nr-action svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* Items inside a section: soft highlight on hover. */
+.nr-item {
+  position: relative;
+  border-radius: 4px;
+  transition: background-color 0.16s ease, box-shadow 0.16s ease;
+}
+.nr-item:hover {
+  background-color: rgba(23, 226, 165, 0.07);
+  box-shadow: 0 0 0 4px rgba(23, 226, 165, 0.07);
+}
+
+/* SortableJS states while reordering list items. */
+.nr-sort-ghost {
+  opacity: 0.35;
+  background: rgba(23, 226, 165, 0.12);
+}
+.nr-sort-chosen {
+  cursor: grabbing;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nr-actions,
+  .nr-item,
+  .nr-action {
+    transition: none;
+  }
+}
+@media print {
+  .nr-item:hover {
+    background: none;
+    box-shadow: none;
+  }
+}

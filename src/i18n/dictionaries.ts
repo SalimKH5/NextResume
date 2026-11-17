@@ -107,9 +107,11 @@ const en = {
       details: { label: "Details", title: "Your details", hint: "Shown in the header of the resume." },
       templates: { label: "Templates", title: "Templates", hint: "Switching keeps everything you wrote. Colors, fonts and section order reset to the template’s defaults." },
       style: { label: "Style", title: "Style", hint: "Colors, font and spacing for this resume." },
-      sections: { label: "Sections", title: "Add a section", hint: "Drag a section onto the page, or click it to add it at the end." },
+      sections: { label: "Sections", title: "Add a section", hint: "Drag a section onto the page, or click to add it at the end. Sections already on the page can be dragged to a new spot." },
     },
     closePanel: "Close panel",
+    item: { add: "Add an entry", edit: "Edit", remove: "Delete" },
+    dragSection: "Drag to move, or click to show it on the page",
     onPage: "On the page",
     dropHere: "Drop a section here",
     section: {
@@ -170,6 +172,7 @@ const en = {
       titleExprience: "Work Experience",
       titleEducations: "Education",
       titleLanguages: "Languages",
+      titleInterests: "Interests",
     },
   },
 };
@@ -278,9 +281,11 @@ const fr: Dictionary = {
       details: { label: "Infos", title: "Vos informations", hint: "Affichées dans l’en-tête du CV." },
       templates: { label: "Modèles", title: "Modèles", hint: "Changer de modèle conserve votre contenu. Les couleurs, polices et l’ordre des sections reprennent les valeurs du modèle." },
       style: { label: "Style", title: "Style", hint: "Couleurs, police et espacements de ce CV." },
-      sections: { label: "Sections", title: "Ajouter une section", hint: "Glissez une section sur la page, ou cliquez pour l’ajouter à la fin." },
+      sections: { label: "Sections", title: "Ajouter une section", hint: "Glissez une section sur la page, ou cliquez pour l’ajouter à la fin. Les sections déjà placées peuvent être glissées ailleurs." },
     },
     closePanel: "Fermer le panneau",
+    item: { add: "Ajouter une entrée", edit: "Modifier", remove: "Supprimer" },
+    dragSection: "Glissez pour déplacer, ou cliquez pour la voir sur la page",
     onPage: "Sur la page",
     dropHere: "Déposez une section ici",
     section: {
@@ -340,6 +345,7 @@ const fr: Dictionary = {
       titleExprience: "Expériences professionnelles",
       titleEducations: "Formation",
       titleLanguages: "Langues",
+      titleInterests: "Centres d’intérêt",
     },
   },
 };
@@ -352,4 +358,5 @@ export const KNOWN_TITLE_DEFAULTS: Record<keyof Dictionary["resume"]["titles"], 
   titleExprience: [en.resume.titles.titleExprience, fr.resume.titles.titleExprience, "Expérience professionnelle"],
   titleEducations: [en.resume.titles.titleEducations, fr.resume.titles.titleEducations, "Work Educations", "Formations"],
   titleLanguages: [en.resume.titles.titleLanguages, fr.resume.titles.titleLanguages],
+  titleInterests: [en.resume.titles.titleInterests, fr.resume.titles.titleInterests, "Interset"],
 };

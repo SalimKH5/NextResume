@@ -1,15 +1,14 @@
 import React, { useRef, useState } from "react";
-import { Button } from "./ui/button";
-import { Delete, Edit, Plus } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { useDragDrop } from "./DraggableContext";
+import { useI18n } from "@/i18n/I18nProvider";
 import ExprienceForm from "./ExprienceForm";
 import { DateRange } from "./DateRange";
 
 const ExpriencesItem = ({ info }: { info: Experience }) => {
-  const [hoverCreate, setHoverCreate] = useState(false);
   const { information, setInformations, fontOptions } = useDragDrop();
+  const { t } = useI18n();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const deleteItem = () => {
     const infoexpre = information.Expriences?.filter((ex) => ex.id !== info.id);
     setInformations((prev) => ({
@@ -17,38 +16,20 @@ const ExpriencesItem = ({ info }: { info: Experience }) => {
       Expriences: infoexpre,
     }));
   };
-  const handleMouseEnter = () => {
-    if (!dialogOpen) {
-      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-      setHoverCreate(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (!dialogOpen) {
-      hoverTimeoutRef.current = setTimeout(() => {
-        setHoverCreate(false);
-      }, 300);
-    }
-  };
   return (
     <li
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       key={info.id}
       style={{ gap: fontOptions.SpaceInside }}
-      className="flex flex-col  px-2 relative "
+      className="nr-hover nr-item flex flex-col  px-2 relative "
     >
-      {hoverCreate && (
-        <div className="absolute -right-6 flex items-center gap-3">
-          <Button onClick={deleteItem}>
-            <Delete />
-          </Button>
-          <ExprienceForm id={info.id} open={dialogOpen} setOpen={setDialogOpen}>
-            <Edit size={16} />
-          </ExprienceForm>
-        </div>
-      )}
+      <div className="nr-actions no-print -top-3 right-0">
+        <ExprienceForm id={info.id} open={dialogOpen} setOpen={setDialogOpen} label={t.editor.item.edit}>
+          <Pencil />
+        </ExprienceForm>
+        <button type="button" className="nr-action" data-danger aria-label={t.editor.item.remove} onClick={deleteItem}>
+          <Trash2 />
+        </button>
+      </div>
       <div className={`w-full flex ${fontOptions?.diplayDateLine?"items-center justify-between":"flex-col"} `}>
         <h1
           style={{ fontSize: fontOptions.textSize }}

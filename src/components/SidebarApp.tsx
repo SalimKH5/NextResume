@@ -53,9 +53,18 @@ function SectionsPanel() {
           <li key={kind}>
             <button
               type="button"
-              disabled={used}
-              draggable={!used}
-              onClick={() => append(kind)}
+              draggable
+              title={used ? t.editor.dragSection : undefined}
+              onClick={() => {
+                if (!used) return append(kind);
+                // already on the page: bring it into view and flash it
+                const el = document.querySelector<HTMLElement>(`[data-section="${kind}"]`);
+                el?.scrollIntoView({ behavior: "smooth", block: "center" });
+                el?.animate(
+                  [{ boxShadow: "0 0 0 1px #17e2a5, 0 0 0 10px rgba(23,226,165,0.35)" }, { boxShadow: "0 0 0 0 rgba(23,226,165,0)" }],
+                  { duration: 1100, easing: "ease-out" }
+                );
+              }}
               onDragStart={(e) => {
                 e.dataTransfer.effectAllowed = "move";
                 e.dataTransfer.setData("text/plain", kind);
@@ -63,13 +72,13 @@ function SectionsPanel() {
               }}
               onDragEnd={() => dragStore.end()}
               className={cn(
-                "flex h-24 w-full flex-col items-center justify-center gap-2 rounded-md border text-sm transition-colors",
+                "flex h-24 w-full cursor-grab flex-col items-center justify-center gap-2 rounded-md border text-sm transition-[background-color,border-color,transform] duration-150 active:cursor-grabbing active:scale-[0.98]",
                 used
-                  ? "cursor-default border-dashed border-line text-muted-foreground"
-                  : "cursor-grab border-line bg-background hover:border-mint hover:bg-mint-wash active:cursor-grabbing"
+                  ? "border-dashed border-line text-muted-foreground hover:border-mint hover:text-ink"
+                  : "border-line bg-background hover:-translate-y-0.5 hover:border-mint hover:bg-mint-wash"
               )}
             >
-              <Icon className="size-5" />
+              <Icon className="size-5" strokeWidth={1.75} />
               {t.sections[kind]}
               {used && <span className="text-[0.7rem]">{t.editor.onPage}</span>}
             </button>

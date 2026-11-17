@@ -1,41 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDragDrop } from "./DraggableContext";
+import { useI18n } from "@/i18n/I18nProvider";
 import LangugeDialog from "./LangugeDialog";
 import { Edit, Plus } from "lucide-react";
 import LangugeItem from "./LangugeItem";
-import Sortable from 'sortablejs';
+import { useSortableList } from "./editor/useSortableList";
 import { Input } from "./ui/input";
 const Languages = () => {
   const { information,setInformations,fontOptions ,scale} = useDragDrop();
+  const { t } = useI18n();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-   const [hoverCreate, setHoverCreate] = useState(false);
-  
-  const handleMouseEnter = () => {
-    if (!dialogOpen) {
-      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-      setHoverCreate(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (!dialogOpen) {
-      hoverTimeoutRef.current = setTimeout(() => {
-        setHoverCreate(false);
-      }, 300);
-    }
-  };
     const [EditTitle, setEditTitle] = useState<boolean>(false);
   const listRef = useRef<HTMLUListElement>(null);
 
-  useEffect(() => {
-    if (listRef.current) {
-      Sortable.create(listRef.current, {
-        animation: 150,
-        dragClass: 'rounded-none!',
-      });
-    }
-  }, []);
+  useSortableList(listRef, "Languages");
   const inputRef = useRef<HTMLInputElement>(null);
 
 
@@ -47,18 +25,14 @@ const Languages = () => {
 
   return (
     <div 
-       onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       style={{gap:fontOptions.SpaceInside}} 
 
-    className="w-full relative flex flex-col gap-1 pr-3">
-         {hoverCreate && (
-        <div  className="absolute -top-5 flex items-center gap-3 bg-white text-black cursor-pointer rounded-xl">
-          <LangugeDialog   open={dialogOpen} setOpen={setDialogOpen}>
-            <Plus size={20} />
-          </LangugeDialog>
-        </div>
-      )}
+    className="nr-hover w-full relative flex flex-col gap-1 pr-3">
+         <div className="nr-actions nr-actions--add no-print -bottom-4 left-0">
+        <LangugeDialog open={dialogOpen} setOpen={setDialogOpen}>
+          <button type="button" className="nr-action" aria-label={t.editor.item.add}><Plus /><span>{t.editor.item.add}</span></button>
+        </LangugeDialog>
+      </div>
     {EditTitle ? (
         <Input
           ref={inputRef}

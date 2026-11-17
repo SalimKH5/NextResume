@@ -1,35 +1,20 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useDragDrop } from "./DraggableContext";
+import { useI18n } from "@/i18n/I18nProvider";
 import EducationItem from "./EducationItem";
 import { Input } from "./ui/input";
 import { Delete, Plus } from "lucide-react";
 import EducationForm from "./EducationForm";
-import Sortable from "sortablejs";
+import { useSortableList } from "./editor/useSortableList";
 
 const Educations = () => {
   const { information,fontOptions,setInformations } = useDragDrop();
+  const { t } = useI18n();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [hoverCreate, setHoverCreate] = useState(false);
    const [EditTitle, setEditTitle] = useState<boolean>(false);
    
    const inputRef = useRef<HTMLInputElement>(null);
-  
-    const handleMouseEnter = () => {
-      if (!dialogOpen) {
-        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-        setHoverCreate(true);
-      }
-    };
-  
-    const handleMouseLeave = () => {
-      if (!dialogOpen) {
-        hoverTimeoutRef.current = setTimeout(() => {
-          setHoverCreate(false);
-        }, 300);
-      }
-    };
   
     // 🔁 Detect outside click to disable edit mode
     useEffect(() => {
@@ -55,30 +40,18 @@ const Educations = () => {
 
   const listRef = useRef<HTMLUListElement>(null);
   
-    useEffect(() => {
-      if (listRef.current) {
-        Sortable.create(listRef.current, {
-          animation: 150,
-          dragClass: 'rounded-none!',
-        });
-      }
-    }, []);
+    useSortableList(listRef, "Educations");
 
   return (
     <div
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       style={{gap:fontOptions.SpaceInside}}
-      className="w-full flex relative flex-col gap-3"
+      className="nr-hover w-full flex relative flex-col gap-3"
     >
-       {hoverCreate && (
-        <div 
-        className="flex z-50 absolute -top-2 shadow-2xs bg-white items-center gap-2">
-          <EducationForm open={dialogOpen} setOpen={setDialogOpen}>
-            <Plus className="cursor-pointer" size={16} />
-          </EducationForm>
-        </div>
-      )}
+       <div className="nr-actions nr-actions--add no-print -bottom-4 left-0">
+        <EducationForm open={dialogOpen} setOpen={setDialogOpen} label={t.editor.item.add}>
+          <Plus /><span>{t.editor.item.add}</span>
+        </EducationForm>
+      </div>
       {EditTitle ? (
         <Input
           ref={inputRef}

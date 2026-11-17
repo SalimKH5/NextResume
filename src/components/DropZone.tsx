@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils";
 
 type DropZoneProps = { zoneId: string; page?: number };
 
+const NOT_A_HANDLE = "input, textarea, select, button, a, li, label, [contenteditable=true], .nr-actions, .fixed, [role=toolbar]";
+
 export default function DropZone({ zoneId, page = 1 }: DropZoneProps) {
   const { droppedItems, fontOptions } = useDragDrop();
   const { place, remove, otherZone } = useSectionOps();
@@ -61,7 +63,7 @@ export default function DropZone({ zoneId, page = 1 }: DropZoneProps) {
   const indicator = (i: number) =>
     insertAt === i && (
       <div aria-hidden="true" className="no-print pointer-events-none relative h-0">
-        <div className="absolute inset-x-0 -top-[3px] h-[3px] rounded-full bg-mint shadow-[0_0_0_3px_rgba(23,226,165,0.25)]" />
+        <div className="absolute inset-x-0 -top-[3px] h-[3px] animate-in fade-in rounded-full bg-mint shadow-[0_0_0_3px_rgba(23,226,165,0.25)] duration-150" />
       </div>
     );
 
@@ -88,10 +90,24 @@ export default function DropZone({ zoneId, page = 1 }: DropZoneProps) {
               ref={(el) => {
                 itemRefs.current[index] = el;
               }}
+              data-section={kind ?? undefined}
+              // The whole section can be grabbed, except where the pointer lands on something
+              // interactive or on a list item (list items reorder inside the section).
+              onPointerDown={(e) => {
+                const target = e.target as HTMLElement;
+                e.currentTarget.draggable = !!kind && !target.closest(NOT_A_HANDLE);
+              }}
+              onDragStart={(e) => {
+                if (e.target !== e.currentTarget || !kind) return; // a list item or the handle started it
+                e.dataTransfer.effectAllowed = "move";
+                e.dataTransfer.setData("text/plain", kind);
+                dragStore.start({ source: "page", kind, zone: zoneId, page, index });
+              }}
+              onDragEnd={() => dragStore.end()}
               className={cn(
-                "group/section relative rounded-sm outline-1 outline-offset-4 outline-transparent transition-[outline-color,opacity]",
-                "hover:outline-dashed hover:outline-mint focus-within:outline-dashed focus-within:outline-mint",
-                isSource && "opacity-40"
+                "nr-section group/section relative cursor-grab rounded-sm transition-[box-shadow,opacity,transform] duration-200 ease-out",
+                "hover:shadow-[0_0_0_1px_var(--mint),0_0_0_6px_rgba(23,226,165,0.12)] focus-within:shadow-[0_0_0_1px_var(--mint),0_0_0_6px_rgba(23,226,165,0.12)]",
+                isSource && "scale-[0.99] opacity-40"
               )}
             >
               {item.component}
@@ -100,7 +116,7 @@ export default function DropZone({ zoneId, page = 1 }: DropZoneProps) {
                 <div
                   role="toolbar"
                   aria-label={t.sections[kind]}
-                  className="no-print absolute -top-4 right-0 z-20 flex items-center gap-0.5 rounded-md border border-line bg-white p-0.5 text-ink opacity-0 shadow-md transition-opacity group-hover/section:opacity-100 focus-within:opacity-100"
+                  className="no-print absolute -top-4 right-0 z-20 flex items-center gap-0.5 rounded-md border border-line bg-white p-0.5 text-ink translate-y-1 opacity-0 shadow-md transition-[opacity,transform] duration-150 ease-out group-hover/section:translate-y-0 group-hover/section:opacity-100 focus-within:translate-y-0 focus-within:opacity-100"
                   style={{ fontSize: 14, fontFamily: "'DM Sans Variable', system-ui, sans-serif" }}
                 >
                   <IconButton

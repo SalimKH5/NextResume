@@ -2,48 +2,26 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Input } from "./ui/input";
 import { useDragDrop } from "./DraggableContext";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Delete, Edit, Plus } from "lucide-react";
 
 import ExpriencesItem from "./ExpriencesItem";
 import ExprienceForm from "./ExprienceForm";
-import Sortable from "sortablejs";
+import { useSortableList } from "./editor/useSortableList";
 
 const Expriences = () => {
   const { information, setInformations,fontOptions,scale } = useDragDrop();
+  const { t } = useI18n();
 
   const [EditTitle, setEditTitle] = useState<boolean>(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [hoverCreate, setHoverCreate] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleMouseEnter = () => {
-    if (!dialogOpen) {
-      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-      setHoverCreate(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (!dialogOpen) {
-      hoverTimeoutRef.current = setTimeout(() => {
-        setHoverCreate(false);
-      }, 300);
-    }
-  };
 
 
   const listRef = useRef<HTMLUListElement>(null);
   
-    useEffect(() => {
-      if (listRef.current) {
-        Sortable.create(listRef.current, {
-          animation: 150,
-          dragClass: 'rounded-none!',
-        });
-      }
-    }, []);
+    useSortableList(listRef, "Expriences");
   
 
 
@@ -73,19 +51,14 @@ const computedTitleSize = (fontOptions?.titleSize ?? 14);
 
   return (
     <div
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       style={{gap:fontOptions.SpaceInside}}
-      className="w-full relative flex flex-col "
+      className="nr-hover w-full relative flex flex-col "
     >
-      {hoverCreate && (
-        <div className="flex z-50 absolute -top-2 shadow-2xs bg-white items-center gap-2">
-          <ExprienceForm  open={dialogOpen} setOpen={setDialogOpen}>
-            <Plus className="cursor-pointer" size={16} />
-          </ExprienceForm>
-        
-        </div>
-      )}
+      <div className="nr-actions nr-actions--add no-print -bottom-4 left-0">
+        <ExprienceForm open={dialogOpen} setOpen={setDialogOpen} label={t.editor.item.add}>
+          <Plus /><span>{t.editor.item.add}</span>
+        </ExprienceForm>
+      </div>
 
       {EditTitle ? (
         <Input

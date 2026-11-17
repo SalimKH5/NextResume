@@ -1,14 +1,13 @@
 import React, { useRef, useState } from "react";
 import { useDragDrop } from "./DraggableContext";
+import { useI18n } from "@/i18n/I18nProvider";
 import LangugeDialog from "./LangugeDialog";
-import { Delete, Edit, Plus } from "lucide-react";
-import { Button } from "./ui/button";
+import { Pencil, Trash2 } from "lucide-react";
 
 const LangugeItem = ({ language }: { language: Languge }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [hoverCreate, setHoverCreate] = useState(false);
   const { information, setInformations,fontOptions } = useDragDrop();
+  const { t } = useI18n();
 
   const deleteItem = () => {
 
@@ -22,43 +21,19 @@ const LangugeItem = ({ language }: { language: Languge }) => {
     }));
   };
 
-
-  const handleMouseEnter = () => {
-    if (!dialogOpen) {
-      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-      setHoverCreate(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (!dialogOpen) {
-      hoverTimeoutRef.current = setTimeout(() => {
-        setHoverCreate(false);
-      }, 200);
-    }
-  };
-
   return (
     <li
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       key={language.id}
-       className={`flex ${fontOptions.diplayLanguageLine?"justify-between items-center gap-1":"flex-col"}  relative `}
+       className={`nr-hover nr-item flex ${fontOptions.diplayLanguageLine?"justify-between items-center gap-1":"flex-col"}  relative `}
     >
-      {hoverCreate && (
-        <div className="absolute -right-2 flex items-center   bg-white text-black cursor-pointer rounded-xl">
-          <Button  className="bg-white text-black " onClick={deleteItem}>
-            <Delete size={12} />
-          </Button>
-          <LangugeDialog
-            id={language.id}
-            open={dialogOpen}
-            setOpen={setDialogOpen}
-          >
-            <Edit size={12} />
-          </LangugeDialog>
-        </div>
-      )}
+      <div className="nr-actions no-print -top-3 right-0">
+        <LangugeDialog id={language.id} open={dialogOpen} setOpen={setDialogOpen}>
+          <button type="button" className="nr-action" aria-label={t.editor.item.edit}><Pencil /></button>
+        </LangugeDialog>
+        <button type="button" className="nr-action" data-danger aria-label={t.editor.item.remove} onClick={deleteItem}>
+          <Trash2 />
+        </button>
+      </div>
       <span className="font-bold">{language.label}</span>
       {language.valuebar ? (
         <div className="w-full bg-gray-600 h-[4px] rounded">

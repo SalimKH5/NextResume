@@ -1,35 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDragDrop } from "./DraggableContext";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Plus } from "lucide-react";
 import { Input } from "./ui/input";
 import SkillsItem from "./SkillsItem";
 import SkillsForm from "./SkillsForm";
-import Sortable from "sortablejs";
+import { useSortableList } from "./editor/useSortableList";
 
 const Skills = () => {
   const { information, fontOptions, setInformations ,scale} = useDragDrop();
+  const { t } = useI18n();
 
   const [EditTitle, setEditTitle] = useState<boolean>(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [hoverCreate, setHoverCreate] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleMouseEnter = () => {
-    if (!dialogOpen) {
-      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-      setHoverCreate(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (!dialogOpen) {
-      hoverTimeoutRef.current = setTimeout(() => {
-        setHoverCreate(false);
-      }, 300);
-    }
-  };
 
   // 🔁 Detect outside click to disable edit mode
   useEffect(() => {
@@ -53,14 +38,7 @@ const Skills = () => {
 
   const listRef = useRef<HTMLUListElement>(null);
 
-  useEffect(() => {
-    if (listRef.current) {
-      Sortable.create(listRef.current, {
-        animation: 150,
-        dragClass: "rounded-none!",
-      });
-    }
-  }, []);
+  useSortableList(listRef, "skills");
 
 
   const computedTitleSize = (fontOptions?.titleSize ?? 14);
@@ -69,17 +47,13 @@ const Skills = () => {
 
   return (
     <div
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className="w-full relative flex flex-col "
+      className="nr-hover w-full relative flex flex-col "
     >
-      {hoverCreate && (
-        <div className="flex z-50 absolute -top-2 shadow-2xs bg-white text-black items-center gap-2">
-          <SkillsForm open={dialogOpen} setOpen={setDialogOpen}>
-            <Plus size={16} />
-          </SkillsForm>
-        </div>
-      )}
+      <div className="nr-actions nr-actions--add no-print -bottom-4 left-0">
+        <SkillsForm open={dialogOpen} setOpen={setDialogOpen}>
+          <button type="button" className="nr-action" aria-label={t.editor.item.add}><Plus /><span>{t.editor.item.add}</span></button>
+        </SkillsForm>
+      </div>
       {EditTitle ? (
         <Input
           ref={inputRef}
