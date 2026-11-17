@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { ArrowRight } from "lucide-react";
@@ -7,12 +6,7 @@ import { Slash } from "@/components/brand/Slash";
 import { Backdrop, DotTitle } from "@/components/brand/Backdrop";
 import { authOptions } from "@/lib/AuthOption";
 import { getDictionary } from "@/i18n/server";
-
-const TEMPLATES = [
-  { src: "/template1.png", key: "classic" },
-  { src: "/template2.png", key: "sidebar-accent" },
-  { src: "/template3.png", key: "minimal" },
-];
+import { TEMPLATE_KEYS, THUMBS, TemplateThumb } from "@/components/pages/TemplateThumb";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -58,21 +52,15 @@ export default async function Home() {
           <p className="max-w-56 text-[0.95rem] leading-snug">
             <span className="text-mint-deep">/</span> {t.home.templatesLead}
           </p>
-          <ul className="grid grid-cols-3 gap-4 sm:gap-8">
-            {TEMPLATES.map((tpl) => (
-              <li key={tpl.src}>
+          <ul className="grid grid-cols-3 gap-4 sm:grid-cols-4 sm:gap-6 lg:grid-cols-7">
+            {TEMPLATE_KEYS.map((key) => (
+              <li key={key}>
                 <Link href={startHref} className="group block">
-                  <div className="relative aspect-[1/1.414] overflow-hidden rounded-sm border border-line bg-muted transition-colors group-hover:border-mint">
-                    <Image
-                      src={tpl.src}
-                      alt=""
-                      fill
-                      sizes="(min-width: 1024px) 25vw, 33vw"
-                      className="object-cover object-top grayscale transition duration-300 group-hover:grayscale-0"
-                    />
+                  <div className="overflow-hidden rounded-sm border border-line bg-white shadow-[0_1px_2px_rgba(6,25,27,0.06)] transition-[border-color,transform] duration-200 group-hover:-translate-y-0.5 group-hover:border-mint">
+                    <TemplateThumb thumb={THUMBS[key]} />
                   </div>
-                  <span className="mt-3 block text-sm text-muted-foreground group-hover:text-ink">
-                    {t.templates[tpl.key].label}
+                  <span className="mt-2.5 block text-sm text-muted-foreground group-hover:text-ink">
+                    {t.templates[key]?.label ?? key}
                   </span>
                 </Link>
               </li>

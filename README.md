@@ -5,9 +5,7 @@ templates, built with **Next.js 15, TypeScript, NextAuth and MongoDB**.
 
 **Live demo:** https://next-resume-psi-ruddy.vercel.app/
 
-| Template 1 | Template 2 | Template 3 |
-| --- | --- | --- |
-| ![Template 1](public/template1.png) | ![Template 2](public/template2.png) | ![Template 3](public/template3.png) |
+Seven templates: Classic, Sidebar accent, Minimal, Studio, Right rail, Executive and Banner.
 
 ## Features
 

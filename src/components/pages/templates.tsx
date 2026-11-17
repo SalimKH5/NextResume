@@ -5,17 +5,12 @@ import TemplatesTwo from "./TemplatesTwo";
 import TemplatesThird from "./TemplatesThird";
 import { makeFlexTemplate } from "./FlexTemplate";
 import type { ZoneLayout } from "./sections";
+import { THUMBS, type Thumb } from "./TemplateThumb";
 
 export * from "./sections";
 
 /* ---------- templates ---------- */
 
-/** Schematic used to draw the picker thumbnail. */
-export type Thumb = {
-  layout: "sidebar-left" | "sidebar-right" | "band-split" | "single" | "banner";
-  fill: string;
-  accent: string;
-};
 
 export type TemplateDef = {
   key: string;
@@ -52,7 +47,7 @@ export const TEMPLATES: TemplateDef[] = [
     template: TemplatesOne,
     style: { ...base, font: "Lato, Arial, sans-serif", BackgroundColor: "#333333", primaryColor: "#FFFFFF", secondColor: "#479099", titleSize: 20, SpaceContent: 20 },
     zones: { "zone-B": { 1: ["education", "experience"] }, "zone-A": { 1: ["languages", "skills", "interests"] } },
-    thumb: { layout: "sidebar-left", fill: "#333333", accent: "#479099" },
+    thumb: THUMBS["classic"],
   },
   {
     key: "sidebar-accent",
@@ -61,7 +56,7 @@ export const TEMPLATES: TemplateDef[] = [
     template: TemplatesTwo,
     style: { ...base, font: "'Open Sans Variable', Arial, sans-serif", BackgroundColor: "#333333", primaryColor: "#000000", secondColor: "#2f7480", titleSize: 20, SpaceContent: 20 },
     zones: { "zone-B": { 1: ["education", "experience", "skills"] }, "zone-A": { 1: ["languages", "interests"] } },
-    thumb: { layout: "sidebar-left", fill: "#e9eeee", accent: "#479099" },
+    thumb: THUMBS["sidebar-accent"],
   },
   {
     key: "minimal",
@@ -73,7 +68,7 @@ export const TEMPLATES: TemplateDef[] = [
       paddingHorizontal: 6, SpaceContent: 10, diplayDateLine: true, diplayLanguageLine: true, displayOneLine: true,
     },
     zones: { "zone-A": { 1: ["skills", "experience", "education", "languages", "interests"] } },
-    thumb: { layout: "single", fill: "#ffffff", accent: "#479099" },
+    thumb: THUMBS["minimal"],
   },
   {
     key: "studio",
@@ -82,7 +77,7 @@ export const TEMPLATES: TemplateDef[] = [
     template: StudioTemplate,
     style: { ...base, font: "'Inter Variable', Arial, sans-serif", BackgroundColor: "#06191b", primaryColor: "#ffffff", secondColor: "#077a59", displayOneLine: true },
     zones: { "zone-B": { 1: ["experience", "education"] }, "zone-A": { 1: ["skills", "languages", "interests"] } },
-    thumb: { layout: "band-split", fill: "#06191b", accent: "#17e2a5" },
+    thumb: THUMBS["studio"],
   },
   {
     key: "right-rail",
@@ -91,7 +86,7 @@ export const TEMPLATES: TemplateDef[] = [
     template: RailTemplate,
     style: { ...base, font: "'Source Sans 3 Variable', Arial, sans-serif", BackgroundColor: "#1e3a5f", primaryColor: "#ffffff", secondColor: "#2563a8" },
     zones: { "zone-B": { 1: ["experience", "education"] }, "zone-A": { 1: ["skills", "languages", "interests"] } },
-    thumb: { layout: "sidebar-right", fill: "#1e3a5f", accent: "#2563a8" },
+    thumb: THUMBS["right-rail"],
   },
   {
     key: "executive",
@@ -103,7 +98,7 @@ export const TEMPLATES: TemplateDef[] = [
       displayOneLine: true, diplayDateLine: true, diplayLanguageLine: true,
     },
     zones: { "zone-B": { 1: ["experience", "education", "skills"] }, "zone-A": { 1: ["languages", "interests"] } },
-    thumb: { layout: "single", fill: "#1a1a1a", accent: "#8a6a2f" },
+    thumb: THUMBS["executive"],
   },
   {
     key: "banner",
@@ -112,7 +107,7 @@ export const TEMPLATES: TemplateDef[] = [
     template: BannerTemplate,
     style: { ...base, font: "'Montserrat Variable', Arial, sans-serif", textSize: 13, BackgroundColor: "#0f766e", primaryColor: "#ffffff", secondColor: "#0f766e", displayOneLine: true },
     zones: { "zone-B": { 1: ["experience", "education"] }, "zone-A": { 1: ["skills", "languages", "interests"] } },
-    thumb: { layout: "banner", fill: "#0f766e", accent: "#0f766e" },
+    thumb: THUMBS["banner"],
   },
 ];
 
