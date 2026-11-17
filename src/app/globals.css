@@ -307,7 +307,11 @@
 
 /* Editor chrome (toolbars, drop hints, overflow notices) never prints. */
 @media print {
-  .no-print {
+  .no-print,
+  /* belt and braces: no editor control inside the CV can reach the PDF */
+  #template .nr-actions,
+  #template [role="toolbar"],
+  #template [data-editor-only] {
     display: none !important;
   }
 }

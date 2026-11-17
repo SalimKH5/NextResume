@@ -78,7 +78,8 @@ export default function ResizableImage({
       {!isPdfMode && isHovered && (
         <div
           onMouseDown={startResizing}
-          className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 cursor-nwse-resize rounded-full"
+          data-editor-only
+          className="no-print absolute bottom-0 right-0 w-4 h-4 bg-blue-500 cursor-nwse-resize rounded-full"
         />
       )}
     </div>

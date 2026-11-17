@@ -245,6 +245,7 @@ const computedTitleSize = (fontOptions?.titleSize?? 14)
               >
                 {isResizing && iconX !== null && (
                   <GripHorizontal
+                    data-editor-only
                     size={24}
                     style={{
                       position: "absolute",

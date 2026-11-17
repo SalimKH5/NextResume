@@ -288,6 +288,7 @@ const TemplatesTwo = ({
               >
                 {isResizing && iconX !== null && (
                   <GripHorizontal
+                    data-editor-only
                     size={24}
                     style={{
                       position: "absolute",

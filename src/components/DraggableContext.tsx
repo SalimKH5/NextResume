@@ -117,8 +117,9 @@ const { data: session, update ,status} = useSession();
     picture: { label: "default-profile.jpg", display: true },
     titleSkills:"Skills",
     titleExprience:"Work Experience",
-    titleEducations:"Work Educations",
+    titleEducations:"Education",
     titleLanguages:"Languages",
+    titleInterests:"Interests",
     CatchPhrase:
       "Développeur web polyvalent avec une forte appétence pour les technologies modernes, toujours en quête de nouveaux défis pour concevoir des solutions innovantes et efficaces.",
     title: "Développeur Full Stack | React.js & Node.js",
