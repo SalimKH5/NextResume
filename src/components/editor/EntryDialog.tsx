@@ -86,7 +86,13 @@ export function EntryDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-[600px]">
+      <DialogContent
+        className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-[600px]"
+        // Escape inside the link field closes only the link field
+        onEscapeKeyDown={(e) => {
+          if ((e.target as HTMLElement | null)?.closest?.("[data-nr-keep-open]")) e.preventDefault();
+        }}
+      >
         <form
           className="flex min-h-0 flex-1 flex-col"
           onSubmit={(e) => {

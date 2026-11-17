@@ -116,7 +116,13 @@ const en = {
     renameSection: "Rename section",
     details: { jobTitle: "Job title on the resume", summary: "Summary", summaryHint: "Two or three sentences about who you are and what you’re looking for.", switchHint: "Switch a detail off to hide it from the resume.", email: "Email", phone: "Phone", location: "City", show: "Show on the resume", showPicture: "Show my photo" },
     sectionTitle: "Section title",
-    richText: { toolbar: "Text formatting", bold: "Bold", italic: "Italic", bullets: "Bulleted list", numbered: "Numbered list" },
+    richText: {
+      toolbar: "Text formatting", bold: "Bold", italic: "Italic", underline: "Underline", strike: "Strikethrough",
+      bullets: "Bulleted list", numbered: "Numbered list", indent: "Indent", outdent: "Outdent",
+      link: "Add a link", editLink: "Edit link", linkUrl: "Link address", applyLink: "Apply", removeLink: "Remove link",
+      accent: "Color with the resume accent", clear: "Clear formatting",
+      words: (n: number) => (n === 1 ? "1 word" : `${n} words`),
+    },
     forms: {
       cancel: "Cancel",
       save: "Save",
@@ -310,7 +316,13 @@ const fr: Dictionary = {
     renameSection: "Renommer la section",
     details: { jobTitle: "Intitulé sur le CV", summary: "Accroche", summaryHint: "Deux ou trois phrases sur qui vous êtes et ce que vous cherchez.", switchHint: "Désactivez une information pour la masquer sur le CV.", email: "E-mail", phone: "Téléphone", location: "Ville", show: "Afficher sur le CV", showPicture: "Afficher ma photo" },
     sectionTitle: "Titre de la section",
-    richText: { toolbar: "Mise en forme du texte", bold: "Gras", italic: "Italique", bullets: "Liste à puces", numbered: "Liste numérotée" },
+    richText: {
+      toolbar: "Mise en forme du texte", bold: "Gras", italic: "Italique", underline: "Souligné", strike: "Barré",
+      bullets: "Liste à puces", numbered: "Liste numérotée", indent: "Augmenter le retrait", outdent: "Diminuer le retrait",
+      link: "Ajouter un lien", editLink: "Modifier le lien", linkUrl: "Adresse du lien", applyLink: "Appliquer", removeLink: "Retirer le lien",
+      accent: "Colorer avec l’accent du CV", clear: "Effacer la mise en forme",
+      words: (n: number) => (n <= 1 ? `${n} mot` : `${n} mots`),
+    },
     forms: {
       cancel: "Annuler",
       save: "Enregistrer",
