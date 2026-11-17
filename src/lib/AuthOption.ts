@@ -1,7 +1,4 @@
-import CredentialsProvider from "next-auth/providers/credentials";
-import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import bcrypt from "bcrypt";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import clientPromise from "./mongodb";
 import { NextAuthOptions } from "next-auth";
@@ -46,46 +43,6 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email and password are required");
-        }
-
-        // ⚠️ À remplacer par une vraie requête à ta base MongoDB
-        const userFromDB = {
-          id: "123",
-          email: "test@example.com",
-          name: "Test User",
-          hashedPassword:
-            "$2b$10$123456789012345678901uQsfSlZ6B1b9PABhA9kV5P6p3z72IEb6", // exemple de hash bcrypt
-        };
-
-        if (credentials.email !== userFromDB.email) {
-          throw new Error("No user found with this email");
-        }
-
-        const isValid = await bcrypt.compare(
-          credentials.password,
-          userFromDB.hashedPassword
-        );
-
-        if (!isValid) {
-          throw new Error("Invalid password");
-        }
-
-        return {
-          id: userFromDB.id,
-          email: userFromDB.email,
-          name: userFromDB.name,
-        };
-      },
-    }),
   ],
 
   pages: {
@@ -99,7 +56,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account }) {
       try {
-        if (account?.provider === "credentials") return true;
         if (!account) {
           return false;
         }

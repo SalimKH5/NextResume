@@ -14,7 +14,7 @@ templates, built with **Next.js 15, TypeScript, NextAuth and MongoDB**.
 - **Sign in with Google** (NextAuth, users and accounts stored through the MongoDB adapter).
 - **Dashboard** listing the resumes of the signed-in user; create a new resume from a template.
 - **Resume editor** with sections for personal information, experience, education, skills, languages and interests.
-- **Drag and drop** to reorder sections and items (`@dnd-kit`).
+- **Drag and drop** to reorder items within sections (SortableJS).
 - **Rich-text descriptions** (TipTap), font selection, resizable profile picture.
 - **Three templates** with live preview.
 - **Export to PDF** through the browser print dialog (`react-to-print`).
@@ -25,7 +25,7 @@ templates, built with **Next.js 15, TypeScript, NextAuth and MongoDB**.
 
 | Layer | Technologies |
 | --- | --- |
-| Frontend | Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, Radix UI / shadcn-style components, TipTap, dnd-kit |
+| Frontend | Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, Radix UI / shadcn-style components, TipTap, SortableJS |
 | Backend | Next.js Route Handlers, NextAuth (Google provider), MongoDB Node driver |
 | Hosting | Vercel |
 
@@ -91,13 +91,17 @@ npm run dev        # http://localhost:3000
 | `npm run build` / `npm start` | Production build / server |
 | `npm run lint` | ESLint |
 
+## Continuous integration
+
+`.github/workflows/ci.yml` runs lint, type-check and a production build on every
+push and pull request. Dependabot keeps npm packages and actions up to date.
+
 ## Roadmap
 
-- Replace the placeholder credentials provider with real email/password accounts (or remove it).
+- Email/password accounts in addition to Google sign-in.
 - Server-side PDF generation for consistent output across browsers.
-- Schema validation (Zod) of resume content; tests for the API routes; CI workflow.
-- Keep a single lockfile (npm or pnpm) and remove unused PDF libraries (`html2pdf.js`, `jspdf`, `pdfmake`).
+- Schema validation (Zod) of resume content and tests for the API routes.
 
 ## License
 
-No license has been chosen yet. All rights reserved by the author until a license file is added.
+[MIT](LICENSE)
